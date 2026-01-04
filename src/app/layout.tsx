@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Crimson_Pro, Noto_Naskh_Arabic, DM_Sans } from "next/font/google";
+import Providers from "@/components/Providers";
 import "./globals.css";
 
 // Headings: Elegant serif
@@ -49,7 +50,7 @@ export default function RootLayout({
       <body
         className={`${cormorant.variable} ${crimsonPro.variable} ${notoNaskhArabic.variable} ${dmSans.variable} antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

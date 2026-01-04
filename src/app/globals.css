@@ -519,3 +519,86 @@ button:focus-visible,
   .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* ===================================
+   TIPTAP EDITOR STYLES
+   =================================== */
+
+.prose {
+  font-family: var(--font-body), 'Crimson Pro', Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.prose h2 {
+  font-family: var(--font-heading), 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 2rem 0 1rem;
+  color: var(--text-primary);
+}
+
+.prose h3 {
+  font-family: var(--font-heading), 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--text-primary);
+}
+
+.prose p {
+  margin: 1rem 0;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose ul, .prose ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.prose li {
+  margin: 0.5rem 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--accent-gold);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.prose hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent-gold) 20%,
+    var(--accent-gold) 80%,
+    transparent
+  );
+  margin: 2rem 0;
+}
+
+/* Placeholder text */
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--text-muted);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
