@@ -41,55 +41,49 @@ export default async function ArchivePage() {
   return (
     <div className="min-h-screen bg-bg-cream">
       {/* Hero Section */}
-      <div className="bg-primary text-white py-12 md:py-16">
-        <Container variant="wide">
-          <div className="text-center max-w-2xl mx-auto px-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Lecture Archive
-            </h1>
-            <p className="text-base md:text-lg opacity-95">
-              English notes from Arabic Islamic lectures by Sheikh Ḥasan Ad-Daghrīrī <span className="arabic-text-inline">حفظه الله</span>
-            </p>
-          </div>
-        </Container>
+      <div className="bg-primary text-white py-16">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h1 className="text-5xl md:text-6xl font-serif font-semibold mb-4">
+            Lecture Archive
+          </h1>
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">
+            English notes from Arabic Islamic lectures by Sheikh Ḥasan Ad-Daghrīrī <span className="arabic-text-inline">حفظه الله</span>
+          </p>
+        </div>
       </div>
 
       {/* Main Content */}
-      <Container variant="wide">
-        <div className="py-12 px-4 sm:px-6 lg:px-8">
-          {/* Stats */}
-          <div className="flex gap-8 mb-12 justify-center">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-1">
-                {lectures.length}
-              </div>
-              <div className="text-sm text-text-muted uppercase tracking-wide">Lectures</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-accent-gold mb-1">
-                {lecturesByBook.length}
-              </div>
-              <div className="text-sm text-text-muted uppercase tracking-wide">Series</div>
-            </div>
+      <div className="max-w-5xl mx-auto px-6 py-12">
+        {/* Stats */}
+        <div className="flex gap-12 justify-center mb-16">
+          <div className="text-center">
+            <div className="text-5xl font-bold text-primary mb-2">{lectures.length}</div>
+            <div className="text-sm text-text-muted uppercase tracking-wide">Lectures</div>
           </div>
+          <div className="text-center">
+            <div className="text-5xl font-bold text-primary mb-2">{lecturesByBook.length}</div>
+            <div className="text-sm text-text-muted uppercase tracking-wide">Series</div>
+          </div>
+        </div>
 
-          {/* Lectures by Book */}
-          {lecturesByBook.length > 0 ? (
-            <div className="space-y-20">
-              {lecturesByBook.map((group) => (
-                <section key={group.book._id}>
-                  {/* Book Header */}
-                  <div className="mb-10 text-center">
-                    <h2 className="text-2xl md:text-3xl font-semibold text-text-primary mb-2">
-                      {group.book.titleEnglish}
-                    </h2>
-                    <p className="arabic-text text-xl md:text-2xl mb-2 opacity-80">
-                      {group.book.titleArabic}
-                    </p>
-                    <p className="text-sm text-text-muted">
-                      {group.lectures.length} Lecture{group.lectures.length !== 1 ? 's' : ''}
-                    </p>
-                  </div>
+        {/* Lectures by Book */}
+        {lecturesByBook.length > 0 ? (
+          <div className="space-y-20">
+            {lecturesByBook.map((group) => (
+              <section key={group.book._id}>
+                {/* Book Header */}
+                <div className="text-center mb-10">
+                  <h2 className="text-3xl md:text-4xl font-serif font-semibold text-text-primary mb-3">
+                    {group.book.titleEnglish}
+                  </h2>
+                  <p className="arabic-text text-2xl text-text-secondary mb-2">
+                    {group.book.titleArabic}
+                  </p>
+                  <p className="text-base text-text-muted">
+                    {group.lectures.length} Lecture{group.lectures.length !== 1 ? 's' : ''}
+                  </p>
+                  <div className="h-px bg-border max-w-md mx-auto mt-6"></div>
+                </div>
 
                   {/* Lecture Cards Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
@@ -110,21 +104,20 @@ export default async function ArchivePage() {
                       />
                     ))}
                   </div>
-                </section>
-              ))}
-            </div>
-          ) : (
-            <div className="card-elevated text-center py-16">
-              <p className="text-xl text-text-muted mb-4">
-                No lectures published yet
-              </p>
-              <p className="text-text-secondary">
-                Check back soon for new content!
-              </p>
-            </div>
-          )}
-        </div>
-      </Container>
+              </section>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg border border-border text-center py-16 px-6">
+            <p className="text-xl text-text-muted mb-2">
+              No lectures published yet
+            </p>
+            <p className="text-text-secondary">
+              Check back soon for new content!
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
