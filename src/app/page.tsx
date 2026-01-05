@@ -23,7 +23,7 @@ export default function Home() {
             <hr className="divider" />
 
             {/* Metadata */}
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 px-6 md:px-8">
               <p className="metadata-text mb-2">LESSON 18 · JĀMI' AL-WURŪD, JEDDAH</p>
               <h1 className="heading-primary mb-4">
                 Explanation of Kitāb At-Tawḥīd
