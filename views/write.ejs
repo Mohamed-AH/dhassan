@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كتابة ملاحظة - Dhassan</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="write-page">
+
+  <!-- Navigation -->
+  <nav class="nav-main">
+    <div class="nav-container">
+      <a href="/" class="logo">دحسن</a>
+      <div class="nav-links">
+        <a href="/notes">المكتبة</a>
+        <a href="/write" class="active">كتابة ملاحظة</a>
+        <a href="/profile">حسابي</a>
+        <a href="/auth/logout">تسجيل خروج</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Write Container -->
+  <div class="write-container">
+    <div class="write-content">
+      <div class="write-header">
+        <h1 class="write-title">كتابة ملاحظة جديدة</h1>
+        <p class="write-subtitle">دوّن فوائدك ودراساتك الإسلامية</p>
+      </div>
+
+      <!-- Note Form -->
+      <form class="note-form" id="note-form">
+        <div id="form-message" class="form-message"></div>
+
+        <div class="form-section">
+          <label class="form-label" for="title">
+            عنوان الملاحظة
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            class="form-input"
+            placeholder="مثال: فائدة في تفسير آية الكرسي"
+            required
+          >
+          <span class="input-hint">اختر عنواناً واضحاً ومعبراً</span>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label" for="category">
+            التصنيف
+          </label>
+          <select id="category" name="category" class="form-input">
+            <option value="General">عام</option>
+            <option value="Quran">القرآن</option>
+            <option value="Hadith">الحديث</option>
+            <option value="Fiqh">الفقه</option>
+            <option value="Aqeedah">العقيدة</option>
+            <option value="Arabic">اللغة العربية</option>
+            <option value="Seerah">السيرة النبوية</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label" for="content">
+            محتوى الملاحظة
+          </label>
+          <textarea
+            id="content"
+            name="content"
+            class="form-textarea"
+            placeholder="اكتب ملاحظتك هنا..."
+            required
+          ></textarea>
+          <div class="textarea-footer">
+            <span class="input-hint">الحد الأدنى 10 أحرف، الحد الأقصى 10000 حرف</span>
+            <span class="char-count" id="char-count">0 / 10000</span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label" for="tags">
+            الوسوم (اختياري)
+          </label>
+          <input
+            type="text"
+            id="tags"
+            name="tags"
+            class="form-input"
+            placeholder="مثال: تفسير, فقه, عبادة"
+          >
+          <span class="input-hint">افصل بين الوسوم بفاصلة</span>
+        </div>
+
+        <div class="form-actions-write">
+          <button type="button" class="btn-secondary" onclick="window.location.href='/notes'">
+            إلغاء
+          </button>
+          <button type="submit" class="btn-primary">
+            نشر الملاحظة
+          </button>
+        </div>
+      </form>
+
+      <!-- Writing Tips -->
+      <div class="writing-tips">
+        <h3>نصائح للكتابة</h3>
+        <ul class="tips-list">
+          <li>اكتب بوضوح وبساطة</li>
+          <li>وثق المعلومات بالمصادر إن أمكن</li>
+          <li>راجع ملاحظتك قبل النشر</li>
+          <li>استخدم الوسوم لتسهيل البحث</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/write.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dhassan - Islamic Study Platform</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="landing-page">
+
+  <!-- Navigation -->
+  <nav class="nav-main">
+    <div class="nav-container">
+      <a href="/" class="logo">دحسن</a>
+      <div class="nav-links">
+        <a href="/notes">المكتبة</a>
+        <% if (user) { %>
+        <a href="/write" class="btn-primary-small">كتابة ملاحظة</a>
+        <a href="/profile">حسابي</a>
+        <a href="/auth/logout">تسجيل خروج</a>
+        <% } else { %>
+        <a href="/login" class="btn-primary-small">تسجيل دخول</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">منصة دحسن للدراسات الإسلامية</h1>
+      <p class="hero-subtitle">
+        مكان مخصص لتدوين ملاحظاتك ودراساتك الإسلامية ومشاركة العلم النافع
+      </p>
+      <div class="hero-cta">
+        <% if (user) { %>
+        <a href="/write" class="btn-primary">ابدأ الكتابة</a>
+        <% } else { %>
+        <a href="/login" class="btn-primary">تسجيل الدخول</a>
+        <% } %>
+        <a href="/notes" class="btn-secondary">تصفح المكتبة</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-number"><%= totalNotes || 0 %></div>
+        <div class="stat-label">ملاحظات مشاركة</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">فوائد علمية</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">متاح دائماً</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Notes -->
+  <% if (recentNotes && recentNotes.length > 0) { %>
+  <section class="featured-section">
+    <div class="section-header">
+      <h2 class="section-title">أحدث الملاحظات</h2>
+      <p class="section-subtitle">آخر ما تمت إضافته من الفوائد العلمية</p>
+    </div>
+
+    <div class="notes-grid">
+      <% recentNotes.forEach(note => { %>
+      <div class="note-card">
+        <div class="note-header">
+          <h3 class="note-title"><%= note.title %></h3>
+          <span class="note-category"><%= note.category %></span>
+        </div>
+        <div class="note-content">
+          <p><%= note.content.substring(0, 200) %><%= note.content.length > 200 ? '...' : '' %></p>
+        </div>
+        <div class="note-footer">
+          <span class="note-author"><%= note.userName %></span>
+          <span class="note-date"><%= new Date(note.createdAt).toLocaleDateString('ar-SA') %></span>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+
+    <div class="section-cta">
+      <a href="/notes" class="btn-secondary">عرض جميع الملاحظات</a>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2 class="cta-title">ابدأ رحلتك العلمية اليوم</h2>
+      <p class="cta-text">
+        انضم إلينا لتدوين ملاحظاتك الدراسية ومشاركة الفوائد العلمية مع طلاب العلم
+      </p>
+      <% if (!user) { %>
+      <a href="/login" class="btn-primary-large">تسجيل الدخول الآن</a>
+      <% } else { %>
+      <a href="/write" class="btn-primary-large">ابدأ الكتابة</a>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>دحسن</h3>
+        <p>منصة للدراسات الإسلامية وتدوين الفوائد العلمية</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Dhassan. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <script src="/js/landing.js"></script>
+</body>
+</html>
