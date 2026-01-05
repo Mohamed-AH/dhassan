@@ -6,12 +6,8 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Desktop: Two Column Layout | Mobile: Single Column */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
-
-          {/* Main Content */}
-          <main className="px-4 md:px-6">
+      <div className="max-w-4xl mx-auto px-6 md:px-8 py-8">
+        <main>
             {/* Breadcrumb */}
             <div className="mb-8">
               <Button variant="ghost" href="/archive">
@@ -23,7 +19,7 @@ export default function Home() {
             <hr className="divider" />
 
             {/* Metadata */}
-            <div className="text-center mb-8 px-6 md:px-8">
+            <div className="text-center mb-8">
               <p className="metadata-text mb-2">LESSON 18 · JĀMI' AL-WURŪD, JEDDAH</p>
               <h1 className="heading-primary mb-4">
                 Explanation of Kitāb At-Tawḥīd
@@ -32,7 +28,7 @@ export default function Home() {
             </div>
 
             {/* Info Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-w-4xl mx-auto px-6 md:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <div className="flex items-start gap-3">
                 <span className="text-2xl">📖</span>
                 <div>
@@ -69,8 +65,8 @@ export default function Home() {
 
             <hr className="divider-simple" />
 
-            {/* Lecture Content - Optimal Reading Width */}
-            <article className="lecture-content max-w-3xl mx-auto">
+            {/* Lecture Content */}
+            <article className="lecture-content">
               <p>
                 In this blessed gathering, we continue our study of the fundamental principles of Islamic monotheism (tawḥīd),
                 exploring the essential foundations that every Muslim must understand and implement in their daily life.
@@ -175,7 +171,7 @@ export default function Home() {
             </article>
 
             {/* Share & Navigation */}
-            <div className="mt-12 pt-8 border-t border-border max-w-3xl mx-auto">
+            <div className="mt-12 pt-8 border-t border-border">
               <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
                 <Button variant="secondary" href="/">
                   ← Previous Lecture
@@ -191,64 +187,7 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-          </main>
-
-          {/* Sidebar (Desktop Only) */}
-          <aside className="hidden lg:block space-y-6">
-            {/* Quick Info Card */}
-            <Card variant="elevated" className="sticky top-8">
-              <h3 className="heading-tertiary text-lg mb-4">Lecture Info</h3>
-              <div className="space-y-3 text-sm">
-                <div>
-                  <p className="metadata-text mb-1">Series</p>
-                  <p className="font-medium">Al-Mulakhkhaṣ</p>
-                </div>
-                <div>
-                  <p className="metadata-text mb-1">Category</p>
-                  <p className="font-medium">Aqeedah</p>
-                </div>
-                <div>
-                  <p className="metadata-text mb-1">Tags</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    <span className="px-2 py-1 bg-bg-accent rounded text-xs">Tawhid</span>
-                    <span className="px-2 py-1 bg-bg-accent rounded text-xs">Aqeedah</span>
-                  </div>
-                </div>
-              </div>
-
-              <hr className="divider-simple my-4" />
-
-              {/* Actions */}
-              <div className="space-y-2">
-                <Button variant="primary" className="w-full text-sm">
-                  📤 Share
-                </Button>
-                <Button variant="ghost" href="/archive" className="w-full text-sm">
-                  📚 View Archive
-                </Button>
-              </div>
-            </Card>
-
-            {/* Other Lectures in Series */}
-            <Card variant="flat">
-              <h3 className="heading-tertiary text-base mb-4">More from This Series</h3>
-              <div className="space-y-3">
-                {[17, 19, 20].map((num) => (
-                  <Link
-                    key={num}
-                    href="/"
-                    className="block p-3 rounded-lg hover:bg-bg-accent transition-colors"
-                  >
-                    <p className="metadata-text text-primary mb-1">Lesson {num}</p>
-                    <p className="text-sm font-medium">
-                      Explanation of Kitāb At-Tawḥīd
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </Card>
-          </aside>
-        </div>
+        </main>
       </div>
     </div>
   );
