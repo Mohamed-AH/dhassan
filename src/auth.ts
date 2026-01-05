@@ -1,8 +1,12 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
+// Debug: Check if secret is loaded
+console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET);
+console.log('AUTH_SECRET:', process.env.AUTH_SECRET);
+
 const nextAuthConfig = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || 'dev-secret-min-32-chars-long-change-in-prod',
   pages: {
     signIn: '/admin/login',
   },
