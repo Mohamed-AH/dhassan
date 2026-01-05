@@ -4,7 +4,6 @@ export const authConfig = {
   pages: {
     signIn: '/admin/login',
   },
-  providers: [],
   session: {
     strategy: 'jwt' as const,
   },
