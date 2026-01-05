@@ -39,16 +39,16 @@ export default async function ArchivePage() {
   })).filter(group => group.lectures.length > 0);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-bg-cream">
       {/* Hero Section */}
-      <div className="bg-primary text-white py-16 md:py-20">
+      <div className="bg-primary text-white py-12 md:py-16">
         <Container variant="wide">
-          <div className="text-center max-w-3xl mx-auto px-4">
-            <h1 className="heading-primary text-white mb-6">
+          <div className="text-center max-w-2xl mx-auto px-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Lecture Archive
             </h1>
-            <p className="text-lg md:text-xl opacity-90 leading-relaxed">
-              Browse all English notes from Arabic Islamic lectures by Sheikh Ḥasan Ad-Daghrīrī <span className="arabic-text-inline">حفظه الله</span>
+            <p className="text-base md:text-lg opacity-95">
+              English notes from Arabic Islamic lectures by Sheikh Ḥasan Ad-Daghrīrī <span className="arabic-text-inline">حفظه الله</span>
             </p>
           </div>
         </Container>
@@ -56,47 +56,43 @@ export default async function ArchivePage() {
 
       {/* Main Content */}
       <Container variant="wide">
-        <div className="py-12 md:py-16">
+        <div className="py-10 md:py-14 px-4 md:px-6">
           {/* Stats */}
-          <div className="flex flex-wrap gap-8 md:gap-12 mb-16 justify-center">
+          <div className="flex gap-8 mb-12 justify-center">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-1">
+              <div className="text-3xl md:text-4xl font-bold text-primary mb-1">
                 {lectures.length}
               </div>
-              <div className="metadata-text">Total Lectures</div>
+              <div className="text-sm text-text-muted uppercase tracking-wide">Lectures</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-accent-gold mb-1">
+              <div className="text-3xl md:text-4xl font-bold text-accent-gold mb-1">
                 {lecturesByBook.length}
               </div>
-              <div className="metadata-text">Book Series</div>
+              <div className="text-sm text-text-muted uppercase tracking-wide">Series</div>
             </div>
           </div>
 
           {/* Lectures by Book */}
           {lecturesByBook.length > 0 ? (
-            <div className="space-y-20">
+            <div className="space-y-16">
               {lecturesByBook.map((group) => (
                 <section key={group.book._id}>
                   {/* Book Header */}
-                  <div className="mb-10">
-                    <div className="flex items-center gap-4 md:gap-6 mb-4">
-                      <hr className="flex-1 border-accent-gold opacity-30" />
-                      <h2 className="heading-secondary text-center px-2">
-                        {group.book.titleEnglish}
-                      </h2>
-                      <hr className="flex-1 border-accent-gold opacity-30" />
-                    </div>
-                    <p className="arabic-text text-center mb-3 text-2xl">
+                  <div className="mb-8 text-center">
+                    <h2 className="text-2xl md:text-3xl font-semibold text-text-primary mb-2">
+                      {group.book.titleEnglish}
+                    </h2>
+                    <p className="arabic-text text-xl md:text-2xl mb-2 opacity-80">
                       {group.book.titleArabic}
                     </p>
-                    <p className="text-center text-text-muted text-base">
-                      By {group.book.author} · {group.lectures.length} Lecture{group.lectures.length !== 1 ? 's' : ''}
+                    <p className="text-sm text-text-muted">
+                      {group.lectures.length} Lecture{group.lectures.length !== 1 ? 's' : ''}
                     </p>
                   </div>
 
                   {/* Lecture Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
                     {group.lectures.map((lecture) => (
                       <LectureCard
                         key={lecture._id}
