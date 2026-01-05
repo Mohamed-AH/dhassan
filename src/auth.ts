@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
 const nextAuthConfig = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/admin/login',
   },

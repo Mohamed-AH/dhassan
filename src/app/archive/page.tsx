@@ -41,13 +41,13 @@ export default async function ArchivePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="bg-primary text-white py-16">
+      <div className="bg-primary text-white py-16 md:py-20">
         <Container variant="wide">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="heading-primary text-white mb-4">
+          <div className="text-center max-w-3xl mx-auto px-4">
+            <h1 className="heading-primary text-white mb-6">
               Lecture Archive
             </h1>
-            <p className="text-xl opacity-90">
+            <p className="text-lg md:text-xl opacity-90 leading-relaxed">
               Browse all English notes from Arabic Islamic lectures by Sheikh Ḥasan Ad-Daghrīrī <span className="arabic-text-inline">حفظه الله</span>
             </p>
           </div>
@@ -56,9 +56,9 @@ export default async function ArchivePage() {
 
       {/* Main Content */}
       <Container variant="wide">
-        <div className="py-12">
+        <div className="py-12 md:py-16">
           {/* Stats */}
-          <div className="flex flex-wrap gap-6 mb-12 justify-center">
+          <div className="flex flex-wrap gap-8 md:gap-12 mb-16 justify-center">
             <div className="text-center">
               <div className="text-4xl font-bold text-primary mb-1">
                 {lectures.length}
@@ -75,28 +75,28 @@ export default async function ArchivePage() {
 
           {/* Lectures by Book */}
           {lecturesByBook.length > 0 ? (
-            <div className="space-y-16">
+            <div className="space-y-20">
               {lecturesByBook.map((group) => (
                 <section key={group.book._id}>
                   {/* Book Header */}
-                  <div className="mb-8">
-                    <div className="flex items-center gap-4 mb-3">
-                      <hr className="flex-1 border-accent-gold" />
-                      <h2 className="heading-secondary text-center">
+                  <div className="mb-10">
+                    <div className="flex items-center gap-4 md:gap-6 mb-4">
+                      <hr className="flex-1 border-accent-gold opacity-30" />
+                      <h2 className="heading-secondary text-center px-2">
                         {group.book.titleEnglish}
                       </h2>
-                      <hr className="flex-1 border-accent-gold" />
+                      <hr className="flex-1 border-accent-gold opacity-30" />
                     </div>
-                    <p className="arabic-text text-center mb-2">
+                    <p className="arabic-text text-center mb-3 text-2xl">
                       {group.book.titleArabic}
                     </p>
-                    <p className="text-center text-text-muted">
+                    <p className="text-center text-text-muted text-base">
                       By {group.book.author} · {group.lectures.length} Lecture{group.lectures.length !== 1 ? 's' : ''}
                     </p>
                   </div>
 
                   {/* Lecture Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {group.lectures.map((lecture) => (
                       <LectureCard
                         key={lecture._id}
