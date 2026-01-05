@@ -56,7 +56,7 @@ export default async function ArchivePage() {
 
       {/* Main Content */}
       <Container variant="wide">
-        <div className="py-10 md:py-14 px-4 md:px-6">
+        <div className="py-12 px-4 sm:px-6 lg:px-8">
           {/* Stats */}
           <div className="flex gap-8 mb-12 justify-center">
             <div className="text-center">
@@ -75,11 +75,11 @@ export default async function ArchivePage() {
 
           {/* Lectures by Book */}
           {lecturesByBook.length > 0 ? (
-            <div className="space-y-16">
+            <div className="space-y-20">
               {lecturesByBook.map((group) => (
                 <section key={group.book._id}>
                   {/* Book Header */}
-                  <div className="mb-8 text-center">
+                  <div className="mb-10 text-center">
                     <h2 className="text-2xl md:text-3xl font-semibold text-text-primary mb-2">
                       {group.book.titleEnglish}
                     </h2>
