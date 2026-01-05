@@ -65,4 +65,11 @@ const nextAuthConfig = NextAuth({
   },
 });
 
-export const { handlers, auth, signIn, signOut } = nextAuthConfig;
+// Debug logging
+console.log('NextAuth config:', nextAuthConfig);
+console.log('Handlers:', nextAuthConfig.handlers);
+
+export const handlers = nextAuthConfig.handlers;
+export const auth = nextAuthConfig.auth;
+export const signIn = nextAuthConfig.signIn;
+export const signOut = nextAuthConfig.signOut;
