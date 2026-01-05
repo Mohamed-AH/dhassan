@@ -11,7 +11,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
 
           {/* Main Content */}
-          <main>
+          <main className="px-4 md:px-6">
             {/* Breadcrumb */}
             <div className="mb-8">
               <Button variant="ghost" href="/archive">
@@ -70,7 +70,7 @@ export default function Home() {
             <hr className="divider-simple" />
 
             {/* Lecture Content - Optimal Reading Width */}
-            <article className="lecture-content max-w-3xl mx-auto px-6 md:px-8 lg:px-12">
+            <article className="lecture-content max-w-3xl">
               <p>
                 In this blessed gathering, we continue our study of the fundamental principles of Islamic monotheism (tawḥīd),
                 exploring the essential foundations that every Muslim must understand and implement in their daily life.
@@ -175,7 +175,7 @@ export default function Home() {
             </article>
 
             {/* Share & Navigation */}
-            <div className="mt-12 pt-8 border-t border-border max-w-3xl mx-auto px-6 md:px-8 lg:px-12">
+            <div className="mt-12 pt-8 border-t border-border max-w-3xl">
               <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
                 <Button variant="secondary" href="/">
                   ← Previous Lecture
