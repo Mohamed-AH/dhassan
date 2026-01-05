@@ -5,11 +5,11 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
-      <div className="max-w-4xl mx-auto px-6 md:px-8 py-8">
-        <main>
+    <div className="min-h-screen bg-bg-cream">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="space-y-8">
             {/* Breadcrumb */}
-            <div className="mb-8">
+            <div>
               <Button variant="ghost" href="/archive">
                 ← Back to Archive
               </Button>
@@ -19,7 +19,7 @@ export default function Home() {
             <hr className="divider" />
 
             {/* Metadata */}
-            <div className="text-center mb-8">
+            <div className="text-center">
               <p className="metadata-text mb-2">LESSON 18 · JĀMI' AL-WURŪD, JEDDAH</p>
               <h1 className="heading-primary mb-4">
                 Explanation of Kitāb At-Tawḥīd
@@ -28,7 +28,7 @@ export default function Home() {
             </div>
 
             {/* Info Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex items-start gap-3">
                 <span className="text-2xl">📖</span>
                 <div>
@@ -66,7 +66,7 @@ export default function Home() {
             <hr className="divider-simple" />
 
             {/* Lecture Content */}
-            <article className="lecture-content">
+            <article className="lecture-content space-y-6">
               <p>
                 In this blessed gathering, we continue our study of the fundamental principles of Islamic monotheism (tawḥīd),
                 exploring the essential foundations that every Muslim must understand and implement in their daily life.
@@ -171,7 +171,7 @@ export default function Home() {
             </article>
 
             {/* Share & Navigation */}
-            <div className="mt-12 pt-8 border-t border-border">
+            <div className="pt-8 border-t border-border">
               <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
                 <Button variant="secondary" href="/">
                   ← Previous Lecture
