@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف الشخصي - Dhassan</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="profile-page">
+
+  <!-- Navigation -->
+  <nav class="nav-main">
+    <div class="nav-container">
+      <a href="/" class="logo">دحسن</a>
+      <div class="nav-links">
+        <a href="/notes">المكتبة</a>
+        <% if (user) { %>
+        <a href="/write" class="btn-primary-small">كتابة ملاحظة</a>
+        <a href="/profile" class="active">حسابي</a>
+        <a href="/auth/logout">تسجيل خروج</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Container -->
+  <div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <img src="<%= profileUser.avatar %>" alt="<%= profileUser.name %>" class="profile-avatar-large">
+
+      <div class="profile-info">
+        <h1 class="profile-name"><%= profileUser.name %></h1>
+        <p class="profile-email"><%= profileUser.email %></p>
+
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <span class="profile-stat-number"><%= profileUser.notesCount || 0 %></span>
+            <span class="profile-stat-label">ملاحظة</span>
+          </div>
+          <div class="profile-stat">
+            <span class="profile-stat-number"><%= notes.length %></span>
+            <span class="profile-stat-label">منشورة</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes Section -->
+    <div class="profile-section">
+      <div class="profile-section-header">
+        <h2 class="profile-section-title"><%= isOwnProfile ? 'ملاحظاتي' : 'ملاحظات ' + profileUser.name %></h2>
+        <% if (isOwnProfile) { %>
+        <a href="/write" class="btn-primary-small">ملاحظة جديدة</a>
+        <% } %>
+      </div>
+
+      <% if (notes && notes.length > 0) { %>
+        <div class="notes-grid-profile">
+          <% notes.forEach(note => { %>
+          <article class="note-card-profile">
+            <div class="note-header-full">
+              <div class="note-info">
+                <h3 class="note-title-full"><%= note.title %></h3>
+                <span class="note-category"><%= note.category %></span>
+              </div>
+              <div class="note-meta">
+                <span class="note-date"><%= new Date(note.createdAt).toLocaleDateString('ar-SA') %></span>
+              </div>
+            </div>
+
+            <div class="note-body">
+              <p class="note-text"><%= note.content %></p>
+            </div>
+
+            <% if (note.tags) { %>
+            <div class="note-tags">
+              <% note.tags.split(',').forEach(tag => { %>
+                <span class="tag"><%= tag.trim() %></span>
+              <% }); %>
+            </div>
+            <% } %>
+
+            <% if (isOwnProfile) { %>
+            <div class="note-actions">
+              <button class="action-btn edit-btn" onclick="editNote('<%= note._id %>')">تعديل</button>
+              <button class="action-btn delete-btn" onclick="deleteNote('<%= note._id %>')">حذف</button>
+            </div>
+            <% } %>
+          </article>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="empty-profile">
+          <h3>لا توجد ملاحظات بعد</h3>
+          <% if (isOwnProfile) { %>
+          <p>ابدأ رحلتك العلمية بكتابة أول ملاحظة</p>
+          <a href="/write" class="btn-primary">كتابة ملاحظة</a>
+          <% } else { %>
+          <p>لم ينشر هذا المستخدم أي ملاحظات بعد</p>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 Dhassan. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <script src="/js/profile.js"></script>
+</body>
+</html>

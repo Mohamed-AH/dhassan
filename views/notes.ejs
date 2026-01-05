@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المكتبة - Dhassan</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="notes-page">
+
+  <!-- Navigation -->
+  <nav class="nav-main">
+    <div class="nav-container">
+      <a href="/" class="logo">دحسن</a>
+      <div class="nav-links">
+        <a href="/notes" class="active">المكتبة</a>
+        <% if (user) { %>
+        <a href="/write" class="btn-primary-small">كتابة ملاحظة</a>
+        <a href="/profile">حسابي</a>
+        <a href="/auth/logout">تسجيل خروج</a>
+        <% } else { %>
+        <a href="/login" class="btn-primary-small">تسجيل دخول</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">مكتبة الملاحظات</h1>
+      <p class="page-subtitle">تصفح واستفد من الفوائد العلمية المشاركة</p>
+    </div>
+  </header>
+
+  <!-- Filter Section -->
+  <section class="filter-section">
+    <div class="filter-container">
+      <form class="search-form" method="GET" action="/notes">
+        <div class="search-bar">
+          <input
+            type="text"
+            name="search"
+            class="search-input"
+            placeholder="ابحث في الملاحظات..."
+            value="<%= searchQuery || '' %>"
+          >
+        </div>
+
+        <div class="filter-controls">
+          <label class="filter-label">الترتيب:</label>
+          <select name="sort" class="sort-select" onchange="this.form.submit()">
+            <option value="newest" <%= sortBy === 'newest' ? 'selected' : '' %>>الأحدث</option>
+            <option value="oldest" <%= sortBy === 'oldest' ? 'selected' : '' %>>الأقدم</option>
+            <option value="title" <%= sortBy === 'title' ? 'selected' : '' %>>العنوان</option>
+          </select>
+
+          <label class="filter-label">التصنيف:</label>
+          <select name="category" class="sort-select" onchange="this.form.submit()">
+            <option value="">الكل</option>
+            <option value="Quran" <%= category === 'Quran' ? 'selected' : '' %>>القرآن</option>
+            <option value="Hadith" <%= category === 'Hadith' ? 'selected' : '' %>>الحديث</option>
+            <option value="Fiqh" <%= category === 'Fiqh' ? 'selected' : '' %>>الفقه</option>
+            <option value="Aqeedah" <%= category === 'Aqeedah' ? 'selected' : '' %>>العقيدة</option>
+            <option value="Arabic" <%= category === 'Arabic' ? 'selected' : '' %>>اللغة العربية</option>
+            <option value="General" <%= category === 'General' ? 'selected' : '' %>>عام</option>
+          </select>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="notes-container">
+      <% if (notes && notes.length > 0) { %>
+        <div class="notes-grid-full">
+          <% notes.forEach(note => { %>
+          <article class="note-card-full">
+            <div class="note-header-full">
+              <div class="note-info">
+                <h2 class="note-title-full"><%= note.title %></h2>
+                <span class="note-category"><%= note.category %></span>
+              </div>
+              <div class="note-meta">
+                <span class="note-date"><%= new Date(note.createdAt).toLocaleDateString('ar-SA') %></span>
+              </div>
+            </div>
+
+            <div class="note-body">
+              <p class="note-text"><%= note.content %></p>
+            </div>
+
+            <% if (note.tags) { %>
+            <div class="note-tags">
+              <% note.tags.split(',').forEach(tag => { %>
+                <span class="tag"><%= tag.trim() %></span>
+              <% }); %>
+            </div>
+            <% } %>
+
+            <div class="note-footer-full">
+              <span class="note-author-full">بواسطة: <%= note.userName %></span>
+
+              <% if (user && note.userId && user._id.toString() === note.userId.toString()) { %>
+              <div class="note-actions">
+                <button class="action-btn edit-btn" onclick="editNote('<%= note._id %>')">تعديل</button>
+                <button class="action-btn delete-btn" onclick="deleteNote('<%= note._id %>')">حذف</button>
+              </div>
+              <% } %>
+            </div>
+          </article>
+          <% }); %>
+        </div>
+
+        <p class="results-summary">عدد الملاحظات: <%= notes.length %></p>
+      <% } else { %>
+        <div class="empty-state">
+          <h2>لا توجد ملاحظات</h2>
+          <p>لم يتم العثور على ملاحظات مطابقة للبحث</p>
+          <% if (user) { %>
+          <a href="/write" class="btn-primary">أضف ملاحظة جديدة</a>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 Dhassan. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <script src="/js/notes.js"></script>
+</body>
+</html>
