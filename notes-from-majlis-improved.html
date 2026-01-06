@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes from the Majlis - Islamic Knowledge Resources</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Warm, welcoming color palette */
+            --sage-green: #7C9885;
+            --deep-sage: #5a7563;
+            --warm-cream: #FAF8F3;
+            --soft-beige: #F5F2EB;
+            --muted-gold: #C5A572;
+            --rich-gold: #B8935E;
+            --text-primary: #2C2C2C;
+            --text-secondary: #5A5A5A;
+            --text-light: #8A8A8A;
+            --border-light: #E8E5DD;
+            
+            /* Typography */
+            --font-display: 'Crimson Pro', serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --font-arabic: 'Amiri', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            background: var(--warm-cream);
+            line-height: 1.7;
+            font-size: 18px;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--sage-green);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--sage-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--muted-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--deep-sage) 100%);
+            color: white;
+            padding: 5rem 2rem 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            margin-bottom: 0.75rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .hero-arabic {
+            font-family: var(--font-arabic);
+            font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .hero-quote {
+            max-width: 700px;
+            margin: 3rem auto 2.5rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--muted-gold);
+            backdrop-filter: blur(10px);
+            border-radius: 4px;
+        }
+
+        .hero-quote p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-style: italic;
+            opacity: 0.95;
+        }
+
+        .hero-quote cite {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            opacity: 0.8;
+            font-style: normal;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--muted-gold);
+            color: var(--text-primary);
+            padding: 1rem 2.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            background: var(--rich-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Stats Section */
+        .stats {
+            background: white;
+            padding: 3rem 2rem;
+            margin-top: -3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            position: relative;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--sage-green);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+
+        .stat-status {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.35rem 1rem;
+            background: var(--soft-beige);
+            color: var(--sage-green);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 600px;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .about-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .about-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .about-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--sage-green);
+            margin-bottom: 1rem;
+        }
+
+        .about-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Lesson Cards */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .lesson-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--muted-gold);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .lesson-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .lesson-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .lesson-tag {
+            background: var(--soft-beige);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 500;
+            color: var(--sage-green);
+        }
+
+        .lesson-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .lesson-card .arabic-title {
+            font-family: var(--font-arabic);
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .lesson-excerpt {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .lesson-info {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .lesson-link {
+            color: var(--sage-green);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-link:hover {
+            color: var(--deep-sage);
+            gap: 0.75rem;
+        }
+
+        /* Official Sources */
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .source-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-light);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .source-card:hover {
+            border-color: var(--muted-gold);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .source-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--soft-beige);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.75rem;
+        }
+
+        .source-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .source-card .arabic-subtitle {
+            font-family: var(--font-arabic);
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .source-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-note {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--muted-gold);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-note p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-note strong {
+            color: var(--muted-gold);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--muted-gold);
+        }
+
+        .copyright {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            .stats-container {
+                gap: 2rem;
+            }
+
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection color */
+        ::selection {
+            background: var(--muted-gold);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Notes from the Majlis</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#lessons">Lessons</a></li>
+                <li><a href="#sources">Sources</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Notes from the Majlis</h1>
+            <p class="hero-subtitle">Student Notes & AI-Assisted Summaries from the Classes of Sheikh Hassan Dghriri</p>
+            <p class="hero-arabic">Jami' Al-Wurud, Jeddah</p>
+            
+            <div class="hero-quote">
+                <p>"Whoever takes a path in search of knowledge, Allah will make easy for him a path to Paradise."</p>
+                <cite>— Sahih Muslim</cite>
+            </div>
+
+            <a href="#lessons" class="cta-button">Explore Lessons</a>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Course Series</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Lessons Available</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Knowledge to Seek</div>
+                <div class="stat-status">Ongoing</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>A Window Into the Ocean</h2>
+                <p>This platform serves as a digital companion for students seeking to benefit from the knowledge shared in Sheikh Hassan Dghriri's classes.</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>🎯 Our Purpose</h3>
+                    <p>To inspire and facilitate—not to replace—the authentic learning experience. Think of this as sitting in the back of a majlis, pen in hand, capturing the essence of what's being shared. We use AI to help organize and present these insights clearly.</p>
+                </div>
+
+                <div class="about-card">
+                    <h3>📚 Our Methodology</h3>
+                    <p>Each lesson is carefully transcribed from the original Arabic recordings, then summarized using AI assistance. The notes capture key concepts, hadiths, and teachings while maintaining the spirit of the sheikh's explanations.</p>
+                </div>
+
+                <div class="about-card">
+                    <h3>🌟 About the Sheikh</h3>
+                    <p>Sheikh Hassan Dghriri studied under the renowned Sheikh Ahmed bin Yahya an-Najmi (may Allah have mercy on him) and currently teaches from classical Islamic texts including Sahih Al-Bukhari's Book of Faith.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Lessons -->
+    <section id="lessons" style="background: var(--soft-beige);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Recent Lessons</h2>
+                <p>Explore the latest teachings and discussions from the majlis</p>
+            </div>
+
+            <div class="lessons-grid">
+                <div class="lesson-card">
+                    <div class="lesson-meta">
+                        <span class="lesson-tag">Lesson 1</span>
+                        <span>8 key terms</span>
+                        <span>•</span>
+                        <span>January 1, 2024</span>
+                    </div>
+                    
+                    <h3>Hadiths 26-30: Faith, Action, and Social Conduct</h3>
+                    <p class="arabic-title">الأحاديث ٢٦-٣٠: الإيمان والعمل والسلوك الاجتماعي</p>
+                    
+                    <p class="lesson-excerpt">
+                        This lesson explores five fundamental hadiths from Sahih Al-Bukhari, examining the relationship between faith and action, the distinction between Islam and Iman, and the importance of spreading peace and maintaining gratitude.
+                    </p>
+                    
+                    <div class="lesson-footer">
+                        <span class="lesson-info">📖 Hadith Studies</span>
+                        <a href="#" class="lesson-link">
+                            View Notes →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Placeholder for more lessons -->
+                <div class="lesson-card" style="opacity: 0.5; border-style: dashed;">
+                    <div class="lesson-meta">
+                        <span class="lesson-tag">Coming Soon</span>
+                    </div>
+                    
+                    <h3>More Lessons Coming</h3>
+                    <p class="arabic-title">المزيد من الدروس قادمة</p>
+                    
+                    <p class="lesson-excerpt">
+                        Additional lessons from Sheikh Hassan Dghriri's ongoing classes will be added regularly. Check back often for new content.
+                    </p>
+                    
+                    <div class="lesson-footer">
+                        <span class="lesson-info">📚 Stay tuned</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Official Sources -->
+    <section id="sources">
+        <div class="container">
+            <div class="section-header">
+                <h2>Official Sources</h2>
+                <p>For authentic, unedited content directly from Sheikh Hassan Dghriri</p>
+            </div>
+
+            <div class="sources-grid">
+                <div class="source-card">
+                    <div class="source-icon">📱</div>
+                    <h3>Telegram Channel</h3>
+                    <p class="arabic-subtitle">قناة شيخ حسن دغريري</p>
+                    <p>Daily updates, audio recordings, and class schedules</p>
+                    <p style="margin-top: 1rem;"><strong>t.me/darihhasan</strong></p>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-icon">💬</div>
+                    <h3>WhatsApp Community</h3>
+                    <p class="arabic-subtitle">مجتمع الطلاب</p>
+                    <p>Join the community of students for class notifications and discussions</p>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-icon">🕌</div>
+                    <h3>In Person</h3>
+                    <p class="arabic-subtitle">جامع الورود</p>
+                    <p>Al-Wurud District, Jeddah, Saudi Arabia<br><br>Regular classes throughout the week</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 3rem; color: var(--text-secondary); font-style: italic;">
+                Always verify from official sources before acting on any knowledge
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-note">
+                <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes created for educational purposes. They have not been reviewed, edited, or approved by Sheikh Hassan Dghriri.</p>
+                <p>For Islamic rulings (fatawa), consult the Sheikh directly. For accurate quotes and complete context, listen to the original recordings. For deep understanding, attend the classes.</p>
+                <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);"><em>The original audio/video recording is the ONLY authoritative source for the Sheikh's teachings.</em></p>
+            </div>
+
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Topics</a>
+                <a href="#">Series</a>
+                <a href="#">About</a>
+                <a href="#">Report an Error</a>
+            </div>
+
+            <p class="copyright">
+                © 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.<br>
+                Unofficial student notes from Sheikh Hassan Dghriri's classes
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
