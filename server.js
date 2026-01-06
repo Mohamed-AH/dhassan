@@ -73,6 +73,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
     const seriesCollection = db.collection("series");
     const lessonsCollection = db.collection("lessons");
     const usersCollection = db.collection("users");
+    const notesCollection = db.collection("notes"); // User-generated notes (legacy/future feature)
 
     // Session configuration
     const sessionConfig = {
