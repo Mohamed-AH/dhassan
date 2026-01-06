@@ -700,14 +700,6 @@ footer {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
-  html {
-    font-size: 14px;
-  }
-
-  body {
-    font-size: 16px;
-  }
-
   .nav-container {
     flex-direction: column;
     gap: var(--space-sm);
