@@ -1,222 +1,220 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notes from the Majlis - Sheikh Hassan Dghriri</title>
+  <title>Notes from the Majlis - Islamic Knowledge Resources</title>
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body class="landing-page">
+<body>
 
   <!-- Navigation -->
-  <nav class="nav-main">
+  <nav>
     <div class="nav-container">
       <a href="/" class="logo">Notes from the Majlis</a>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/topics">Browse Topics</a>
-        <a href="/series">Browse Series</a>
-        <a href="/about">About</a>
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#sources">Sources</a></li>
         <% if (user) { %>
-        <a href="/profile"><%= user.name %></a>
-        <a href="/auth/logout">Logout</a>
-        <% } else { %>
-        <a href="/login" class="btn-primary-small">Sign In</a>
+        <li><a href="/profile"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
         <% } %>
-      </div>
+      </ul>
     </div>
   </nav>
 
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">Notes from the Majlis</h1>
-      <p class="hero-subtitle">
-        Student Notes & AI-Assisted Summaries from the Classes of Sheikh Hassan Dghriri
-      </p>
-      <p class="hero-tagline">
-        Jami' Al-Wurud, Jeddah
-      </p>
-      <div class="hero-cta">
-        <a href="/topics" class="btn-primary">Browse Topics</a>
-        <a href="/series" class="btn-secondary">Browse Series</a>
+      <h1>Notes from the Majlis</h1>
+      <p class="hero-subtitle">Student Notes & AI-Assisted Summaries from the Classes of Sheikh Hassan Dghriri</p>
+      <p class="hero-arabic">Jami' Al-Wurud, Jeddah</p>
+
+      <div class="hero-quote">
+        <p>"Whoever takes a path in search of knowledge, Allah will make easy for him a path to Paradise."</p>
+        <cite>— Sahih Muslim</cite>
       </div>
+
+      <a href="#lessons" class="cta-button">Explore Lessons</a>
     </div>
   </section>
 
-  <!-- Stats Section -->
-  <section class="stats-section">
+  <!-- Stats -->
+  <section class="stats">
     <div class="stats-container">
-      <div class="stat-card">
+      <div class="stat-item">
         <div class="stat-number"><%= totalSeries || 0 %></div>
         <div class="stat-label">Course Series</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-item">
         <div class="stat-number"><%= totalLessons || 0 %></div>
         <div class="stat-label">Lessons Available</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-number">Ongoing</div>
-        <div class="stat-label">Status</div>
+      <div class="stat-item">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Knowledge to Seek</div>
+        <div class="stat-status">Ongoing <span class="beta-badge">Growing Library</span></div>
       </div>
     </div>
   </section>
 
-  <!-- Welcome & Disclaimer Section -->
-  <section class="welcome-section">
-    <div class="welcome-container">
-      <h2>Welcome</h2>
-      <p>
-        <em>Bismillah ar-Rahman ar-Raheem</em>
-      </p>
-      <p>
-        This platform serves as a digital notebook for students seeking to benefit from
-        the knowledge shared in the classes of Sheikh Hassan Dghriri (حفظه الله) at
-        Jami' Al-Wurud in Jeddah.
-      </p>
-      <p>
-        Think of this as sitting in the back of a majlis (study circle), pen in hand,
-        trying to capture the gems of knowledge being shared—except here, we're using AI
-        to help transcribe and organize those notes.
-      </p>
-
-      <div class="purpose-box">
-        <h3>Our Purpose</h3>
-        <p><strong>To motivate, not to replace.</strong></p>
-        <p>This is a window into an ocean—not the ocean itself.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Disclaimer Section -->
-  <section class="disclaimer-section">
-    <div class="disclaimer-container">
-      <h2 class="disclaimer-title">Important Disclaimer</h2>
-      <p class="disclaimer-subtitle">Please Read Carefully</p>
-
-      <div class="disclaimer-box">
-        <h3>NOT a Primary Source</h3>
-        <p>
-          These notes are AI-assisted summaries created by a student for educational
-          purposes. They have NOT been reviewed, edited, or approved by Sheikh Hassan Dghriri.
-        </p>
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2>A Window Into the Ocean</h2>
+        <p>This platform serves as a digital companion for students seeking to benefit from the knowledge shared in Sheikh Hassan Dghriri's classes.</p>
       </div>
 
-      <div class="disclaimer-grid">
-        <div class="disclaimer-item">
-          <h4>AI Limitations</h4>
-          <ul>
-            <li>AI can misinterpret Arabic nuances</li>
-            <li>Technical terms may be mistranscribed</li>
-            <li>Context can be lost in summarization</li>
-          </ul>
+      <div class="about-grid">
+        <div class="about-card">
+          <h3>🎯 Our Purpose</h3>
+          <p>To inspire and facilitate—not to replace—the authentic learning experience. Think of this as sitting in the back of a majlis, pen in hand, capturing the essence of what's being shared. We use AI to help organize and present these insights clearly.</p>
         </div>
 
-        <div class="disclaimer-item">
-          <h4>No Substitute for the Source</h4>
-          <ul>
-            <li>For rulings (fatawa), consult the Sheikh directly</li>
-            <li>For accurate quotes, listen to original recordings</li>
-            <li>For deep understanding, attend the classes</li>
-          </ul>
+        <div class="about-card">
+          <h3>📚 Our Methodology</h3>
+          <p>Each lesson is carefully transcribed from the original Arabic recordings, then summarized using AI assistance. The notes capture key concepts, hadiths, and teachings while maintaining the spirit of the sheikh's explanations.</p>
         </div>
-      </div>
 
-      <div class="disclaimer-highlight">
-        <p>
-          <strong>When in Doubt, Verify</strong><br>
-          The original audio/video recording is the ONLY authoritative source for the Sheikh's teachings.
-        </p>
+        <div class="about-card">
+          <h3>🌟 About the Sheikh</h3>
+          <p>Sheikh Hassan Dghriri studied under the renowned Sheikh Ahmed bin Yahya an-Najmi (may Allah have mercy on him) and currently teaches from classical Islamic texts including Sahih Al-Bukhari's Book of Faith.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Recent Lessons -->
-  <% if (recentLessons && recentLessons.length > 0) { %>
-  <section class="recent-section">
-    <div class="recent-container">
-      <h2>Recent Lessons</h2>
+  <section id="lessons" style="background: var(--soft-beige);">
+    <div class="container">
+      <div class="section-header">
+        <h2>Recent Lessons</h2>
+        <p>Explore the latest teachings and discussions from the majlis</p>
+      </div>
+
       <div class="lessons-grid">
-        <% recentLessons.forEach(lesson => { %>
-        <div class="lesson-card">
-          <div class="lesson-category"><%= lesson.category %></div>
-          <h3 class="lesson-title"><%= lesson.titleEnglish %></h3>
-          <% if (lesson.titleArabic) { %>
-          <p class="lesson-title-ar"><%= lesson.titleArabic %></p>
-          <% } %>
-          <div class="lesson-meta">
-            <span class="lesson-duration"><%= lesson.duration %></span>
-            <span class="lesson-date"><%= new Date(lesson.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+        <% if (recentLessons && recentLessons.length > 0) { %>
+          <% recentLessons.forEach(lesson => { %>
+          <div class="lesson-card">
+            <div class="lesson-meta">
+              <span class="lesson-tag">Lesson <%= lesson.lessonNumber %></span>
+              <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
+              <span><%= lesson.keyTerms.length %> key terms</span>
+              <span>•</span>
+              <% } %>
+              <span><%= new Date(lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+            </div>
+
+            <h3><%= lesson.titleEnglish %></h3>
+            <% if (lesson.titleArabic) { %>
+            <p class="arabic-title"><%= lesson.titleArabic %></p>
+            <% } %>
+
+            <% if (lesson.summary) { %>
+            <p class="lesson-excerpt">
+              <%= lesson.summary.length > 200 ? lesson.summary.substring(0, 200) + '...' : lesson.summary %>
+            </p>
+            <% } %>
+
+            <div class="lesson-footer">
+              <span class="lesson-info">📖 Hadith Studies</span>
+              <a href="/lesson/<%= lesson._id %>" class="lesson-link">
+                View Notes →
+              </a>
+            </div>
           </div>
-          <a href="/lesson/<%= lesson._id %>" class="lesson-link">View Notes</a>
+          <% }); %>
+        <% } %>
+
+        <!-- Placeholder for more lessons -->
+        <div class="lesson-card coming-soon">
+          <div class="lesson-meta">
+            <span class="lesson-tag">Coming Soon</span>
+          </div>
+
+          <h3>More Lessons Coming</h3>
+          <p class="arabic-title">المزيد من الدروس قادمة</p>
+
+          <p class="lesson-excerpt">
+            Additional lessons from Sheikh Hassan Dghriri's ongoing classes will be added regularly. Check back often for new content.
+          </p>
+
+          <div class="lesson-footer">
+            <span class="lesson-info">📚 Stay tuned</span>
+          </div>
         </div>
-        <% }); %>
       </div>
     </div>
   </section>
-  <% } %>
 
-  <!-- Official Sources Section -->
-  <section class="sources-section">
-    <div class="sources-container">
-      <h2>Official Sources</h2>
-      <p>For authentic, unedited content directly from Sheikh Hassan Dghriri:</p>
+  <!-- Official Sources -->
+  <section id="sources">
+    <div class="container">
+      <div class="section-header">
+        <h2>Official Sources</h2>
+        <p>For authentic, unedited content directly from Sheikh Hassan Dghriri</p>
+      </div>
 
       <div class="sources-grid">
         <div class="source-card">
+          <div class="source-icon">📱</div>
           <h3>Telegram Channel</h3>
-          <p>قناة الشيخ حسن الدغريري</p>
-          <a href="https://t.me/daririhasan" target="_blank" rel="noopener noreferrer" class="source-link">
-            t.me/daririhasan
-          </a>
-          <p class="source-description">Daily updates, audio recordings, class schedules</p>
+          <p class="arabic-subtitle">قناة شيخ حسن دغريري</p>
+          <p>Daily updates, audio recordings, and class schedules</p>
+          <p style="margin-top: 1rem;"><strong>t.me/darihhasan</strong></p>
         </div>
 
         <div class="source-card">
+          <div class="source-icon">💬</div>
           <h3>WhatsApp Community</h3>
-          <a href="https://chat.whatsapp.com/DUvpoPZFcBk22nVL1nIrVg" target="_blank" rel="noopener noreferrer" class="source-link">
-            Join Community
-          </a>
-          <p class="source-description">Community of students, class notifications</p>
+          <p class="arabic-subtitle">مجتمع الطلاب</p>
+          <p>Join the community of students for class notifications and discussions</p>
         </div>
 
         <div class="source-card">
+          <div class="source-icon">🕌</div>
           <h3>In Person</h3>
-          <p><strong>Jami' Al-Wurud</strong></p>
-          <p>Al-Wurud District, Jeddah, Saudi Arabia</p>
-          <p class="source-description">Regular classes throughout the week</p>
+          <p class="arabic-subtitle">جامع الورود</p>
+          <p>Al-Wurud District, Jeddah, Saudi Arabia<br><br>Regular classes throughout the week</p>
         </div>
       </div>
 
-      <p class="sources-note">
-        <strong>Always verify from official sources before acting on any knowledge.</strong>
+      <p style="text-align: center; margin-top: 3rem; color: var(--text-secondary); font-style: italic;">
+        Always verify from official sources before acting on any knowledge
       </p>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer>
     <div class="footer-content">
-      <div class="footer-brand">
-        <h3>Notes from the Majlis</h3>
-        <p>Unofficial student notes from Sheikh Hassan Dghriri's classes</p>
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes created for educational purposes. They have not been reviewed, edited, or approved by Sheikh Hassan Dghriri.</p>
+        <p>For Islamic rulings (fatawa), consult the Sheikh directly. For accurate quotes and complete context, listen to the original recordings. For deep understanding, attend the classes.</p>
+        <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);"><em>The original audio/video recording is the ONLY authoritative source for the Sheikh's teachings.</em></p>
       </div>
+
       <div class="footer-links">
         <a href="/">Home</a>
         <a href="/topics">Topics</a>
         <a href="/series">Series</a>
-        <a href="/about">About</a>
+        <a href="#about">About</a>
+        <a href="mailto:corrections@example.com">Report an Error</a>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.</p>
-      <p>These are unofficial AI-assisted student notes. Always verify from original recordings.</p>
+
+      <p class="copyright">
+        © 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.<br>
+        Unofficial student notes from Sheikh Hassan Dghriri's classes
+      </p>
     </div>
   </footer>
 
-  <script src="/js/landing.js"></script>
 </body>
 </html>
