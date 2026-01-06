@@ -69,8 +69,9 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
     console.log("Google:", `${callbackURL}/auth/google/callback`);
     console.log("GitHub:", `${callbackURL}/auth/github/callback\n`);
 
-    const db = client.db("dhassan-study");
-    const notesCollection = db.collection("notes");
+    const db = client.db("notes-from-majlis");
+    const seriesCollection = db.collection("series");
+    const lessonsCollection = db.collection("lessons");
     const usersCollection = db.collection("users");
 
     // Session configuration
@@ -80,7 +81,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
       saveUninitialized: false,
       store: MongoStore.create({
         client: client,
-        dbName: 'dhassan-study',
+        dbName: 'notes-from-majlis',
         collectionName: 'sessions',
         ttl: 14 * 24 * 60 * 60 // 14 days
       }),
@@ -186,72 +187,161 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
     // ===== PAGE ROUTES =====
 
     // Landing page
-    app.get("/", (req, res) => {
+    app.get("/", async (req, res) => {
       console.log("🏠 Landing page accessed");
       console.log("Session ID:", req.sessionID);
       console.log("Is Authenticated:", req.isAuthenticated());
       console.log("User:", req.user ? req.user.email || req.user.name : "Not logged in");
 
-      notesCollection
-        .find()
-        .sort({ createdAt: -1 })
-        .limit(6)
-        .toArray()
-        .then((recentNotes) => {
-          notesCollection.countDocuments().then((totalNotes) => {
-            res.render("landing.ejs", {
-              recentNotes,
-              totalNotes
-            });
-          });
-        })
-        .catch((error) => {
-          console.error(error);
-          res.status(500).render("error.ejs", { message: "Failed to load content" });
+      try {
+        const recentLessons = await lessonsCollection
+          .find()
+          .sort({ date: -1 })
+          .limit(6)
+          .toArray();
+
+        const totalSeries = await seriesCollection.countDocuments();
+        const totalLessons = await lessonsCollection.countDocuments();
+
+        res.render("landing.ejs", {
+          recentLessons,
+          totalSeries,
+          totalLessons
         });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load content" });
+      }
     });
 
-    // Notes library page
-    app.get("/notes", (req, res) => {
-      const searchQuery = req.query.search || "";
-      const sortBy = req.query.sort || "newest";
-      const category = req.query.category || "";
+    // Browse by Topics page
+    app.get("/topics", async (req, res) => {
+      try {
+        const allSeries = await seriesCollection
+          .find()
+          .sort({ category: 1, titleEnglish: 1 })
+          .toArray();
 
-      let query = {};
-      if (searchQuery) {
-        query = {
-          $or: [
-            { title: { $regex: searchQuery, $options: 'i' } },
-            { content: { $regex: searchQuery, $options: 'i' } },
-            { tags: { $regex: searchQuery, $options: 'i' } }
-          ]
-        };
-      }
-
-      if (category) {
-        query.category = category;
-      }
-
-      let sortOption = { createdAt: -1 };
-      if (sortBy === "oldest") sortOption = { createdAt: 1 };
-      if (sortBy === "title") sortOption = { title: 1 };
-
-      notesCollection
-        .find(query)
-        .sort(sortOption)
-        .toArray()
-        .then((results) => {
-          res.render("notes.ejs", {
-            notes: results,
-            searchQuery,
-            sortBy,
-            category
-          });
-        })
-        .catch((error) => {
-          console.error(error);
-          res.status(500).render("error.ejs", { message: "Failed to load notes" });
+        // Group series by category
+        const seriesByCategory = {};
+        allSeries.forEach(series => {
+          if (!seriesByCategory[series.category]) {
+            seriesByCategory[series.category] = [];
+          }
+          seriesByCategory[series.category].push(series);
         });
+
+        res.render("topics.ejs", {
+          seriesByCategory
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load topics" });
+      }
+    });
+
+    // Browse by Series page
+    app.get("/series", async (req, res) => {
+      try {
+        const category = req.query.category || "";
+
+        let query = {};
+        if (category) {
+          query.category = category;
+        }
+
+        const allSeries = await seriesCollection
+          .find(query)
+          .sort({ titleEnglish: 1 })
+          .toArray();
+
+        // Get latest lesson for each series
+        for (let series of allSeries) {
+          const latestLesson = await lessonsCollection
+            .find({ seriesId: series.seriesId })
+            .sort({ date: -1 })
+            .limit(1)
+            .toArray();
+
+          if (latestLesson.length > 0) {
+            series.latestLesson = latestLesson[0];
+          }
+        }
+
+        res.render("series.ejs", {
+          allSeries,
+          selectedCategory: category
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load series" });
+      }
+    });
+
+    // Individual Series page
+    app.get("/series/:seriesId", async (req, res) => {
+      try {
+        const { seriesId } = req.params;
+
+        const series = await seriesCollection.findOne({ seriesId });
+
+        if (!series) {
+          return res.status(404).render("error.ejs", { message: "Series not found" });
+        }
+
+        const lessons = await lessonsCollection
+          .find({ seriesId })
+          .sort({ lessonNumber: 1 })
+          .toArray();
+
+        res.render("series-detail.ejs", {
+          series,
+          lessons
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load series" });
+      }
+    });
+
+    // Individual Lesson page
+    app.get("/lesson/:lessonId", async (req, res) => {
+      try {
+        const { lessonId } = req.params;
+
+        if (!ObjectId.isValid(lessonId)) {
+          return res.status(404).render("error.ejs", { message: "Lesson not found" });
+        }
+
+        const lesson = await lessonsCollection.findOne({ _id: new ObjectId(lessonId) });
+
+        if (!lesson) {
+          return res.status(404).render("error.ejs", { message: "Lesson not found" });
+        }
+
+        const series = await seriesCollection.findOne({ seriesId: lesson.seriesId });
+
+        // Get previous and next lessons
+        const previousLesson = await lessonsCollection.findOne({
+          seriesId: lesson.seriesId,
+          lessonNumber: lesson.lessonNumber - 1
+        });
+
+        const nextLesson = await lessonsCollection.findOne({
+          seriesId: lesson.seriesId,
+          lessonNumber: lesson.lessonNumber + 1
+        });
+
+        res.render("lesson.ejs", {
+          lesson,
+          series,
+          previousLesson,
+          nextLesson
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load lesson" });
+      }
     });
 
     // Write page (requires authentication)

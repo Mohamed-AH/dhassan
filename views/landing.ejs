@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dhassan - Islamic Study Platform</title>
+  <title>Notes from the Majlis - Sheikh Hassan Dghriri</title>
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="landing-page">
 
   <!-- Navigation -->
   <nav class="nav-main">
     <div class="nav-container">
-      <a href="/" class="logo">دحسن</a>
+      <a href="/" class="logo">Notes from the Majlis</a>
       <div class="nav-links">
-        <a href="/notes">المكتبة</a>
+        <a href="/">Home</a>
+        <a href="/topics">Browse Topics</a>
+        <a href="/series">Browse Series</a>
+        <a href="/about">About</a>
         <% if (user) { %>
-        <a href="/write" class="btn-primary-small">كتابة ملاحظة</a>
-        <a href="/profile">حسابي</a>
-        <a href="/auth/logout">تسجيل خروج</a>
+        <a href="/profile"><%= user.name %></a>
+        <a href="/auth/logout">Logout</a>
         <% } else { %>
-        <a href="/login" class="btn-primary-small">تسجيل دخول</a>
+        <a href="/login" class="btn-primary-small">Sign In</a>
         <% } %>
       </div>
     </div>
@@ -31,17 +33,16 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">منصة دحسن للدراسات الإسلامية</h1>
+      <h1 class="hero-title">Notes from the Majlis</h1>
       <p class="hero-subtitle">
-        مكان مخصص لتدوين ملاحظاتك ودراساتك الإسلامية ومشاركة العلم النافع
+        Student Notes & AI-Assisted Summaries from the Classes of Sheikh Hassan Dghriri
+      </p>
+      <p class="hero-tagline">
+        Jami' Al-Wurud, Jeddah
       </p>
       <div class="hero-cta">
-        <% if (user) { %>
-        <a href="/write" class="btn-primary">ابدأ الكتابة</a>
-        <% } else { %>
-        <a href="/login" class="btn-primary">تسجيل الدخول</a>
-        <% } %>
-        <a href="/notes" class="btn-secondary">تصفح المكتبة</a>
+        <a href="/topics" class="btn-primary">Browse Topics</a>
+        <a href="/series" class="btn-secondary">Browse Series</a>
       </div>
     </div>
   </section>
@@ -50,64 +51,149 @@
   <section class="stats-section">
     <div class="stats-container">
       <div class="stat-card">
-        <div class="stat-number"><%= totalNotes || 0 %></div>
-        <div class="stat-label">ملاحظات مشاركة</div>
+        <div class="stat-number"><%= totalSeries || 0 %></div>
+        <div class="stat-label">Course Series</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">∞</div>
-        <div class="stat-label">فوائد علمية</div>
+        <div class="stat-number"><%= totalLessons || 0 %></div>
+        <div class="stat-label">Lessons Available</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">24/7</div>
-        <div class="stat-label">متاح دائماً</div>
+        <div class="stat-number">Ongoing</div>
+        <div class="stat-label">Status</div>
       </div>
     </div>
   </section>
 
-  <!-- Recent Notes -->
-  <% if (recentNotes && recentNotes.length > 0) { %>
-  <section class="featured-section">
-    <div class="section-header">
-      <h2 class="section-title">أحدث الملاحظات</h2>
-      <p class="section-subtitle">آخر ما تمت إضافته من الفوائد العلمية</p>
-    </div>
+  <!-- Welcome & Disclaimer Section -->
+  <section class="welcome-section">
+    <div class="welcome-container">
+      <h2>Welcome</h2>
+      <p>
+        <em>Bismillah ar-Rahman ar-Raheem</em>
+      </p>
+      <p>
+        This platform serves as a digital notebook for students seeking to benefit from
+        the knowledge shared in the classes of Sheikh Hassan Dghriri (حفظه الله) at
+        Jami' Al-Wurud in Jeddah.
+      </p>
+      <p>
+        Think of this as sitting in the back of a majlis (study circle), pen in hand,
+        trying to capture the gems of knowledge being shared—except here, we're using AI
+        to help transcribe and organize those notes.
+      </p>
 
-    <div class="notes-grid">
-      <% recentNotes.forEach(note => { %>
-      <div class="note-card">
-        <div class="note-header">
-          <h3 class="note-title"><%= note.title %></h3>
-          <span class="note-category"><%= note.category %></span>
+      <div class="purpose-box">
+        <h3>Our Purpose</h3>
+        <p><strong>To motivate, not to replace.</strong></p>
+        <p>This is a window into an ocean—not the ocean itself.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer Section -->
+  <section class="disclaimer-section">
+    <div class="disclaimer-container">
+      <h2 class="disclaimer-title">Important Disclaimer</h2>
+      <p class="disclaimer-subtitle">Please Read Carefully</p>
+
+      <div class="disclaimer-box">
+        <h3>NOT a Primary Source</h3>
+        <p>
+          These notes are AI-assisted summaries created by a student for educational
+          purposes. They have NOT been reviewed, edited, or approved by Sheikh Hassan Dghriri.
+        </p>
+      </div>
+
+      <div class="disclaimer-grid">
+        <div class="disclaimer-item">
+          <h4>AI Limitations</h4>
+          <ul>
+            <li>AI can misinterpret Arabic nuances</li>
+            <li>Technical terms may be mistranscribed</li>
+            <li>Context can be lost in summarization</li>
+          </ul>
         </div>
-        <div class="note-content">
-          <p><%= note.content.substring(0, 200) %><%= note.content.length > 200 ? '...' : '' %></p>
-        </div>
-        <div class="note-footer">
-          <span class="note-author"><%= note.userName %></span>
-          <span class="note-date"><%= new Date(note.createdAt).toLocaleDateString('ar-SA') %></span>
+
+        <div class="disclaimer-item">
+          <h4>No Substitute for the Source</h4>
+          <ul>
+            <li>For rulings (fatawa), consult the Sheikh directly</li>
+            <li>For accurate quotes, listen to original recordings</li>
+            <li>For deep understanding, attend the classes</li>
+          </ul>
         </div>
       </div>
-      <% }); %>
-    </div>
 
-    <div class="section-cta">
-      <a href="/notes" class="btn-secondary">عرض جميع الملاحظات</a>
+      <div class="disclaimer-highlight">
+        <p>
+          <strong>When in Doubt, Verify</strong><br>
+          The original audio/video recording is the ONLY authoritative source for the Sheikh's teachings.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Lessons -->
+  <% if (recentLessons && recentLessons.length > 0) { %>
+  <section class="recent-section">
+    <div class="recent-container">
+      <h2>Recent Lessons</h2>
+      <div class="lessons-grid">
+        <% recentLessons.forEach(lesson => { %>
+        <div class="lesson-card">
+          <div class="lesson-category"><%= lesson.category %></div>
+          <h3 class="lesson-title"><%= lesson.titleEnglish %></h3>
+          <% if (lesson.titleArabic) { %>
+          <p class="lesson-title-ar"><%= lesson.titleArabic %></p>
+          <% } %>
+          <div class="lesson-meta">
+            <span class="lesson-duration"><%= lesson.duration %></span>
+            <span class="lesson-date"><%= new Date(lesson.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+          </div>
+          <a href="/lesson/<%= lesson._id %>" class="lesson-link">View Notes</a>
+        </div>
+        <% }); %>
+      </div>
     </div>
   </section>
   <% } %>
 
-  <!-- CTA Section -->
-  <section class="cta-section">
-    <div class="cta-content">
-      <h2 class="cta-title">ابدأ رحلتك العلمية اليوم</h2>
-      <p class="cta-text">
-        انضم إلينا لتدوين ملاحظاتك الدراسية ومشاركة الفوائد العلمية مع طلاب العلم
+  <!-- Official Sources Section -->
+  <section class="sources-section">
+    <div class="sources-container">
+      <h2>Official Sources</h2>
+      <p>For authentic, unedited content directly from Sheikh Hassan Dghriri:</p>
+
+      <div class="sources-grid">
+        <div class="source-card">
+          <h3>Telegram Channel</h3>
+          <p>قناة الشيخ حسن الدغريري</p>
+          <a href="https://t.me/daririhasan" target="_blank" rel="noopener noreferrer" class="source-link">
+            t.me/daririhasan
+          </a>
+          <p class="source-description">Daily updates, audio recordings, class schedules</p>
+        </div>
+
+        <div class="source-card">
+          <h3>WhatsApp Community</h3>
+          <a href="https://chat.whatsapp.com/DUvpoPZFcBk22nVL1nIrVg" target="_blank" rel="noopener noreferrer" class="source-link">
+            Join Community
+          </a>
+          <p class="source-description">Community of students, class notifications</p>
+        </div>
+
+        <div class="source-card">
+          <h3>In Person</h3>
+          <p><strong>Jami' Al-Wurud</strong></p>
+          <p>Al-Wurud District, Jeddah, Saudi Arabia</p>
+          <p class="source-description">Regular classes throughout the week</p>
+        </div>
+      </div>
+
+      <p class="sources-note">
+        <strong>Always verify from official sources before acting on any knowledge.</strong>
       </p>
-      <% if (!user) { %>
-      <a href="/login" class="btn-primary-large">تسجيل الدخول الآن</a>
-      <% } else { %>
-      <a href="/write" class="btn-primary-large">ابدأ الكتابة</a>
-      <% } %>
     </div>
   </section>
 
@@ -115,12 +201,19 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
-        <h3>دحسن</h3>
-        <p>منصة للدراسات الإسلامية وتدوين الفوائد العلمية</p>
+        <h3>Notes from the Majlis</h3>
+        <p>Unofficial student notes from Sheikh Hassan Dghriri's classes</p>
+      </div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/topics">Topics</a>
+        <a href="/series">Series</a>
+        <a href="/about">About</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 Dhassan. جميع الحقوق محفوظة.</p>
+      <p>&copy; 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.</p>
+      <p>These are unofficial AI-assisted student notes. Always verify from original recordings.</p>
     </div>
   </footer>
 

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse by Series - Notes from the Majlis</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-main">
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/topics">Browse Topics</a>
+        <a href="/series" class="active">Browse Series</a>
+        <a href="/about">About</a>
+        <% if (user) { %>
+        <a href="/profile"><%= user.name %></a>
+        <a href="/auth/logout">Logout</a>
+        <% } else { %>
+        <a href="/login" class="btn-primary-small">Sign In</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">Browse by Series</h1>
+      <p class="page-subtitle">Explore all course series with sequential lessons</p>
+    </div>
+  </header>
+
+  <!-- Filter Section -->
+  <section class="filter-section">
+    <div class="filter-container">
+      <label for="category-filter" class="filter-label">Filter by Category:</label>
+      <select id="category-filter" class="filter-select">
+        <option value="all">All Categories</option>
+        <option value="Tafsir">Quranic Sciences (Tafsir)</option>
+        <option value="Aqeedah">Islamic Creed (Aqeedah)</option>
+        <option value="Fiqh">Islamic Jurisprudence (Fiqh)</option>
+        <option value="Hadith">Hadith Studies</option>
+        <option value="Khutbah">Sermons (Khutbah)</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="series-list-container">
+
+      <% if (allSeries && allSeries.length > 0) { %>
+        <% allSeries.forEach(series => { %>
+        <div class="series-list-item" data-category="<%= series.category %>">
+          <div class="series-list-header">
+            <div>
+              <h3 class="series-list-title"><%= series.titleEnglish %></h3>
+              <% if (series.titleArabic) { %>
+              <p class="series-list-title-ar"><%= series.titleArabic %></p>
+              <% } %>
+            </div>
+            <span class="series-category-badge <%= series.category.toLowerCase() %>">
+              <%= series.category %>
+            </span>
+          </div>
+
+          <div class="series-list-content">
+            <p class="series-list-author">By <%= series.author %></p>
+
+            <% if (series.description) { %>
+            <p class="series-list-description"><%= series.description %></p>
+            <% } %>
+
+            <div class="series-list-meta">
+              <div class="series-meta-item">
+                <span class="meta-label">Total Lessons:</span>
+                <span class="meta-value"><%= series.totalLessons || 0 %></span>
+              </div>
+              <div class="series-meta-item">
+                <span class="meta-label">Status:</span>
+                <span class="meta-value"><%= series.status %></span>
+              </div>
+              <% if (series.latestLesson) { %>
+              <div class="series-meta-item">
+                <span class="meta-label">Latest:</span>
+                <span class="meta-value">Lesson <%= series.latestLesson.lessonNumber %> - <%= new Date(series.latestLesson.date).toLocaleDateString() %></span>
+              </div>
+              <% } %>
+            </div>
+
+            <% if (series.telegramLink) { %>
+            <div class="series-external-links">
+              <a href="<%= series.telegramLink %>" target="_blank" rel="noopener noreferrer" class="external-link">
+                Telegram Channel
+              </a>
+            </div>
+            <% } %>
+          </div>
+
+          <div class="series-list-actions">
+            <a href="/series/<%= series.seriesId %>" class="btn-primary">View All Lessons</a>
+          </div>
+        </div>
+        <% }); %>
+      <% } else { %>
+        <div class="empty-state">
+          <p>No course series available yet.</p>
+        </div>
+      <% } %>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.</p>
+      <p>These are unofficial AI-assisted student notes. Always verify from original recordings.</p>
+    </div>
+  </footer>
+
+  <script src="/js/series.js"></script>
+
+</body>
+</html>

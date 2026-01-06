@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= series.titleEnglish %> - Notes from the Majlis</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav-main">
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/topics">Browse Topics</a>
+        <a href="/series">Browse Series</a>
+        <a href="/about">About</a>
+        <% if (user) { %>
+        <a href="/profile"><%= user.name %></a>
+        <a href="/auth/logout">Logout</a>
+        <% } else { %>
+        <a href="/login" class="btn-primary-small">Sign In</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <div class="breadcrumb-container">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <a href="/series">All Series</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current"><%= series.titleEnglish %></span>
+    </div>
+  </nav>
+
+  <!-- Series Header -->
+  <header class="series-header">
+    <div class="series-header-content">
+      <div class="series-header-category">
+        <span class="category-badge <%= series.category.toLowerCase() %>">
+          <%= series.category %>
+        </span>
+      </div>
+
+      <h1 class="series-header-title"><%= series.titleEnglish %></h1>
+      <% if (series.titleArabic) { %>
+      <h2 class="series-header-title-ar"><%= series.titleArabic %></h2>
+      <% } %>
+
+      <p class="series-header-author">By <%= series.author %></p>
+
+      <% if (series.description) { %>
+      <div class="series-header-description">
+        <p><%= series.description %></p>
+      </div>
+      <% } %>
+
+      <div class="series-header-meta">
+        <div class="meta-stat">
+          <span class="meta-stat-value"><%= series.totalLessons || lessons.length %></span>
+          <span class="meta-stat-label">Total Lessons</span>
+        </div>
+        <div class="meta-stat">
+          <span class="meta-stat-value"><%= series.status %></span>
+          <span class="meta-stat-label">Status</span>
+        </div>
+        <% if (series.duration) { %>
+        <div class="meta-stat">
+          <span class="meta-stat-value"><%= series.duration %></span>
+          <span class="meta-stat-label">Duration</span>
+        </div>
+        <% } %>
+      </div>
+
+      <% if (series.telegramLink) { %>
+      <div class="series-header-links">
+        <a href="<%= series.telegramLink %>" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+          View on Telegram
+        </a>
+      </div>
+      <% } %>
+    </div>
+  </header>
+
+  <!-- Lessons List -->
+  <main class="main-content">
+    <div class="lessons-container">
+      <h2 class="lessons-section-title">All Lessons</h2>
+
+      <% if (lessons && lessons.length > 0) { %>
+        <div class="lessons-list">
+          <% lessons.forEach(lesson => { %>
+          <div class="lesson-item">
+            <div class="lesson-item-header">
+              <span class="lesson-number">Lesson <%= lesson.lessonNumber %></span>
+              <span class="lesson-date"><%= new Date(lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+            </div>
+
+            <h3 class="lesson-item-title">
+              <% if (lesson.titleEnglish) { %>
+                <%= lesson.titleEnglish %>
+              <% } else { %>
+                Lesson <%= lesson.lessonNumber %>
+              <% } %>
+            </h3>
+
+            <% if (lesson.titleArabic) { %>
+            <p class="lesson-item-title-ar"><%= lesson.titleArabic %></p>
+            <% } %>
+
+            <% if (lesson.summary) { %>
+            <p class="lesson-item-summary"><%= lesson.summary.substring(0, 200) %>...</p>
+            <% } %>
+
+            <div class="lesson-item-meta">
+              <% if (lesson.duration) { %>
+              <span class="lesson-duration"><%= lesson.duration %></span>
+              <% } %>
+              <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
+              <span class="lesson-terms-count"><%= lesson.keyTerms.length %> key terms</span>
+              <% } %>
+            </div>
+
+            <div class="lesson-item-actions">
+              <a href="/lesson/<%= lesson._id %>" class="btn-primary">View Notes</a>
+              <% if (lesson.audioLink) { %>
+              <a href="<%= lesson.audioLink %>" target="_blank" rel="noopener noreferrer" class="btn-secondary-small">Audio</a>
+              <% } %>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <p>No lessons available for this series yet.</p>
+        </div>
+      <% } %>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.</p>
+      <p>These are unofficial AI-assisted student notes. Always verify from original recordings.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
