@@ -87,9 +87,10 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.5px;
 }
 
-h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
-h2 { font-size: clamp(2rem, 4vw, 2.5rem); }
-h3 { font-size: clamp(1.35rem, 2.5vw, 1.5rem); }
+/* Note: Specific sizes defined in component styles (hero h1, section-header h2, etc) */
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
 h4 { font-size: 1.25rem; }
 h5 { font-size: 1.125rem; }
 h6 { font-size: 1rem; }
@@ -420,7 +421,7 @@ section {
 }
 
 .about-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   transform: translateY(-4px);
 }
 
@@ -470,7 +471,7 @@ section {
 }
 
 .lesson-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   transform: translateY(-4px);
 }
 
@@ -568,7 +569,7 @@ section {
 
 .source-card:hover {
   border-color: var(--muted-gold);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .source-icon {
