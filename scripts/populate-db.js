@@ -45,8 +45,35 @@ async function populateDatabase() {
       lessonNumber: 1,
       titleEnglish: 'Hadiths 26-30: Faith, Action, and Social Conduct',
       titleArabic: 'الأحاديث ٢٦-٣٠: الإيمان والعمل والسلوك الاجتماعي',
-      date: new Date('2024-01-01'), // Update with actual date if known
-      duration: null, // Add if known
+
+      // Dates
+      dateGregorian: new Date('2025-01-13'), // Converted from Hijri ١٣/ ٧/ ١٤٤٧
+      dateHijri: '١٣/ ٧/ ١٤٤٧',
+
+      // Audio & Media
+      duration: '1:07:19',
+      durationSeconds: 4039, // 67 minutes, 19 seconds
+      telegramLink: 'https://t.me/daririhasan/6158', // Primary audio source
+      whatsappLink: 'https://chat.whatsapp.com/DUvpoPZFcBk22nVL1nIrVg', // Community group
+      audioLink: 'https://t.me/daririhasan/6158', // Keep for backwards compatibility
+
+      // Content Structure
+      hadithsCovered: '26-30',
+      chaptersCovered: [
+        'Those Who Say That Īmān is Action',
+        'When Islam is Not Upon Truth but Upon Submission or Fear of Being Killed',
+        'Spreading Salām is Part of Islam',
+        'Ingratitude Toward the Husband (Kufrān Al-ʿAshīr)',
+        'Sins from the Pre-Islamic Era (Jāhiliyyah)'
+      ],
+
+      // Metadata
+      location: 'Jāmiʿ Al-Wurūd, Al-Wurūd District, Jeddah',
+      bookName: 'صحيح البخاري - كتاب الإيمان',
+      bookNameEnglish: 'Sahih Al-Bukhari - Book of Faith',
+      bookAuthor: 'الإمام محمد بن إسماعيل البخاري',
+      bookAuthorEnglish: 'Imam Muhammad ibn Ismail Al-Bukhari',
+
       summary: 'This lesson covers five fundamental chapters from the Book of Faith in Sahih Al-Bukhari (Hadiths 26-30), addressing the relationship between faith and action, the distinction between Islam and Iman, the importance of spreading Salam, marital relations and gratitude, and remnants of pre-Islamic practices.',
       notes: `# Notes: Sahih Al-Bukhari | Book of Faith (Kitab Al-Iman)
 
@@ -308,7 +335,6 @@ This is why Abū Dharr dressed his slave in a cloak similar to his own—as an a
         }
       ],
 
-      audioLink: null, // Add if available
       createdAt: new Date(),
       updatedAt: new Date()
     };

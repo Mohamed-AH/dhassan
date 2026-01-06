@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,234 +12,481 @@
     - Notes from the Majlis
   </title>
   <link rel="stylesheet" href="/css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 </head>
 <body>
 
   <!-- Navigation -->
-  <nav class="nav-main">
+  <nav>
     <div class="nav-container">
       <a href="/" class="logo">Notes from the Majlis</a>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/topics">Browse Topics</a>
-        <a href="/series">Browse Series</a>
-        <a href="/about">About</a>
-        <% if (user) { %>
-        <a href="/profile"><%= user.name %></a>
-        <a href="/auth/logout">Logout</a>
-        <% } else { %>
-        <a href="/login" class="btn-primary-small">Sign In</a>
-        <% } %>
-      </div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#sources">Sources</a></li>
+      </ul>
     </div>
   </nav>
 
   <!-- Breadcrumb -->
-  <nav class="breadcrumb">
-    <div class="breadcrumb-container">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">/</span>
-      <a href="/series">All Series</a>
-      <span class="breadcrumb-separator">/</span>
-      <a href="/series/<%= series.seriesId %>"><%= series.titleEnglish %></a>
-      <span class="breadcrumb-separator">/</span>
-      <span class="breadcrumb-current">Lesson <%= lesson.lessonNumber %></span>
-    </div>
-  </nav>
-
-  <!-- Lesson Header -->
-  <header class="lesson-header">
-    <div class="lesson-header-content">
-      <div class="lesson-header-series">
-        <a href="/series/<%= series.seriesId %>" class="series-link-back">
-          &larr; Back to <%= series.titleEnglish %>
-        </a>
-      </div>
-
-      <div class="lesson-header-number">
-        <span class="lesson-number-badge">Lesson <%= lesson.lessonNumber %></span>
-        <span class="lesson-date"><%= new Date(lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
-      </div>
-
-      <h1 class="lesson-title">
-        <% if (lesson.titleEnglish) { %>
-          <%= lesson.titleEnglish %>
-        <% } else { %>
-          Lesson <%= lesson.lessonNumber %>
-        <% } %>
-      </h1>
-
-      <% if (lesson.titleArabic) { %>
-      <h2 class="lesson-title-ar"><%= lesson.titleArabic %></h2>
-      <% } %>
-
-      <div class="lesson-meta">
-        <span class="lesson-meta-item">
-          <span class="meta-label">Category:</span>
-          <span class="meta-value"><%= series.category %></span>
-        </span>
-        <% if (lesson.duration) { %>
-        <span class="lesson-meta-item">
-          <span class="meta-label">Duration:</span>
-          <span class="meta-value"><%= lesson.duration %></span>
-        </span>
-        <% } %>
-        <span class="lesson-meta-item">
-          <span class="meta-label">Teacher:</span>
-          <span class="meta-value"><%= series.author %></span>
-        </span>
-      </div>
-
-      <% if (lesson.audioLink) { %>
-      <div class="lesson-audio-link">
-        <a href="<%= lesson.audioLink %>" target="_blank" rel="noopener noreferrer" class="btn-primary">
-          Listen to Original Recording
-        </a>
-      </div>
-      <% } %>
-    </div>
-  </header>
-
-  <!-- Disclaimer Banner -->
-  <div class="lesson-disclaimer">
-    <div class="disclaimer-content">
-      <strong>Student Notes:</strong> These are AI-assisted summaries not reviewed by the Sheikh. Always verify from the original recording.
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="/series">Series</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="/series/<%= series.seriesId %>"><%= series.titleEnglish %></a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Lesson <%= lesson.lessonNumber %></span>
+      </nav>
     </div>
   </div>
 
-  <!-- Main Content -->
-  <main class="lesson-main">
-    <div class="lesson-content-container">
+  <!-- Lesson Hero Header -->
+  <section class="lesson-hero">
+    <div class="lesson-hero-content">
+      <a href="/series/<%= series.seriesId %>" class="back-link">
+        ← Back to <%= series.titleEnglish %>
+      </a>
 
-      <!-- Summary Section -->
-      <% if (lesson.summary) { %>
-      <section class="lesson-section">
-        <h2 class="section-title">Summary</h2>
-        <div class="lesson-summary">
-          <p><%= lesson.summary %></p>
-        </div>
-      </section>
+      <div class="lesson-meta-badges">
+        <span class="lesson-badge">Lesson <%= lesson.lessonNumber %></span>
+        <% if (lesson.hadithsCovered) { %>
+        <span class="lesson-badge">Hadiths <%= lesson.hadithsCovered %></span>
+        <% } %>
+        <% if (lesson.duration) { %>
+        <span class="lesson-badge">⏱ <%= lesson.duration %></span>
+        <% } %>
+      </div>
+
+      <h1 class="lesson-title-main">
+        <%= lesson.titleEnglish || `Lesson ${lesson.lessonNumber}` %>
+      </h1>
+
+      <% if (lesson.titleArabic) { %>
+      <h2 class="lesson-title-arabic"><%= lesson.titleArabic %></h2>
       <% } %>
 
-      <!-- Full Notes Section -->
-      <% if (lesson.notes) { %>
-      <section class="lesson-section">
-        <h2 class="section-title">Detailed Notes</h2>
-        <div class="lesson-notes">
-          <% if (typeof lesson.notes === 'string') { %>
-            <p><%= lesson.notes %></p>
-          <% } else if (Array.isArray(lesson.notes)) { %>
-            <% lesson.notes.forEach(note => { %>
-              <p><%= note %></p>
+      <!-- Lesson Metadata -->
+      <div class="lesson-metadata">
+        <div class="metadata-grid">
+          <% if (lesson.bookNameEnglish) { %>
+          <div class="metadata-item">
+            <span class="metadata-icon">📚</span>
+            <div class="metadata-content">
+              <span class="metadata-label">Book</span>
+              <span class="metadata-value"><%= lesson.bookNameEnglish %></span>
+              <% if (lesson.bookAuthorEnglish) { %>
+              <span class="metadata-subvalue">by <%= lesson.bookAuthorEnglish %></span>
+              <% } %>
+            </div>
+          </div>
+          <% } %>
+
+          <div class="metadata-item">
+            <span class="metadata-icon">👤</span>
+            <div class="metadata-content">
+              <span class="metadata-label">Sheikh</span>
+              <span class="metadata-value"><%= series.author %></span>
+            </div>
+          </div>
+
+          <% if (lesson.location) { %>
+          <div class="metadata-item">
+            <span class="metadata-icon">📍</span>
+            <div class="metadata-content">
+              <span class="metadata-label">Location</span>
+              <span class="metadata-value"><%= lesson.location %></span>
+            </div>
+          </div>
+          <% } %>
+
+          <div class="metadata-item">
+            <span class="metadata-icon">📅</span>
+            <div class="metadata-content">
+              <span class="metadata-label">Date</span>
+              <span class="metadata-value">
+                <%= new Date(lesson.dateGregorian || lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+              </span>
+              <% if (lesson.dateHijri) { %>
+              <span class="metadata-subvalue"><%= lesson.dateHijri %></span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio Links -->
+      <div class="lesson-audio-section">
+        <% if (lesson.telegramLink) { %>
+        <a href="<%= lesson.telegramLink %>" target="_blank" rel="noopener noreferrer" class="audio-link-primary">
+          <span class="audio-icon">🎧</span>
+          Listen to Recording
+        </a>
+        <% } else if (lesson.audioLink) { %>
+        <a href="<%= lesson.audioLink %>" target="_blank" rel="noopener noreferrer" class="audio-link-primary">
+          <span class="audio-icon">🎧</span>
+          Listen to Recording
+        </a>
+        <% } %>
+
+        <% if (lesson.whatsappLink) { %>
+        <a href="<%= lesson.whatsappLink %>" target="_blank" rel="noopener noreferrer" class="audio-link-secondary">
+          <span class="audio-icon">💬</span>
+          Join WhatsApp Group
+        </a>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer Banner -->
+  <div class="lesson-disclaimer-banner">
+    <div class="container">
+      <div class="disclaimer-content">
+        <strong>⚠️ Student Notes:</strong> These are AI-assisted summaries not reviewed by Sheikh Hassan Dghriri. Always verify from the original recording.
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Summary Section -->
+  <% if (lesson.summary || (lesson.chaptersCovered && lesson.chaptersCovered.length > 0)) { %>
+  <section class="lesson-summary-section">
+    <div class="container">
+      <div class="summary-card">
+        <h2 class="summary-title">📝 Quick Summary</h2>
+        <% if (lesson.summary) { %>
+        <p class="summary-text"><%= lesson.summary %></p>
+        <% } %>
+
+        <% if (lesson.chaptersCovered && lesson.chaptersCovered.length > 0) { %>
+        <div class="chapters-overview">
+          <h3 class="chapters-title">Chapters Covered:</h3>
+          <ul class="chapters-list">
+            <% lesson.chaptersCovered.forEach((chapter, index) => { %>
+            <li class="chapter-item">
+              <a href="#chapter-<%= index + 1 %>" class="chapter-link"><%= chapter %></a>
+            </li>
             <% }); %>
+          </ul>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- Main Lesson Content -->
+  <main class="lesson-main">
+    <div class="lesson-container">
+
+      <!-- Sidebar: Table of Contents -->
+      <aside class="lesson-sidebar">
+        <div class="lesson-sidebar-sticky">
+          <nav class="lesson-toc">
+            <h3 class="toc-title">Contents</h3>
+            <div id="toc-content" class="toc-content">
+              <!-- Will be populated by JavaScript from markdown headings -->
+            </div>
+          </nav>
+
+          <!-- Key Terms in Sidebar -->
+          <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
+          <div class="sidebar-key-terms">
+            <h3 class="toc-title">Key Terms</h3>
+            <ul class="key-terms-quick-list">
+              <% lesson.keyTerms.slice(0, 5).forEach(term => { %>
+              <li class="key-term-quick-item">
+                <a href="#key-terms" class="key-term-quick-link">
+                  <%= term.termEnglish %>
+                  <% if (term.termArabic) { %>
+                  <span class="term-arabic-small">(<%= term.termArabic %>)</span>
+                  <% } %>
+                </a>
+              </li>
+              <% }); %>
+              <% if (lesson.keyTerms.length > 5) { %>
+              <li class="key-term-quick-item">
+                <a href="#key-terms" class="key-term-quick-link">+ <%= lesson.keyTerms.length - 5 %> more terms...</a>
+              </li>
+              <% } %>
+            </ul>
+          </div>
+          <% } %>
+
+          <!-- Timestamps in Sidebar -->
+          <% if (lesson.timestamps && lesson.timestamps.length > 0) { %>
+          <div class="sidebar-timestamps">
+            <h3 class="toc-title">Timestamps</h3>
+            <ul class="timestamps-quick-list">
+              <% lesson.timestamps.slice(0, 5).forEach(timestamp => { %>
+              <li class="timestamp-quick-item">
+                <% if (lesson.telegramLink || lesson.audioLink) { %>
+                <a href="<%= lesson.telegramLink || lesson.audioLink %>" target="_blank" class="timestamp-quick-link">
+                  <span class="timestamp-time"><%= timestamp.time %></span>
+                  <span class="timestamp-desc"><%= timestamp.description.substring(0, 30) %><%= timestamp.description.length > 30 ? '...' : '' %></span>
+                </a>
+                <% } else { %>
+                <span class="timestamp-quick-link">
+                  <span class="timestamp-time"><%= timestamp.time %></span>
+                  <span class="timestamp-desc"><%= timestamp.description.substring(0, 30) %><%= timestamp.description.length > 30 ? '...' : '' %></span>
+                </span>
+                <% } %>
+              </li>
+              <% }); %>
+              <% if (lesson.timestamps.length > 5) { %>
+              <li class="timestamp-quick-item">
+                <a href="#timestamps" class="timestamp-quick-link">+ <%= lesson.timestamps.length - 5 %> more...</a>
+              </li>
+              <% } %>
+            </ul>
+          </div>
           <% } %>
         </div>
-      </section>
-      <% } %>
+      </aside>
 
-      <!-- Timestamps Section -->
-      <% if (lesson.timestamps && lesson.timestamps.length > 0) { %>
-      <section class="lesson-section">
-        <h2 class="section-title">Timestamps</h2>
-        <div class="timestamps-list">
-          <% lesson.timestamps.forEach(timestamp => { %>
-          <div class="timestamp-item">
-            <span class="timestamp-time"><%= timestamp.time %></span>
-            <span class="timestamp-description"><%= timestamp.description %></span>
-          </div>
-          <% }); %>
+      <!-- Main Content Area -->
+      <article class="lesson-content">
+
+        <!-- Rendered Markdown Notes -->
+        <div id="lesson-notes-rendered" class="lesson-notes-content">
+          <!-- Markdown will be rendered here by JavaScript -->
         </div>
-      </section>
-      <% } %>
 
-      <!-- Key Terms Section -->
-      <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
-      <section class="lesson-section">
-        <h2 class="section-title">Key Terms & Concepts</h2>
-        <div class="key-terms-list">
-          <% lesson.keyTerms.forEach(term => { %>
-          <div class="key-term-item">
-            <h3 class="key-term-name">
-              <%= term.termEnglish %>
-              <% if (term.termArabic) { %>
-                <span class="key-term-arabic">(<%= term.termArabic %>)</span>
+        <!-- Hidden markdown content for JavaScript to process -->
+        <script id="lesson-notes-markdown" type="text/plain"><%- lesson.notes %></script>
+
+        <!-- Timestamps Full Section -->
+        <% if (lesson.timestamps && lesson.timestamps.length > 0) { %>
+        <section id="timestamps" class="lesson-section timestamps-section">
+          <h2 class="section-heading">⏱️ Timestamps</h2>
+          <div class="timestamps-grid">
+            <% lesson.timestamps.forEach(timestamp => { %>
+            <div class="timestamp-card">
+              <span class="timestamp-card-time"><%= timestamp.time %></span>
+              <span class="timestamp-card-description"><%= timestamp.description %></span>
+              <% if (lesson.telegramLink || lesson.audioLink) { %>
+              <a href="<%= lesson.telegramLink || lesson.audioLink %>" target="_blank" class="timestamp-card-link">
+                Jump to Audio →
+              </a>
               <% } %>
-            </h3>
-            <% if (term.definition) { %>
-            <p class="key-term-definition"><%= term.definition %></p>
-            <% } %>
+            </div>
+            <% }); %>
           </div>
-          <% }); %>
-        </div>
-      </section>
-      <% } %>
+        </section>
+        <% } %>
 
-      <!-- Error Reporting Section -->
-      <section class="lesson-section error-report-section">
-        <h2 class="section-title">Found an Error?</h2>
-        <p class="error-report-text">
-          If you notice any mistakes in these notes, please help us improve by reporting them.
-          These notes are not reviewed by the Sheikh and may contain errors.
-        </p>
-        <a href="mailto:corrections@example.com?subject=Error%20in%20Lesson%20<%= lesson.lessonNumber %>%20-%20<%= series.titleEnglish %>" class="btn-secondary">
-          Report an Error
-        </a>
-      </section>
+        <!-- Key Terms Full Section -->
+        <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
+        <section id="key-terms" class="lesson-section key-terms-section">
+          <h2 class="section-heading">📚 Key Terms & Concepts</h2>
+          <div class="key-terms-grid">
+            <% lesson.keyTerms.forEach(term => { %>
+            <div class="key-term-card">
+              <h3 class="key-term-name">
+                <%= term.termEnglish %>
+                <% if (term.termArabic) { %>
+                <span class="key-term-arabic">(<%= term.termArabic %>)</span>
+                <% } %>
+              </h3>
+              <% if (term.definition) { %>
+              <p class="key-term-definition"><%= term.definition %></p>
+              <% } %>
+            </div>
+            <% }); %>
+          </div>
+        </section>
+        <% } %>
 
+        <!-- Error Reporting Section -->
+        <section class="lesson-section error-report-section">
+          <div class="error-report-card">
+            <h3 class="error-report-title">Found an Error?</h3>
+            <p class="error-report-text">
+              If you notice any mistakes in these notes, please help us improve by reporting them.
+              These notes are AI-assisted and may contain errors.
+            </p>
+            <a href="mailto:corrections@example.com?subject=Error%20in%20Lesson%20<%= lesson.lessonNumber %>%20-%20<%= series.titleEnglish %>" class="btn-report">
+              Report an Error
+            </a>
+          </div>
+        </section>
+
+      </article>
     </div>
   </main>
 
   <!-- Lesson Navigation -->
   <nav class="lesson-navigation">
-    <div class="lesson-nav-container">
-      <div class="lesson-nav-prev">
-        <% if (previousLesson) { %>
-        <a href="/lesson/<%= previousLesson._id %>" class="lesson-nav-link">
-          <span class="nav-direction">&larr; Previous</span>
-          <span class="nav-lesson-info">
-            Lesson <%= previousLesson.lessonNumber %>
-            <% if (previousLesson.titleEnglish) { %>
-              : <%= previousLesson.titleEnglish.substring(0, 40) %><%= previousLesson.titleEnglish.length > 40 ? '...' : '' %>
-            <% } %>
-          </span>
-        </a>
-        <% } else { %>
-        <span class="lesson-nav-disabled">No previous lesson</span>
-        <% } %>
-      </div>
+    <div class="container">
+      <div class="lesson-nav-grid">
+        <div class="lesson-nav-item lesson-nav-prev">
+          <% if (previousLesson) { %>
+          <a href="/lesson/<%= previousLesson._id %>" class="lesson-nav-link">
+            <span class="nav-direction">← Previous Lesson</span>
+            <span class="nav-lesson-title">
+              <%= previousLesson.titleEnglish || `Lesson ${previousLesson.lessonNumber}` %>
+            </span>
+          </a>
+          <% } else { %>
+          <span class="lesson-nav-disabled">No previous lesson</span>
+          <% } %>
+        </div>
 
-      <div class="lesson-nav-center">
-        <a href="/series/<%= series.seriesId %>" class="btn-secondary-small">
-          All Lessons in Series
-        </a>
-      </div>
+        <div class="lesson-nav-item lesson-nav-center">
+          <a href="/series/<%= series.seriesId %>" class="lesson-nav-series">
+            <span class="nav-series-icon">📚</span>
+            <span class="nav-series-text">All Lessons</span>
+          </a>
+        </div>
 
-      <div class="lesson-nav-next">
-        <% if (nextLesson) { %>
-        <a href="/lesson/<%= nextLesson._id %>" class="lesson-nav-link">
-          <span class="nav-direction">Next &rarr;</span>
-          <span class="nav-lesson-info">
-            Lesson <%= nextLesson.lessonNumber %>
-            <% if (nextLesson.titleEnglish) { %>
-              : <%= nextLesson.titleEnglish.substring(0, 40) %><%= nextLesson.titleEnglish.length > 40 ? '...' : '' %>
-            <% } %>
-          </span>
-        </a>
-        <% } else { %>
-        <span class="lesson-nav-disabled">No next lesson</span>
-        <% } %>
+        <div class="lesson-nav-item lesson-nav-next">
+          <% if (nextLesson) { %>
+          <a href="/lesson/<%= nextLesson._id %>" class="lesson-nav-link">
+            <span class="nav-direction">Next Lesson →</span>
+            <span class="nav-lesson-title">
+              <%= nextLesson.titleEnglish || `Lesson ${nextLesson.lessonNumber}` %>
+            </span>
+          </a>
+          <% } else { %>
+          <span class="lesson-nav-disabled">No next lesson yet</span>
+          <% } %>
+        </div>
       </div>
     </div>
   </nav>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-bottom">
-      <p>&copy; 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.</p>
-      <p>These are unofficial AI-assisted student notes. Always verify from original recordings.</p>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes. They have not been reviewed or endorsed by Sheikh Hassan Dghriri. Always verify information from the original audio recordings.</p>
+      </div>
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
     </div>
   </footer>
+
+  <!-- JavaScript for Markdown Rendering and TOC Generation -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configure marked options
+      marked.setOptions({
+        breaks: true,
+        gfm: true
+      });
+
+      // Get markdown content
+      const markdownSource = document.getElementById('lesson-notes-markdown').textContent;
+
+      // Render markdown to HTML
+      const rawHtml = marked.parse(markdownSource);
+
+      // Sanitize HTML with DOMPurify
+      const cleanHtml = DOMPurify.sanitize(rawHtml);
+
+      // Insert into page
+      document.getElementById('lesson-notes-rendered').innerHTML = cleanHtml;
+
+      // Generate Table of Contents from rendered headings
+      generateTableOfContents();
+
+      // Add Arabic text styling
+      styleArabicText();
+
+      // Smooth scroll for anchor links
+      addSmoothScroll();
+    });
+
+    function generateTableOfContents() {
+      const content = document.getElementById('lesson-notes-rendered');
+      const toc = document.getElementById('toc-content');
+      const headings = content.querySelectorAll('h2, h3');
+
+      if (headings.length === 0) {
+        toc.innerHTML = '<p class="toc-empty">No sections found</p>';
+        return;
+      }
+
+      let tocHtml = '<ul class="toc-list">';
+      let chapterCount = 1;
+
+      headings.forEach((heading, index) => {
+        // Add ID to heading if it doesn't have one
+        if (!heading.id) {
+          const id = 'section-' + index;
+          heading.id = id;
+        }
+
+        // Check if this is a chapter heading
+        if (heading.textContent.toLowerCase().includes('chapter')) {
+          heading.id = 'chapter-' + chapterCount;
+          chapterCount++;
+        }
+
+        const level = heading.tagName === 'H2' ? 'toc-level-1' : 'toc-level-2';
+        const text = heading.textContent;
+
+        tocHtml += `
+          <li class="toc-item ${level}">
+            <a href="#${heading.id}" class="toc-link">${text}</a>
+          </li>
+        `;
+      });
+
+      tocHtml += '</ul>';
+      toc.innerHTML = tocHtml;
+    }
+
+    function styleArabicText() {
+      const content = document.getElementById('lesson-notes-rendered');
+
+      // Find all paragraphs and check if they contain Arabic text
+      const paragraphs = content.querySelectorAll('p');
+
+      paragraphs.forEach(p => {
+        const text = p.textContent;
+        // Simple check for Arabic characters
+        if (/[\u0600-\u06FF]/.test(text)) {
+          // If paragraph is mostly Arabic (more than 50% Arabic chars)
+          const arabicChars = (text.match(/[\u0600-\u06FF]/g) || []).length;
+          const totalChars = text.replace(/\s/g, '').length;
+
+          if (arabicChars / totalChars > 0.5) {
+            p.classList.add('arabic-paragraph');
+            p.setAttribute('dir', 'rtl');
+          } else {
+            // Mixed content - wrap Arabic spans
+            p.innerHTML = p.innerHTML.replace(
+              /([\u0600-\u06FF\s]+)/g,
+              '<span class="arabic-inline" dir="rtl">$1</span>'
+            );
+          }
+        }
+      });
+    }
+
+    function addSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    }
+  </script>
 
 </body>
 </html>
