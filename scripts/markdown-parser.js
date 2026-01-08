@@ -221,7 +221,7 @@ class MarkdownParser {
       keyTerms: this.extractKeyTerms(),
       stats: this.getStats(),
       fullContent: this.content,
-      fileName: this.filePath.split('/').pop()
+      fileName: this.filePath ? this.filePath.split('/').pop() : 'raw-content'
     };
   }
 }
