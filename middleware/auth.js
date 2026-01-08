@@ -82,6 +82,35 @@ function optionalAuth(req, res, next) {
 function injectUser(req, res, next) {
   res.locals.user = req.user || null;
   res.locals.isAuthenticated = req.isAuthenticated();
+  res.locals.isAdmin = req.user && req.user.email === 'emah84@gmail.com';
+  next();
+}
+
+// Check if user is admin
+function isAdmin(req, res, next) {
+  if (!req.isAuthenticated()) {
+    if (req.path.startsWith('/api/')) {
+      return res.status(401).json({
+        success: false,
+        errors: ['Authentication required']
+      });
+    }
+    return res.redirect('/login');
+  }
+
+  // Check if user email matches admin email
+  if (req.user.email !== 'emah84@gmail.com') {
+    if (req.path.startsWith('/api/')) {
+      return res.status(403).json({
+        success: false,
+        errors: ['Admin access required']
+      });
+    }
+    return res.status(403).render('error.ejs', {
+      message: 'Admin access required'
+    });
+  }
+
   next();
 }
 
@@ -89,5 +118,6 @@ module.exports = {
   isAuthenticated,
   isOwner,
   optionalAuth,
-  injectUser
+  injectUser,
+  isAdmin
 };

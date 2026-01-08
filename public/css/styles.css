@@ -1596,6 +1596,42 @@ footer {
   .key-terms-grid {
     grid-template-columns: 1fr;
   }
+
+  /* Reduce overwhelming font sizes and spacing on mobile */
+  .lesson-notes-content {
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .lesson-notes-content h2 {
+    font-size: 1.75rem;
+    margin-top: 2.5rem;
+  }
+
+  .lesson-notes-content h3 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+  }
+
+  .lesson-notes-content p {
+    margin-bottom: 1.5rem;
+  }
+
+  .arabic-paragraph {
+    font-size: 1.3rem;
+    line-height: 2.0;
+    padding: 1rem;
+  }
+
+  .lesson-section {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {

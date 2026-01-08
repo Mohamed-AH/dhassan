@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Lesson - <%= lesson.titleEnglish || `Lesson ${lesson.lessonNumber}` %> - Admin</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+  <style>
+    .admin-editor-container {
+      max-width: 100%;
+      padding: 2rem;
+      background: white;
+      min-height: 100vh;
+    }
+
+    .admin-editor-header {
+      max-width: 1400px;
+      margin: 0 auto 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--border-light);
+    }
+
+    .admin-editor-header h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--sage-green);
+      margin-bottom: 0.5rem;
+    }
+
+    .admin-editor-header .lesson-info {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .admin-editor-header .lesson-info strong {
+      color: var(--text-primary);
+    }
+
+    .admin-editor-main {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .btn-save {
+      background: var(--sage-green);
+      color: white;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+      background: var(--deep-sage);
+      transform: translateY(-2px);
+    }
+
+    .btn-save:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-cancel {
+      background: var(--text-light);
+      color: white;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-cancel:hover {
+      background: var(--text-secondary);
+    }
+
+    .save-status {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .save-status.success {
+      color: var(--sage-green);
+      font-weight: 600;
+    }
+
+    .save-status.error {
+      color: #d32f2f;
+      font-weight: 600;
+    }
+
+    /* Customize EasyMDE */
+    .EasyMDEContainer {
+      font-family: var(--font-body);
+    }
+
+    .EasyMDEContainer .CodeMirror {
+      min-height: 600px;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .editor-toolbar {
+      background: var(--soft-beige);
+      border-color: var(--border-light);
+    }
+
+    .editor-toolbar button {
+      color: var(--text-primary) !important;
+    }
+
+    .editor-toolbar button:hover,
+    .editor-toolbar button.active {
+      background: var(--sage-green) !important;
+      border-color: var(--sage-green) !important;
+      color: white !important;
+    }
+
+    .editor-preview {
+      font-family: var(--font-body);
+      font-size: 1.125rem;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+
+    .editor-preview h2 {
+      font-family: var(--font-display);
+      color: var(--sage-green);
+      font-size: 2rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border-light);
+    }
+
+    .editor-preview h3 {
+      font-family: var(--font-display);
+      color: var(--sage-green);
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .admin-tips {
+      background: var(--soft-beige);
+      padding: 1.5rem;
+      border-radius: 6px;
+      border-left: 4px solid var(--muted-gold);
+      margin-top: 2rem;
+    }
+
+    .admin-tips h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .admin-tips ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .admin-tips li {
+      padding: 0.5rem 0;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .admin-tips li::before {
+      content: '✓';
+      color: var(--sage-green);
+      font-weight: bold;
+      margin-right: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/lesson/<%= lesson._id %>">View Lesson</a></li>
+        <% if (user) { %>
+        <li><a href="/auth/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="admin-editor-container">
+    <!-- Header -->
+    <div class="admin-editor-header">
+      <h1>✏️ Edit Lesson Notes</h1>
+      <div class="lesson-info">
+        <strong>Series:</strong> <%= series.titleEnglish %> |
+        <strong>Lesson:</strong> <%= lesson.lessonNumber %> |
+        <strong>Title:</strong> <%= lesson.titleEnglish || 'Untitled' %>
+      </div>
+    </div>
+
+    <!-- Editor -->
+    <div class="admin-editor-main">
+      <form id="lesson-edit-form">
+        <div class="editor-actions">
+          <button type="submit" class="btn-save" id="save-btn">
+            💾 Save Changes
+          </button>
+          <a href="/lesson/<%= lesson._id %>" class="btn-cancel">
+            ← Cancel
+          </a>
+          <span class="save-status" id="save-status"></span>
+        </div>
+
+        <textarea id="markdown-editor"><%= lesson.notes %></textarea>
+
+        <div class="admin-tips">
+          <h3>💡 Editing Tips</h3>
+          <ul>
+            <li>Use the toolbar above for markdown formatting</li>
+            <li>Click the eye icon (👁️) to toggle preview mode</li>
+            <li>Use <code>## Heading</code> for chapter headings (will auto-generate table of contents)</li>
+            <li>Timestamps format: <code>(HH:MM-HH:MM)</code> will be automatically extracted</li>
+            <li>Changes will auto-update chapters, timestamps, and table of contents</li>
+            <li>All changes are logged with your admin email</li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EasyMDE JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+  <script>
+    // Initialize EasyMDE
+    const easyMDE = new EasyMDE({
+      element: document.getElementById('markdown-editor'),
+      spellChecker: false,
+      autosave: {
+        enabled: true,
+        uniqueId: 'lesson-<%= lesson._id %>',
+        delay: 5000,
+      },
+      toolbar: [
+        'bold', 'italic', 'heading', '|',
+        'quote', 'unordered-list', 'ordered-list', '|',
+        'link', 'image', '|',
+        'preview', 'side-by-side', 'fullscreen', '|',
+        'guide'
+      ],
+      placeholder: 'Enter lesson notes in Markdown format...',
+      renderingConfig: {
+        singleLineBreaks: false,
+        codeSyntaxHighlighting: false,
+      }
+    });
+
+    // Form submission
+    document.getElementById('lesson-edit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const saveBtn = document.getElementById('save-btn');
+      const saveStatus = document.getElementById('save-status');
+      const markdown = easyMDE.value();
+
+      // Disable button
+      saveBtn.disabled = true;
+      saveBtn.textContent = '💾 Saving...';
+      saveStatus.textContent = '';
+      saveStatus.className = 'save-status';
+
+      try {
+        const response = await fetch('/admin/lesson/<%= lesson._id %>/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ notes: markdown })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          saveStatus.textContent = '✓ Saved successfully!';
+          saveStatus.className = 'save-status success';
+
+          // Clear autosave
+          easyMDE.clearAutosavedValue();
+
+          // Redirect after 1 second
+          setTimeout(() => {
+            window.location.href = '/lesson/<%= lesson._id %>';
+          }, 1000);
+        } else {
+          throw new Error(result.error || 'Failed to save');
+        }
+      } catch (error) {
+        console.error('Save error:', error);
+        saveStatus.textContent = '✗ Error: ' + error.message;
+        saveStatus.className = 'save-status error';
+        saveBtn.disabled = false;
+        saveBtn.textContent = '💾 Save Changes';
+      }
+    });
+
+    // Keyboard shortcut: Ctrl+S / Cmd+S to save
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        document.getElementById('lesson-edit-form').dispatchEvent(new Event('submit'));
+      }
+    });
+
+    // Warn on page leave if there are unsaved changes
+    let initialValue = easyMDE.value();
+    window.addEventListener('beforeunload', (e) => {
+      if (easyMDE.value() !== initialValue) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
+    });
+  </script>
+
+</body>
+</html>

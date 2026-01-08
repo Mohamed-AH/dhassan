@@ -137,6 +137,14 @@
         </a>
         <% } %>
 
+        <!-- Admin Edit Button -->
+        <% if (isAdmin) { %>
+        <a href="/admin/lesson/<%= lesson._id %>/edit" class="audio-link-secondary">
+          <span class="audio-icon">✏️</span>
+          Edit Lesson
+        </a>
+        <% } %>
+
         <% if (lesson.whatsappLink) { %>
         <a href="<%= lesson.whatsappLink %>" target="_blank" rel="noopener noreferrer" class="audio-link-secondary">
           <span class="audio-icon">💬</span>
@@ -437,35 +445,59 @@
     }
 
     function fixBilingualHeadings() {
+      // Fix bilingual headings in markdown content
       const content = document.getElementById('lesson-notes-rendered');
-      const headings = content.querySelectorAll('h2, h3');
+      const markdownHeadings = content.querySelectorAll('h2, h3');
 
-      headings.forEach(heading => {
-        const text = heading.textContent;
+      markdownHeadings.forEach(heading => {
+        swapBilingualText(heading);
+      });
 
-        // Check if heading contains pipe separator
-        if (text.includes('|')) {
-          const parts = text.split('|').map(s => s.trim());
+      // Fix bilingual headings in hero section
+      const heroTitle = document.querySelector('.lesson-title-main');
+      if (heroTitle) {
+        swapBilingualText(heroTitle);
+      }
 
-          if (parts.length === 2) {
-            const [part1, part2] = parts;
+      const heroArabicTitle = document.querySelector('.lesson-title-arabic');
+      if (heroArabicTitle) {
+        swapBilingualText(heroArabicTitle);
+      }
 
-            // Check if part1 is Arabic and part2 is English
-            const hasArabicPart1 = /[\u0600-\u06FF]/.test(part1);
-            const hasArabicPart2 = /[\u0600-\u06FF]/.test(part2);
-
-            // If first part is Arabic and second is not, swap them
-            if (hasArabicPart1 && !hasArabicPart2) {
-              heading.innerHTML = `
-                <span class="bilingual-en">${part2}</span>
-                <span class="bilingual-separator"> | </span>
-                <span class="bilingual-ar" dir="rtl">${part1}</span>
-              `;
-              heading.classList.add('bilingual-heading');
-            }
-          }
+      // Fix any other headings on the page
+      const allHeadings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      allHeadings.forEach(heading => {
+        if (!heading.closest('#lesson-notes-rendered')) {
+          swapBilingualText(heading);
         }
       });
+    }
+
+    function swapBilingualText(element) {
+      const text = element.textContent;
+
+      // Check if element contains pipe separator
+      if (text.includes('|')) {
+        const parts = text.split('|').map(s => s.trim());
+
+        if (parts.length === 2) {
+          const [part1, part2] = parts;
+
+          // Check if part1 is Arabic and part2 is English
+          const hasArabicPart1 = /[\u0600-\u06FF]/.test(part1);
+          const hasArabicPart2 = /[\u0600-\u06FF]/.test(part2);
+
+          // If first part is Arabic and second is not, swap them
+          if (hasArabicPart1 && !hasArabicPart2) {
+            element.innerHTML = `
+              <span class="bilingual-en">${part2}</span>
+              <span class="bilingual-separator"> | </span>
+              <span class="bilingual-ar" dir="rtl">${part1}</span>
+            `;
+            element.classList.add('bilingual-heading');
+          }
+        }
+      }
     }
 
     function addSmoothScroll() {

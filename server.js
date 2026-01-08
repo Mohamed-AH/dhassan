@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const { MongoClient, ObjectId } = require("mongodb");
-const { isAuthenticated, isOwner, injectUser } = require('./middleware/auth');
+const { isAuthenticated, isOwner, injectUser, isAdmin } = require('./middleware/auth');
 
 // Set view engine
 app.set("view engine", "ejs");
@@ -344,6 +344,89 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
         res.status(500).render("error.ejs", { message: "Failed to load lesson" });
       }
     });
+
+    // ===== ADMIN ROUTES =====
+
+    // Admin: Edit lesson page
+    app.get("/admin/lesson/:lessonId/edit", isAdmin, async (req, res) => {
+      try {
+        const { lessonId } = req.params;
+
+        if (!ObjectId.isValid(lessonId)) {
+          return res.status(404).render("error.ejs", { message: "Lesson not found" });
+        }
+
+        const lesson = await lessonsCollection.findOne({ _id: new ObjectId(lessonId) });
+
+        if (!lesson) {
+          return res.status(404).render("error.ejs", { message: "Lesson not found" });
+        }
+
+        const series = await seriesCollection.findOne({ seriesId: lesson.seriesId });
+
+        res.render("admin-lesson-edit.ejs", {
+          lesson,
+          series
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load lesson editor" });
+      }
+    });
+
+    // Admin: Update lesson notes
+    app.post("/admin/lesson/:lessonId/update", isAdmin, async (req, res) => {
+      try {
+        const { lessonId } = req.params;
+        const { notes } = req.body;
+
+        if (!ObjectId.isValid(lessonId)) {
+          return res.status(400).json({
+            success: false,
+            error: "Invalid lesson ID"
+          });
+        }
+
+        if (!notes || notes.trim().length === 0) {
+          return res.status(400).json({
+            success: false,
+            error: "Notes content is required"
+          });
+        }
+
+        // Re-parse markdown to update chapters, timestamps, etc.
+        const MarkdownParser = require('./scripts/markdown-parser');
+        const parser = new MarkdownParser(notes);
+        const parsed = parser.parseAll();
+
+        // Update lesson in database
+        await lessonsCollection.updateOne(
+          { _id: new ObjectId(lessonId) },
+          {
+            $set: {
+              notes: notes.trim(),
+              chapters: parsed.chapters,
+              timestamps: parsed.timestamps,
+              updatedAt: new Date(),
+              updatedBy: req.user.email
+            }
+          }
+        );
+
+        res.json({
+          success: true,
+          message: "Lesson updated successfully"
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to update lesson"
+        });
+      }
+    });
+
+    // ===== END ADMIN ROUTES =====
 
     // Write page (requires authentication)
     app.get("/write", isAuthenticated, (req, res) => {
