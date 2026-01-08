@@ -625,16 +625,39 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
       }
     });
 
-    // Admin: Update lesson notes
+    // Admin: Update lesson (all fields)
     app.post("/admin/lesson/:lessonId/update", isAdmin(adminsCollection), async (req, res) => {
       try {
         const { lessonId } = req.params;
-        const { notes } = req.body;
+        const {
+          titleEnglish,
+          titleArabic,
+          hadithsDisplay,
+          duration,
+          dateGregorian,
+          lessonNumber,
+          notes
+        } = req.body;
 
         if (!ObjectId.isValid(lessonId)) {
           return res.status(400).json({
             success: false,
             error: "Invalid lesson ID"
+          });
+        }
+
+        // Validate required fields
+        if (!titleEnglish || titleEnglish.trim().length === 0) {
+          return res.status(400).json({
+            success: false,
+            error: "Title (English) is required"
+          });
+        }
+
+        if (!lessonNumber || lessonNumber < 1) {
+          return res.status(400).json({
+            success: false,
+            error: "Valid lesson number is required"
           });
         }
 
@@ -650,18 +673,29 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
         const parser = new MarkdownParser(notes, true); // true = raw content, not file path
         const parsed = parser.parseAll();
 
+        // Prepare update object
+        const updateFields = {
+          titleEnglish: titleEnglish.trim(),
+          titleArabic: titleArabic ? titleArabic.trim() : '',
+          hadithsDisplay: hadithsDisplay ? hadithsDisplay.trim() : '',
+          duration: duration ? duration.trim() : '',
+          lessonNumber: parseInt(lessonNumber),
+          notes: notes.trim(),
+          chapters: parsed.chapters,
+          timestamps: parsed.timestamps,
+          updatedAt: new Date(),
+          updatedBy: req.user.email
+        };
+
+        // Add dateGregorian if provided
+        if (dateGregorian) {
+          updateFields.dateGregorian = new Date(dateGregorian);
+        }
+
         // Update lesson in database
         await lessonsCollection.updateOne(
           { _id: new ObjectId(lessonId) },
-          {
-            $set: {
-              notes: notes.trim(),
-              chapters: parsed.chapters,
-              timestamps: parsed.timestamps,
-              updatedAt: new Date(),
-              updatedBy: req.user.email
-            }
-          }
+          { $set: updateFields }
         );
 
         res.json({
@@ -673,6 +707,43 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
         res.status(500).json({
           success: false,
           error: "Failed to update lesson"
+        });
+      }
+    });
+
+    // Admin: Delete lesson (super-admin only)
+    app.delete("/admin/lesson/:lessonId/delete", isSuperAdmin(adminsCollection), async (req, res) => {
+      try {
+        const { lessonId } = req.params;
+
+        if (!ObjectId.isValid(lessonId)) {
+          return res.status(400).json({
+            success: false,
+            error: "Invalid lesson ID"
+          });
+        }
+
+        // Delete the lesson
+        const result = await lessonsCollection.deleteOne({ _id: new ObjectId(lessonId) });
+
+        if (result.deletedCount === 0) {
+          return res.status(404).json({
+            success: false,
+            error: "Lesson not found"
+          });
+        }
+
+        console.log(`Lesson ${lessonId} deleted by ${req.admin.email}`);
+
+        res.json({
+          success: true,
+          message: "Lesson deleted successfully"
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to delete lesson"
         });
       }
     });

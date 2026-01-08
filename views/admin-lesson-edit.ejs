@@ -10,31 +10,29 @@
     .admin-editor-container {
       max-width: 100%;
       padding: 2rem;
-      background: white;
+      background: var(--warm-cream);
       min-height: 100vh;
     }
 
     .admin-editor-header {
       max-width: 1400px;
       margin: 0 auto 2rem;
-      padding-bottom: 2rem;
-      border-bottom: 2px solid var(--border-light);
+      padding: 2rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
     }
 
     .admin-editor-header h1 {
       font-family: var(--font-display);
       font-size: 2rem;
-      color: var(--sage-green);
+      color: var(--terracotta);
       margin-bottom: 0.5rem;
     }
 
-    .admin-editor-header .lesson-info {
+    .lesson-info {
       color: var(--text-secondary);
       font-size: 0.95rem;
-    }
-
-    .admin-editor-header .lesson-info strong {
-      color: var(--text-primary);
     }
 
     .admin-editor-main {
@@ -42,19 +40,72 @@
       margin: 0 auto;
     }
 
+    .metadata-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    .metadata-section h2 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--soft-beige);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--terracotta);
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
     .editor-actions {
       display: flex;
       gap: 1rem;
       margin-bottom: 1.5rem;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .btn-save {
-      background: var(--sage-green);
+      background: var(--terracotta);
       color: white;
       padding: 0.875rem 2rem;
       border: none;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       font-weight: 600;
       font-size: 1rem;
       cursor: pointer;
@@ -62,14 +113,12 @@
     }
 
     .btn-save:hover {
-      background: var(--deep-sage);
-      transform: translateY(-2px);
+      background: var(--burnt-orange);
     }
 
     .btn-save:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      transform: none;
     }
 
     .btn-cancel {
@@ -77,7 +126,7 @@
       color: white;
       padding: 0.875rem 2rem;
       border: none;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       font-weight: 600;
       font-size: 1rem;
       cursor: pointer;
@@ -90,13 +139,30 @@
       background: var(--text-secondary);
     }
 
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: auto;
+    }
+
+    .btn-delete:hover {
+      background: #c82333;
+    }
+
     .save-status {
       color: var(--text-secondary);
       font-size: 0.9rem;
     }
 
     .save-status.success {
-      color: var(--sage-green);
+      color: var(--olive-green);
       font-weight: 600;
     }
 
@@ -105,13 +171,24 @@
       font-weight: 600;
     }
 
-    /* Customize EasyMDE */
-    .EasyMDEContainer {
-      font-family: var(--font-body);
+    .notes-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
     }
 
+    .notes-section h2 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--soft-beige);
+    }
+
+    /* Customize EasyMDE */
     .EasyMDEContainer .CodeMirror {
-      min-height: 600px;
+      min-height: 500px;
       font-size: 1rem;
       line-height: 1.8;
     }
@@ -121,53 +198,23 @@
       border-color: var(--border-light);
     }
 
-    .editor-toolbar button {
-      color: var(--text-primary) !important;
-    }
-
     .editor-toolbar button:hover,
     .editor-toolbar button.active {
-      background: var(--sage-green) !important;
-      border-color: var(--sage-green) !important;
-      color: white !important;
-    }
-
-    .editor-preview {
-      font-family: var(--font-body);
-      font-size: 1.125rem;
-      line-height: 1.8;
-      padding: 2rem;
-    }
-
-    .editor-preview h2 {
-      font-family: var(--font-display);
-      color: var(--sage-green);
-      font-size: 2rem;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--border-light);
-    }
-
-    .editor-preview h3 {
-      font-family: var(--font-display);
-      color: var(--sage-green);
-      font-size: 1.5rem;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
+      background: var(--terracotta) !important;
+      border-color: var(--terracotta) !important;
     }
 
     .admin-tips {
       background: var(--soft-beige);
       padding: 1.5rem;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       border-left: 4px solid var(--muted-gold);
       margin-top: 2rem;
     }
 
     .admin-tips h3 {
       font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       color: var(--text-primary);
       margin-bottom: 1rem;
     }
@@ -181,11 +228,12 @@
       padding: 0.5rem 0;
       color: var(--text-secondary);
       line-height: 1.6;
+      font-size: 0.9rem;
     }
 
     .admin-tips li::before {
       content: '✓';
-      color: var(--sage-green);
+      color: var(--olive-green);
       font-weight: bold;
       margin-right: 0.75rem;
     }
@@ -199,6 +247,7 @@
       <a href="/" class="logo">Notes from the Majlis</a>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
+        <li><a href="/admin">Admin Panel</a></li>
         <li><a href="/lesson/<%= lesson._id %>">View Lesson</a></li>
         <% if (user) { %>
         <li><a href="/auth/logout">Logout</a></li>
@@ -210,39 +259,84 @@
   <div class="admin-editor-container">
     <!-- Header -->
     <div class="admin-editor-header">
-      <h1>✏️ Edit Lesson Notes</h1>
+      <h1>✏️ Edit Lesson</h1>
       <div class="lesson-info">
         <strong>Series:</strong> <%= series.titleEnglish %> |
-        <strong>Lesson:</strong> <%= lesson.lessonNumber %> |
-        <strong>Title:</strong> <%= lesson.titleEnglish || 'Untitled' %>
+        <strong>Lesson:</strong> <%= lesson.lessonNumber %>
       </div>
     </div>
 
     <!-- Editor -->
     <div class="admin-editor-main">
       <form id="lesson-edit-form">
-        <div class="editor-actions">
+
+        <!-- Metadata Section -->
+        <div class="metadata-section">
+          <h2>Lesson Information</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="titleEnglish">Title (English) *</label>
+              <input type="text" id="titleEnglish" name="titleEnglish" value="<%= lesson.titleEnglish || '' %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="titleArabic">Title (Arabic)</label>
+              <input type="text" id="titleArabic" name="titleArabic" value="<%= lesson.titleArabic || '' %>">
+            </div>
+
+            <div class="form-group">
+              <label for="hadithsDisplay">Hadiths (e.g., "Hadiths 26-30")</label>
+              <input type="text" id="hadithsDisplay" name="hadithsDisplay" value="<%= lesson.hadithsDisplay || '' %>">
+            </div>
+
+            <div class="form-group">
+              <label for="duration">Duration (e.g., "1h 45m")</label>
+              <input type="text" id="duration" name="duration" value="<%= lesson.duration || '' %>">
+            </div>
+
+            <div class="form-group">
+              <label for="dateGregorian">Date (Gregorian)</label>
+              <input type="date" id="dateGregorian" name="dateGregorian" value="<%= lesson.dateGregorian ? new Date(lesson.dateGregorian).toISOString().split('T')[0] : '' %>">
+            </div>
+
+            <div class="form-group">
+              <label for="lessonNumber">Lesson Number *</label>
+              <input type="number" id="lessonNumber" name="lessonNumber" value="<%= lesson.lessonNumber %>" required min="1">
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="notes-section">
+          <h2>Lesson Notes (Markdown)</h2>
+          <textarea id="markdown-editor"><%= lesson.notes %></textarea>
+
+          <div class="admin-tips">
+            <h3>💡 Editing Tips</h3>
+            <ul>
+              <li>Use <code>## Heading</code> for chapter headings (auto-generates table of contents)</li>
+              <li>Timestamps format: <code>(HH:MM-HH:MM)</code> will be automatically extracted</li>
+              <li>Click the eye icon (👁️) to toggle preview mode</li>
+              <li>Changes will auto-update chapters and timestamps</li>
+              <li>Press Ctrl+S (Cmd+S) to save quickly</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="editor-actions" style="margin-top: 2rem;">
           <button type="submit" class="btn-save" id="save-btn">
-            💾 Save Changes
+            💾 Save All Changes
           </button>
           <a href="/lesson/<%= lesson._id %>" class="btn-cancel">
             ← Cancel
           </a>
           <span class="save-status" id="save-status"></span>
-        </div>
-
-        <textarea id="markdown-editor"><%= lesson.notes %></textarea>
-
-        <div class="admin-tips">
-          <h3>💡 Editing Tips</h3>
-          <ul>
-            <li>Use the toolbar above for markdown formatting</li>
-            <li>Click the eye icon (👁️) to toggle preview mode</li>
-            <li>Use <code>## Heading</code> for chapter headings (will auto-generate table of contents)</li>
-            <li>Timestamps format: <code>(HH:MM-HH:MM)</code> will be automatically extracted</li>
-            <li>Changes will auto-update chapters, timestamps, and table of contents</li>
-            <li>All changes are logged with your admin email</li>
-          </ul>
+          <% if (adminRole === 'super-admin') { %>
+          <button type="button" class="btn-delete" id="delete-btn">
+            🗑️ Delete Lesson
+          </button>
+          <% } %>
         </div>
       </form>
     </div>
@@ -268,10 +362,6 @@
         'guide'
       ],
       placeholder: 'Enter lesson notes in Markdown format...',
-      renderingConfig: {
-        singleLineBreaks: false,
-        codeSyntaxHighlighting: false,
-      }
     });
 
     // Form submission
@@ -280,7 +370,28 @@
 
       const saveBtn = document.getElementById('save-btn');
       const saveStatus = document.getElementById('save-status');
-      const markdown = easyMDE.value();
+
+      // Gather all form data
+      const formData = {
+        titleEnglish: document.getElementById('titleEnglish').value.trim(),
+        titleArabic: document.getElementById('titleArabic').value.trim(),
+        hadithsDisplay: document.getElementById('hadithsDisplay').value.trim(),
+        duration: document.getElementById('duration').value.trim(),
+        dateGregorian: document.getElementById('dateGregorian').value,
+        lessonNumber: parseInt(document.getElementById('lessonNumber').value),
+        notes: easyMDE.value()
+      };
+
+      // Validate
+      if (!formData.titleEnglish) {
+        alert('English title is required');
+        return;
+      }
+
+      if (!formData.lessonNumber || formData.lessonNumber < 1) {
+        alert('Valid lesson number is required');
+        return;
+      }
 
       // Disable button
       saveBtn.disabled = true;
@@ -294,7 +405,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ notes: markdown })
+          body: JSON.stringify(formData)
         });
 
         const result = await response.json();
@@ -318,9 +429,45 @@
         saveStatus.textContent = '✗ Error: ' + error.message;
         saveStatus.className = 'save-status error';
         saveBtn.disabled = false;
-        saveBtn.textContent = '💾 Save Changes';
+        saveBtn.textContent = '💾 Save All Changes';
       }
     });
+
+    // Delete lesson (super-admin only)
+    <% if (adminRole === 'super-admin') { %>
+    document.getElementById('delete-btn').addEventListener('click', async () => {
+      const lessonTitle = '<%= lesson.titleEnglish || `Lesson ${lesson.lessonNumber}` %>';
+
+      if (!confirm(`⚠️ Are you sure you want to DELETE this lesson?\n\n"${lessonTitle}"\n\nThis action CANNOT be undone!`)) {
+        return;
+      }
+
+      if (!confirm('Are you ABSOLUTELY sure? This will permanently delete all lesson data.')) {
+        return;
+      }
+
+      try {
+        const response = await fetch('/admin/lesson/<%= lesson._id %>/delete', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('✓ Lesson deleted successfully');
+          window.location.href = '/admin/lessons';
+        } else {
+          throw new Error(result.error || 'Failed to delete');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('✗ Error: ' + error.message);
+      }
+    });
+    <% } %>
 
     // Keyboard shortcut: Ctrl+S / Cmd+S to save
     document.addEventListener('keydown', (e) => {
@@ -331,9 +478,18 @@
     });
 
     // Warn on page leave if there are unsaved changes
-    let initialValue = easyMDE.value();
+    let initialValue = JSON.stringify({
+      titleEnglish: document.getElementById('titleEnglish').value,
+      notes: easyMDE.value()
+    });
+
     window.addEventListener('beforeunload', (e) => {
-      if (easyMDE.value() !== initialValue) {
+      const currentValue = JSON.stringify({
+        titleEnglish: document.getElementById('titleEnglish').value,
+        notes: easyMDE.value()
+      });
+
+      if (currentValue !== initialValue) {
         e.preventDefault();
         e.returnValue = '';
         return '';
