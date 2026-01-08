@@ -403,7 +403,22 @@
         }
 
         const level = heading.tagName === 'H2' ? 'toc-level-1' : 'toc-level-2';
-        const text = heading.textContent;
+        let text = heading.textContent;
+
+        // Apply bilingual swap to TOC text
+        if (text.includes('|')) {
+          const parts = text.split('|').map(s => s.trim());
+          if (parts.length === 2) {
+            const [part1, part2] = parts;
+            const hasArabicPart1 = /[\u0600-\u06FF]/.test(part1);
+            const hasArabicPart2 = /[\u0600-\u06FF]/.test(part2);
+
+            // If first part is Arabic and second is not, swap them
+            if (hasArabicPart1 && !hasArabicPart2) {
+              text = `${part2} | ${part1}`;
+            }
+          }
+        }
 
         tocHtml += `
           <li class="toc-item ${level}">
