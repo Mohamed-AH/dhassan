@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Series Management - Admin Panel</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .admin-nav {
+      background: var(--warm-sand);
+      border-bottom: 2px solid var(--terracotta);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .admin-nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .admin-nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .admin-nav-links a:hover,
+    .admin-nav-links a.active {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .admin-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    .admin-section h2 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--soft-beige);
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .admin-table th {
+      text-align: left;
+      padding: 1rem;
+      background: var(--soft-beige);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .admin-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .admin-table tr:hover {
+      background: var(--warm-cream);
+    }
+
+    .admin-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-badge.ongoing {
+      background: var(--olive-green);
+      color: white;
+    }
+
+    .status-badge.complete {
+      background: var(--muted-gold);
+      color: white;
+    }
+
+    .btn-admin {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-admin-primary {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .btn-admin-primary:hover {
+      background: var(--burnt-orange);
+    }
+
+    .btn-admin-secondary {
+      background: var(--soft-beige);
+      color: var(--text-primary);
+    }
+
+    .btn-admin-secondary:hover {
+      background: var(--warm-sand);
+    }
+
+    .btn-admin-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-admin-danger:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <% if (user) { %>
+        <li><a href="/profile"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Admin Navigation -->
+  <div class="admin-nav">
+    <div class="container">
+      <ul class="admin-nav-links">
+        <li><a href="/admin">Dashboard</a></li>
+        <li><a href="/admin/lessons">All Lessons</a></li>
+        <li><a href="/admin/series" class="active">Series</a></li>
+        <% if (adminRole === 'super-admin') { %>
+        <li><a href="/admin/users">User Management</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main style="padding: 2rem 0; background: var(--warm-cream); min-height: 70vh;">
+    <div class="container">
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="font-family: var(--font-display); margin: 0;">Series Management</h1>
+        <a href="/admin/series/new" class="btn-admin btn-admin-primary">+ Create New Series</a>
+      </div>
+
+      <!-- Series List -->
+      <div class="admin-section">
+        <h2>All Series</h2>
+
+        <% if (allSeries && allSeries.length > 0) { %>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Series ID</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Lessons</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% allSeries.forEach(series => { %>
+            <tr>
+              <td><code><%= series.seriesId %></code></td>
+              <td>
+                <strong><%= series.titleEnglish %></strong>
+                <% if (series.titleArabic) { %>
+                <br><span style="font-size: 0.85rem; color: var(--text-light);"><%= series.titleArabic %></span>
+                <% } %>
+              </td>
+              <td><span class="admin-badge" style="background: var(--soft-beige);"><%= series.category %></span></td>
+              <td>
+                <span class="status-badge <%= series.status.toLowerCase() %>">
+                  <%= series.status %>
+                </span>
+              </td>
+              <td><%= series.actualLessonCount || 0 %> lessons</td>
+              <td>
+                <a href="/series/<%= series.seriesId %>" class="btn-admin btn-admin-secondary" style="margin-right: 0.5rem;">View</a>
+                <a href="/admin/series/<%= series.seriesId %>/edit" class="btn-admin btn-admin-primary" style="margin-right: 0.5rem;">Edit</a>
+                <% if (adminRole === 'super-admin' && series.actualLessonCount === 0) { %>
+                <button class="btn-admin btn-admin-danger" onclick="deleteSeries('<%= series.seriesId %>', '<%= series.titleEnglish %>')">Delete</button>
+                <% } %>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <p style="text-align: center; color: var(--text-light); padding: 2rem;">No series found. <a href="/admin/series/new">Create one now</a>.</p>
+        <% } %>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes. They have not been reviewed or endorsed by Sheikh Hassan Dghriri. Always verify information from the original audio recordings.</p>
+      </div>
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
+    </div>
+  </footer>
+
+  <script>
+    async function deleteSeries(seriesId, seriesTitle) {
+      if (!confirm(`⚠️ Are you sure you want to DELETE this series?\n\n"${seriesTitle}"\n\nThis action CANNOT be undone!`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/admin/series/${seriesId}/delete`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('✓ Series deleted successfully');
+          window.location.reload();
+        } else {
+          throw new Error(result.error || 'Failed to delete');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('✗ Error: ' + error.message);
+      }
+    }
+  </script>
+
+</body>
+</html>

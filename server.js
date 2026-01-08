@@ -436,6 +436,223 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
       }
     });
 
+    // Admin: Series management
+    app.get("/admin/series", isAdmin(adminsCollection), async (req, res) => {
+      try {
+        const allSeries = await seriesCollection.find().sort({ category: 1, titleEnglish: 1 }).toArray();
+
+        // Get lesson counts for each series
+        for (const series of allSeries) {
+          const count = await lessonsCollection.countDocuments({ seriesId: series.seriesId });
+          series.actualLessonCount = count;
+        }
+
+        res.render("admin-series.ejs", {
+          allSeries,
+          currentAdmin: req.admin
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load series" });
+      }
+    });
+
+    // Admin: Create series page
+    app.get("/admin/series/new", isAdmin(adminsCollection), async (req, res) => {
+      res.render("admin-series-edit.ejs", {
+        series: null,
+        currentAdmin: req.admin,
+        isNew: true
+      });
+    });
+
+    // Admin: Edit series page
+    app.get("/admin/series/:seriesId/edit", isAdmin(adminsCollection), async (req, res) => {
+      try {
+        const { seriesId } = req.params;
+        const series = await seriesCollection.findOne({ seriesId });
+
+        if (!series) {
+          return res.status(404).render("error.ejs", { message: "Series not found" });
+        }
+
+        res.render("admin-series-edit.ejs", {
+          series,
+          currentAdmin: req.admin,
+          isNew: false
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load series editor" });
+      }
+    });
+
+    // Admin: Create new series
+    app.post("/admin/series/create", isAdmin(adminsCollection), async (req, res) => {
+      try {
+        const {
+          seriesId,
+          titleEnglish,
+          titleArabic,
+          category,
+          author,
+          description,
+          status,
+          location,
+          telegramLink
+        } = req.body;
+
+        // Validate required fields
+        if (!seriesId || !titleEnglish || !category) {
+          return res.status(400).json({
+            success: false,
+            error: "Series ID, Title (English), and Category are required"
+          });
+        }
+
+        // Check if series ID already exists
+        const existing = await seriesCollection.findOne({ seriesId: seriesId.trim() });
+        if (existing) {
+          return res.status(400).json({
+            success: false,
+            error: "Series ID already exists. Please use a unique ID."
+          });
+        }
+
+        // Create new series
+        const newSeries = {
+          seriesId: seriesId.trim(),
+          titleEnglish: titleEnglish.trim(),
+          titleArabic: titleArabic ? titleArabic.trim() : '',
+          category: category.trim(),
+          author: author ? author.trim() : 'Sheikh Hassan bin Muhammad Mansur Ad-Daghriri',
+          description: description ? description.trim() : '',
+          status: status || 'Ongoing',
+          totalLessons: 0,
+          location: location ? location.trim() : 'Jami\' Al-Wurud, Al-Wurud District, Jeddah',
+          telegramLink: telegramLink ? telegramLink.trim() : null,
+          createdAt: new Date(),
+          createdBy: req.user.email,
+          updatedAt: new Date()
+        };
+
+        await seriesCollection.insertOne(newSeries);
+
+        res.json({
+          success: true,
+          message: "Series created successfully",
+          seriesId: newSeries.seriesId
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to create series"
+        });
+      }
+    });
+
+    // Admin: Update series
+    app.post("/admin/series/:seriesId/update", isAdmin(adminsCollection), async (req, res) => {
+      try {
+        const { seriesId } = req.params;
+        const {
+          titleEnglish,
+          titleArabic,
+          category,
+          author,
+          description,
+          status,
+          location,
+          telegramLink
+        } = req.body;
+
+        // Validate required fields
+        if (!titleEnglish || !category) {
+          return res.status(400).json({
+            success: false,
+            error: "Title (English) and Category are required"
+          });
+        }
+
+        // Update series
+        const updateFields = {
+          titleEnglish: titleEnglish.trim(),
+          titleArabic: titleArabic ? titleArabic.trim() : '',
+          category: category.trim(),
+          author: author ? author.trim() : 'Sheikh Hassan bin Muhammad Mansur Ad-Daghriri',
+          description: description ? description.trim() : '',
+          status: status || 'Ongoing',
+          location: location ? location.trim() : 'Jami\' Al-Wurud, Al-Wurud District, Jeddah',
+          telegramLink: telegramLink ? telegramLink.trim() : null,
+          updatedAt: new Date(),
+          updatedBy: req.user.email
+        };
+
+        const result = await seriesCollection.updateOne(
+          { seriesId },
+          { $set: updateFields }
+        );
+
+        if (result.matchedCount === 0) {
+          return res.status(404).json({
+            success: false,
+            error: "Series not found"
+          });
+        }
+
+        res.json({
+          success: true,
+          message: "Series updated successfully"
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to update series"
+        });
+      }
+    });
+
+    // Admin: Delete series (super-admin only)
+    app.delete("/admin/series/:seriesId/delete", isSuperAdmin(adminsCollection), async (req, res) => {
+      try {
+        const { seriesId } = req.params;
+
+        // Check if series has any lessons
+        const lessonCount = await lessonsCollection.countDocuments({ seriesId });
+        if (lessonCount > 0) {
+          return res.status(400).json({
+            success: false,
+            error: `Cannot delete series. It has ${lessonCount} lesson(s). Delete all lessons first.`
+          });
+        }
+
+        // Delete the series
+        const result = await seriesCollection.deleteOne({ seriesId });
+
+        if (result.deletedCount === 0) {
+          return res.status(404).json({
+            success: false,
+            error: "Series not found"
+          });
+        }
+
+        console.log(`Series ${seriesId} deleted by ${req.admin.email}`);
+
+        res.json({
+          success: true,
+          message: "Series deleted successfully"
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to delete series"
+        });
+      }
+    });
+
     // Admin: User management (super-admin only)
     app.get("/admin/users", isSuperAdmin(adminsCollection), async (req, res) => {
       try {

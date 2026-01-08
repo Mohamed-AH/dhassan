@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= isNew ? 'Create New Series' : 'Edit Series' %> - Admin Panel</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .admin-editor-container {
+      max-width: 100%;
+      padding: 2rem;
+      background: var(--warm-cream);
+      min-height: 100vh;
+    }
+
+    .admin-editor-header {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      padding: 2rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+    }
+
+    .admin-editor-header h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--terracotta);
+      margin-bottom: 0.5rem;
+    }
+
+    .admin-editor-main {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .form-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    .form-section h2 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--soft-beige);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--terracotta);
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-save {
+      background: var(--terracotta);
+      color: white;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+      background: var(--burnt-orange);
+    }
+
+    .btn-save:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-cancel {
+      background: var(--text-light);
+      color: white;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-cancel:hover {
+      background: var(--text-secondary);
+    }
+
+    .save-status {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .save-status.success {
+      color: var(--olive-green);
+      font-weight: 600;
+    }
+
+    .save-status.error {
+      color: #d32f2f;
+      font-weight: 600;
+    }
+
+    .help-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/admin">Admin Panel</a></li>
+        <li><a href="/admin/series">Series Management</a></li>
+        <% if (user) { %>
+        <li><a href="/auth/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="admin-editor-container">
+    <!-- Header -->
+    <div class="admin-editor-header">
+      <h1><%= isNew ? '➕ Create New Series' : '✏️ Edit Series' %></h1>
+      <% if (!isNew) { %>
+      <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+        Series ID: <code><%= series.seriesId %></code>
+      </p>
+      <% } %>
+    </div>
+
+    <!-- Editor -->
+    <div class="admin-editor-main">
+      <form id="series-form">
+
+        <!-- Basic Information -->
+        <div class="form-section">
+          <h2>Basic Information</h2>
+          <div class="form-grid">
+            <% if (isNew) { %>
+            <div class="form-group full-width">
+              <label for="seriesId">Series ID *</label>
+              <input type="text" id="seriesId" name="seriesId" required placeholder="e.g., sahih-bukhari-book-of-faith">
+              <div class="help-text">Lowercase, use hyphens instead of spaces. This cannot be changed later.</div>
+            </div>
+            <% } %>
+
+            <div class="form-group">
+              <label for="titleEnglish">Title (English) *</label>
+              <input type="text" id="titleEnglish" name="titleEnglish" value="<%= series ? series.titleEnglish : '' %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="titleArabic">Title (Arabic)</label>
+              <input type="text" id="titleArabic" name="titleArabic" value="<%= series ? series.titleArabic : '' %>">
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category *</label>
+              <select id="category" name="category" required>
+                <option value="">Select Category</option>
+                <option value="Hadith" <%= series && series.category === 'Hadith' ? 'selected' : '' %>>Hadith</option>
+                <option value="Tafsir" <%= series && series.category === 'Tafsir' ? 'selected' : '' %>>Tafsir (Quranic Sciences)</option>
+                <option value="Fiqh" <%= series && series.category === 'Fiqh' ? 'selected' : '' %>>Fiqh (Islamic Jurisprudence)</option>
+                <option value="Aqeedah" <%= series && series.category === 'Aqeedah' ? 'selected' : '' %>>Aqeedah (Islamic Creed)</option>
+                <option value="Seerah" <%= series && series.category === 'Seerah' ? 'selected' : '' %>>Seerah (Prophetic Biography)</option>
+                <option value="Akhlaq" <%= series && series.category === 'Akhlaq' ? 'selected' : '' %>>Akhlaq (Character & Ethics)</option>
+                <option value="Other" <%= series && series.category === 'Other' ? 'selected' : '' %>>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="status">Status</label>
+              <select id="status" name="status">
+                <option value="Ongoing" <%= (!series || series.status === 'Ongoing') ? 'selected' : '' %>>Ongoing</option>
+                <option value="Complete" <%= series && series.status === 'Complete' ? 'selected' : '' %>>Complete</option>
+                <option value="Paused" <%= series && series.status === 'Paused' ? 'selected' : '' %>>Paused</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="author">Author/Teacher</label>
+              <input type="text" id="author" name="author" value="<%= series ? series.author : 'Sheikh Hassan bin Muhammad Mansur Ad-Daghriri' %>">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="description">Description</label>
+              <textarea id="description" name="description"><%= series ? series.description : '' %></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location & Links -->
+        <div class="form-section">
+          <h2>Location & Links</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input type="text" id="location" name="location" value="<%= series ? series.location : 'Jami\' Al-Wurud, Al-Wurud District, Jeddah' %>">
+            </div>
+
+            <div class="form-group">
+              <label for="telegramLink">Telegram Link</label>
+              <input type="url" id="telegramLink" name="telegramLink" value="<%= series && series.telegramLink ? series.telegramLink : '' %>" placeholder="https://t.me/...">
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="editor-actions">
+          <button type="submit" class="btn-save" id="save-btn">
+            💾 <%= isNew ? 'Create Series' : 'Save Changes' %>
+          </button>
+          <a href="/admin/series" class="btn-cancel">
+            ← Cancel
+          </a>
+          <span class="save-status" id="save-status"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Form submission
+    document.getElementById('series-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const saveBtn = document.getElementById('save-btn');
+      const saveStatus = document.getElementById('save-status');
+      const isNew = <%= isNew ? 'true' : 'false' %>;
+
+      // Gather form data
+      const formData = {
+        titleEnglish: document.getElementById('titleEnglish').value.trim(),
+        titleArabic: document.getElementById('titleArabic').value.trim(),
+        category: document.getElementById('category').value,
+        status: document.getElementById('status').value,
+        author: document.getElementById('author').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        location: document.getElementById('location').value.trim(),
+        telegramLink: document.getElementById('telegramLink').value.trim()
+      };
+
+      if (isNew) {
+        formData.seriesId = document.getElementById('seriesId').value.trim();
+
+        // Validate series ID format
+        if (!/^[a-z0-9-]+$/.test(formData.seriesId)) {
+          alert('Series ID must be lowercase letters, numbers, and hyphens only');
+          return;
+        }
+      }
+
+      // Validate required fields
+      if (!formData.titleEnglish || !formData.category) {
+        alert('Title (English) and Category are required');
+        return;
+      }
+
+      // Disable button
+      saveBtn.disabled = true;
+      saveBtn.textContent = '💾 Saving...';
+      saveStatus.textContent = '';
+      saveStatus.className = 'save-status';
+
+      try {
+        const url = isNew ? '/admin/series/create' : '/admin/series/<%= series ? series.seriesId : '' %>/update';
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          saveStatus.textContent = '✓ Saved successfully!';
+          saveStatus.className = 'save-status success';
+
+          // Redirect after 1 second
+          setTimeout(() => {
+            window.location.href = '/admin/series';
+          }, 1000);
+        } else {
+          throw new Error(result.error || 'Failed to save');
+        }
+      } catch (error) {
+        console.error('Save error:', error);
+        saveStatus.textContent = '✗ Error: ' + error.message;
+        saveStatus.className = 'save-status error';
+        saveBtn.disabled = false;
+        saveBtn.textContent = '💾 <%= isNew ? "Create Series" : "Save Changes" %>';
+      }
+    });
+  </script>
+
+</body>
+</html>
