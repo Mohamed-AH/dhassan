@@ -127,8 +127,8 @@
       <div class="lesson-audio-section">
         <% if (lesson.telegramLink) { %>
         <a href="<%= lesson.telegramLink %>" target="_blank" rel="noopener noreferrer" class="audio-link-primary">
-          <span class="audio-icon">🎧</span>
-          Listen to Recording
+          <span class="audio-icon">📱</span>
+          Open in Telegram
         </a>
         <% } else if (lesson.audioLink) { %>
         <a href="<%= lesson.audioLink %>" target="_blank" rel="noopener noreferrer" class="audio-link-primary">
@@ -197,30 +197,6 @@
             </div>
           </nav>
 
-          <!-- Key Terms in Sidebar -->
-          <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
-          <div class="sidebar-key-terms">
-            <h3 class="toc-title">Key Terms</h3>
-            <ul class="key-terms-quick-list">
-              <% lesson.keyTerms.slice(0, 5).forEach(term => { %>
-              <li class="key-term-quick-item">
-                <a href="#key-terms" class="key-term-quick-link">
-                  <%= term.termEnglish %>
-                  <% if (term.termArabic) { %>
-                  <span class="term-arabic-small">(<%= term.termArabic %>)</span>
-                  <% } %>
-                </a>
-              </li>
-              <% }); %>
-              <% if (lesson.keyTerms.length > 5) { %>
-              <li class="key-term-quick-item">
-                <a href="#key-terms" class="key-term-quick-link">+ <%= lesson.keyTerms.length - 5 %> more terms...</a>
-              </li>
-              <% } %>
-            </ul>
-          </div>
-          <% } %>
-
           <!-- Timestamps in Sidebar -->
           <% if (lesson.timestamps && lesson.timestamps.length > 0) { %>
           <div class="sidebar-timestamps">
@@ -267,6 +243,9 @@
         <% if (lesson.timestamps && lesson.timestamps.length > 0) { %>
         <section id="timestamps" class="lesson-section timestamps-section">
           <h2 class="section-heading">⏱️ Timestamps</h2>
+          <% if (lesson.telegramLink) { %>
+          <p class="timestamp-note">💡 Tip: Click timestamps to open Telegram, then manually seek to the shown time in the audio player.</p>
+          <% } %>
           <div class="timestamps-grid">
             <% lesson.timestamps.forEach(timestamp => { %>
             <div class="timestamp-card">
@@ -274,30 +253,12 @@
               <span class="timestamp-card-description"><%= timestamp.description %></span>
               <% if (lesson.telegramLink || lesson.audioLink) { %>
               <a href="<%= lesson.telegramLink || lesson.audioLink %>" target="_blank" class="timestamp-card-link">
+                <% if (lesson.telegramLink) { %>
+                📱 Open in Telegram →
+                <% } else { %>
                 Jump to Audio →
-              </a>
-              <% } %>
-            </div>
-            <% }); %>
-          </div>
-        </section>
-        <% } %>
-
-        <!-- Key Terms Full Section -->
-        <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
-        <section id="key-terms" class="lesson-section key-terms-section">
-          <h2 class="section-heading">📚 Key Terms & Concepts</h2>
-          <div class="key-terms-grid">
-            <% lesson.keyTerms.forEach(term => { %>
-            <div class="key-term-card">
-              <h3 class="key-term-name">
-                <%= term.termEnglish %>
-                <% if (term.termArabic) { %>
-                <span class="key-term-arabic">(<%= term.termArabic %>)</span>
                 <% } %>
-              </h3>
-              <% if (term.definition) { %>
-              <p class="key-term-definition"><%= term.definition %></p>
+              </a>
               <% } %>
             </div>
             <% }); %>
@@ -400,6 +361,9 @@
       // Add Arabic text styling
       styleArabicText();
 
+      // Fix bilingual heading order
+      fixBilingualHeadings();
+
       // Smooth scroll for anchor links
       addSmoothScroll();
     });
@@ -467,6 +431,38 @@
               /([\u0600-\u06FF\s]+)/g,
               '<span class="arabic-inline" dir="rtl">$1</span>'
             );
+          }
+        }
+      });
+    }
+
+    function fixBilingualHeadings() {
+      const content = document.getElementById('lesson-notes-rendered');
+      const headings = content.querySelectorAll('h2, h3');
+
+      headings.forEach(heading => {
+        const text = heading.textContent;
+
+        // Check if heading contains pipe separator
+        if (text.includes('|')) {
+          const parts = text.split('|').map(s => s.trim());
+
+          if (parts.length === 2) {
+            const [part1, part2] = parts;
+
+            // Check if part1 is Arabic and part2 is English
+            const hasArabicPart1 = /[\u0600-\u06FF]/.test(part1);
+            const hasArabicPart2 = /[\u0600-\u06FF]/.test(part2);
+
+            // If first part is Arabic and second is not, swap them
+            if (hasArabicPart1 && !hasArabicPart2) {
+              heading.innerHTML = `
+                <span class="bilingual-en">${part2}</span>
+                <span class="bilingual-separator"> | </span>
+                <span class="bilingual-ar" dir="rtl">${part1}</span>
+              `;
+              heading.classList.add('bilingual-heading');
+            }
           }
         }
       });
