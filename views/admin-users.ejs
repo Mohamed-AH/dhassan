@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management - Admin Panel</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .admin-nav {
+      background: var(--warm-sand);
+      border-bottom: 2px solid var(--terracotta);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .admin-nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .admin-nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .admin-nav-links a:hover,
+    .admin-nav-links a.active {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .admin-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    .admin-section h2 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--soft-beige);
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .admin-table th {
+      text-align: left;
+      padding: 1rem;
+      background: var(--soft-beige);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .admin-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .admin-table tr:hover {
+      background: var(--warm-cream);
+    }
+
+    .admin-table tr.inactive {
+      opacity: 0.6;
+      background: var(--warm-cream);
+    }
+
+    .admin-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .admin-badge.super-admin {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .admin-badge.editor {
+      background: var(--olive-green);
+      color: white;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-badge.active {
+      background: var(--olive-green);
+      color: white;
+    }
+
+    .status-badge.inactive {
+      background: var(--text-light);
+      color: white;
+    }
+
+    .btn-admin {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-admin-primary {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .btn-admin-primary:hover {
+      background: var(--burnt-orange);
+    }
+
+    .btn-admin-secondary {
+      background: var(--soft-beige);
+      color: var(--text-primary);
+    }
+
+    .btn-admin-secondary:hover {
+      background: var(--warm-sand);
+    }
+
+    .btn-admin-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-admin-danger:hover {
+      background: #c82333;
+    }
+
+    .add-admin-form {
+      background: var(--warm-cream);
+      padding: 2rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--terracotta);
+    }
+
+    .alert {
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.5rem;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <% if (user) { %>
+        <li><a href="/profile"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Admin Navigation -->
+  <div class="admin-nav">
+    <div class="container">
+      <ul class="admin-nav-links">
+        <li><a href="/admin">Dashboard</a></li>
+        <li><a href="/admin/lessons">All Lessons</a></li>
+        <li><a href="/admin/users" class="active">User Management</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main style="padding: 2rem 0; background: var(--warm-cream); min-height: 70vh;">
+    <div class="container">
+
+      <h1 style="font-family: var(--font-display); margin-bottom: 2rem;">User Management</h1>
+
+      <!-- Add New Admin Form -->
+      <div class="admin-section">
+        <h2>Add New Admin</h2>
+
+        <div id="alertContainer"></div>
+
+        <form id="addAdminForm" class="add-admin-form">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="admin@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required placeholder="John Doe">
+          </div>
+
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role" required>
+              <option value="">Select Role</option>
+              <option value="editor">Editor (can edit lessons only)</option>
+              <option value="super-admin">Super Admin (full access)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-admin btn-admin-primary">Add Admin</button>
+        </form>
+      </div>
+
+      <!-- Current Admins -->
+      <div class="admin-section">
+        <h2>Current Admins</h2>
+
+        <% if (admins && admins.length > 0) { %>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Added</th>
+              <th>Added By</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% admins.forEach(admin => { %>
+            <tr class="<%= admin.isActive ? '' : 'inactive' %>">
+              <td>
+                <strong><%= admin.name %></strong>
+                <% if (admin._id.toString() === currentAdmin._id.toString()) { %>
+                <span style="color: var(--terracotta); font-size: 0.85rem;"> (You)</span>
+                <% } %>
+              </td>
+              <td><%= admin.email %></td>
+              <td><span class="admin-badge <%= admin.role %>"><%= admin.role %></span></td>
+              <td>
+                <span class="status-badge <%= admin.isActive ? 'active' : 'inactive' %>">
+                  <%= admin.isActive ? 'Active' : 'Inactive' %>
+                </span>
+              </td>
+              <td><%= new Date(admin.addedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+              <td><%= admin.addedBy %></td>
+              <td>
+                <% if (admin._id.toString() !== currentAdmin._id.toString()) { %>
+                  <% if (admin.isActive) { %>
+                  <button
+                    class="btn-admin btn-admin-danger"
+                    onclick="deactivateAdmin('<%= admin._id %>', '<%= admin.name %>')"
+                  >
+                    Deactivate
+                  </button>
+                  <% } else { %>
+                  <button
+                    class="btn-admin btn-admin-secondary"
+                    onclick="reactivateAdmin('<%= admin._id %>', '<%= admin.name %>')"
+                  >
+                    Reactivate
+                  </button>
+                  <% } %>
+                <% } else { %>
+                <span style="color: var(--text-light); font-size: 0.85rem;">—</span>
+                <% } %>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <p style="text-align: center; color: var(--text-light); padding: 2rem;">No admins found</p>
+        <% } %>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes. They have not been reviewed or endorsed by Sheikh Hassan Dghriri. Always verify information from the original audio recordings.</p>
+      </div>
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Add Admin Form Handler
+    document.getElementById('addAdminForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        email: document.getElementById('email').value.trim(),
+        name: document.getElementById('name').value.trim(),
+        role: document.getElementById('role').value
+      };
+
+      try {
+        const response = await fetch('/admin/users/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert('success', data.message || 'Admin added successfully!');
+          document.getElementById('addAdminForm').reset();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          showAlert('error', data.error || 'Failed to add admin');
+        }
+      } catch (error) {
+        console.error(error);
+        showAlert('error', 'Network error. Please try again.');
+      }
+    });
+
+    // Deactivate Admin
+    async function deactivateAdmin(adminId, adminName) {
+      if (!confirm(`Are you sure you want to deactivate ${adminName}?`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/admin/users/${adminId}/deactivate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert('success', data.message || 'Admin deactivated successfully');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          showAlert('error', data.error || 'Failed to deactivate admin');
+        }
+      } catch (error) {
+        console.error(error);
+        showAlert('error', 'Network error. Please try again.');
+      }
+    }
+
+    // Reactivate Admin
+    async function reactivateAdmin(adminId, adminName) {
+      if (!confirm(`Reactivate ${adminName}?`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/admin/users/${adminId}/reactivate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert('success', data.message || 'Admin reactivated successfully');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          showAlert('error', data.error || 'Failed to reactivate admin');
+        }
+      } catch (error) {
+        console.error(error);
+        showAlert('error', 'Network error. Please try again.');
+      }
+    }
+
+    // Show Alert Helper
+    function showAlert(type, message) {
+      const alertContainer = document.getElementById('alertContainer');
+      const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+
+      alertContainer.innerHTML = `
+        <div class="alert ${alertClass}">
+          ${message}
+        </div>
+      `;
+
+      setTimeout(() => {
+        alertContainer.innerHTML = '';
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>

@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const { MongoClient, ObjectId } = require("mongodb");
-const { isAuthenticated, isOwner, injectUser, isAdmin } = require('./middleware/auth');
+const { isAuthenticated, isOwner, injectUser, isAdmin, isSuperAdmin } = require('./middleware/auth');
 
 // Set view engine
 app.set("view engine", "ejs");
@@ -74,6 +74,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
     const lessonsCollection = db.collection("lessons");
     const usersCollection = db.collection("users");
     const notesCollection = db.collection("notes"); // User-generated notes (legacy/future feature)
+    const adminsCollection = db.collection("admins"); // Admin users collection
 
     // Session configuration
     const sessionConfig = {
@@ -107,8 +108,8 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
     app.use(passport.initialize());
     app.use(passport.session());
 
-    // Make user available in all templates
-    app.use(injectUser);
+    // Make user available in all templates (with admin check)
+    app.use(injectUser(adminsCollection));
 
     // ===== AUTHENTICATION ROUTES =====
 
@@ -361,8 +362,244 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
 
     // ===== ADMIN ROUTES =====
 
+    // Admin: Dashboard
+    app.get("/admin", isAdmin(adminsCollection), async (req, res) => {
+      try {
+        // Get stats
+        const totalLessons = await lessonsCollection.countDocuments();
+        const totalSeries = await seriesCollection.countDocuments();
+        const totalUsers = await usersCollection.countDocuments();
+        const totalAdmins = await adminsCollection.countDocuments({ isActive: true });
+
+        // Get recent lessons
+        const recentLessons = await lessonsCollection
+          .find()
+          .sort({ createdAt: -1, dateGregorian: -1 })
+          .limit(10)
+          .toArray();
+
+        // Get all admins (for display)
+        const admins = await adminsCollection
+          .find({ isActive: true })
+          .sort({ role: -1, name: 1 })
+          .toArray();
+
+        res.render("admin-dashboard.ejs", {
+          stats: {
+            totalLessons,
+            totalSeries,
+            totalUsers,
+            totalAdmins
+          },
+          recentLessons,
+          admins,
+          currentAdmin: req.admin
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load admin dashboard" });
+      }
+    });
+
+    // Admin: All lessons list
+    app.get("/admin/lessons", isAdmin(adminsCollection), async (req, res) => {
+      try {
+        const allLessons = await lessonsCollection
+          .find()
+          .sort({ seriesId: 1, lessonNumber: 1 })
+          .toArray();
+
+        // Group by series
+        const lessonsBySeries = {};
+        for (const lesson of allLessons) {
+          if (!lessonsBySeries[lesson.seriesId]) {
+            lessonsBySeries[lesson.seriesId] = [];
+          }
+          lessonsBySeries[lesson.seriesId].push(lesson);
+        }
+
+        // Get series info
+        const allSeries = await seriesCollection.find().toArray();
+        const seriesMap = {};
+        allSeries.forEach(series => {
+          seriesMap[series.seriesId] = series;
+        });
+
+        res.render("admin-lessons.ejs", {
+          lessonsBySeries,
+          seriesMap,
+          currentAdmin: req.admin
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load lessons" });
+      }
+    });
+
+    // Admin: User management (super-admin only)
+    app.get("/admin/users", isSuperAdmin(adminsCollection), async (req, res) => {
+      try {
+        const admins = await adminsCollection
+          .find()
+          .sort({ isActive: -1, role: -1, name: 1 })
+          .toArray();
+
+        res.render("admin-users.ejs", {
+          admins,
+          currentAdmin: req.admin
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("error.ejs", { message: "Failed to load users" });
+      }
+    });
+
+    // Admin: Add new admin (super-admin only)
+    app.post("/admin/users/add", isSuperAdmin(adminsCollection), async (req, res) => {
+      try {
+        const { email, name, role } = req.body;
+
+        // Validate input
+        if (!email || !name || !role) {
+          return res.status(400).json({
+            success: false,
+            error: "Email, name, and role are required"
+          });
+        }
+
+        if (!email.includes('@')) {
+          return res.status(400).json({
+            success: false,
+            error: "Invalid email address"
+          });
+        }
+
+        if (!['super-admin', 'editor'].includes(role)) {
+          return res.status(400).json({
+            success: false,
+            error: "Role must be 'super-admin' or 'editor'"
+          });
+        }
+
+        // Check if admin already exists
+        const existingAdmin = await adminsCollection.findOne({ email: email.trim().toLowerCase() });
+        if (existingAdmin) {
+          return res.status(400).json({
+            success: false,
+            error: "Admin with this email already exists"
+          });
+        }
+
+        // Create new admin
+        const newAdmin = {
+          email: email.trim().toLowerCase(),
+          name: name.trim(),
+          role: role,
+          addedBy: req.admin.email,
+          addedAt: new Date(),
+          lastLogin: null,
+          isActive: true
+        };
+
+        await adminsCollection.insertOne(newAdmin);
+
+        res.json({
+          success: true,
+          message: "Admin added successfully"
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to add admin"
+        });
+      }
+    });
+
+    // Admin: Deactivate admin (super-admin only)
+    app.post("/admin/users/:id/deactivate", isSuperAdmin(adminsCollection), async (req, res) => {
+      try {
+        const { id } = req.params;
+
+        if (!ObjectId.isValid(id)) {
+          return res.status(400).json({
+            success: false,
+            error: "Invalid admin ID"
+          });
+        }
+
+        // Prevent self-deactivation
+        const targetAdmin = await adminsCollection.findOne({ _id: new ObjectId(id) });
+        if (targetAdmin && targetAdmin.email === req.admin.email) {
+          return res.status(400).json({
+            success: false,
+            error: "Cannot deactivate your own account"
+          });
+        }
+
+        // Deactivate admin
+        await adminsCollection.updateOne(
+          { _id: new ObjectId(id) },
+          {
+            $set: {
+              isActive: false,
+              deactivatedBy: req.admin.email,
+              deactivatedAt: new Date()
+            }
+          }
+        );
+
+        res.json({
+          success: true,
+          message: "Admin deactivated successfully"
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to deactivate admin"
+        });
+      }
+    });
+
+    // Admin: Reactivate admin (super-admin only)
+    app.post("/admin/users/:id/reactivate", isSuperAdmin(adminsCollection), async (req, res) => {
+      try {
+        const { id } = req.params;
+
+        if (!ObjectId.isValid(id)) {
+          return res.status(400).json({
+            success: false,
+            error: "Invalid admin ID"
+          });
+        }
+
+        await adminsCollection.updateOne(
+          { _id: new ObjectId(id) },
+          {
+            $set: {
+              isActive: true,
+              reactivatedBy: req.admin.email,
+              reactivatedAt: new Date()
+            }
+          }
+        );
+
+        res.json({
+          success: true,
+          message: "Admin reactivated successfully"
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          success: false,
+          error: "Failed to reactivate admin"
+        });
+      }
+    });
+
     // Admin: Edit lesson page
-    app.get("/admin/lesson/:lessonId/edit", isAdmin, async (req, res) => {
+    app.get("/admin/lesson/:lessonId/edit", isAdmin(adminsCollection), async (req, res) => {
       try {
         const { lessonId } = req.params;
 
@@ -389,7 +626,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
     });
 
     // Admin: Update lesson notes
-    app.post("/admin/lesson/:lessonId/update", isAdmin, async (req, res) => {
+    app.post("/admin/lesson/:lessonId/update", isAdmin(adminsCollection), async (req, res) => {
       try {
         const { lessonId } = req.params;
         const { notes } = req.body;

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Notes from the Majlis</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .admin-nav {
+      background: var(--warm-sand);
+      border-bottom: 2px solid var(--terracotta);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .admin-nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .admin-nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .admin-nav-links a:hover,
+    .admin-nav-links a.active {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--terracotta);
+      font-family: var(--font-display);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 0.5rem;
+    }
+
+    .admin-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    .admin-section h2 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--soft-beige);
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .admin-table th {
+      text-align: left;
+      padding: 1rem;
+      background: var(--soft-beige);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .admin-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .admin-table tr:hover {
+      background: var(--warm-cream);
+    }
+
+    .admin-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .admin-badge.super-admin {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .admin-badge.editor {
+      background: var(--olive-green);
+      color: white;
+    }
+
+    .btn-admin {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-admin-primary {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .btn-admin-primary:hover {
+      background: var(--burnt-orange);
+    }
+
+    .btn-admin-secondary {
+      background: var(--soft-beige);
+      color: var(--text-primary);
+    }
+
+    .btn-admin-secondary:hover {
+      background: var(--warm-sand);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <% if (user) { %>
+        <li><a href="/profile"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Admin Navigation -->
+  <div class="admin-nav">
+    <div class="container">
+      <ul class="admin-nav-links">
+        <li><a href="/admin" class="active">Dashboard</a></li>
+        <li><a href="/admin/lessons">All Lessons</a></li>
+        <% if (adminRole === 'super-admin') { %>
+        <li><a href="/admin/users">User Management</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main style="padding: 2rem 0; background: var(--warm-cream); min-height: 70vh;">
+    <div class="container">
+
+      <!-- Welcome Section -->
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-family: var(--font-display); margin-bottom: 0.5rem;">Admin Dashboard</h1>
+        <p style="color: var(--text-secondary);">
+          Welcome back, <strong><%= currentAdmin.name %></strong>
+          <span class="admin-badge <%= currentAdmin.role %>"><%= currentAdmin.role %></span>
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.totalLessons %></div>
+          <div class="stat-label">Total Lessons</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.totalSeries %></div>
+          <div class="stat-label">Series</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.totalUsers %></div>
+          <div class="stat-label">Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.totalAdmins %></div>
+          <div class="stat-label">Active Admins</div>
+        </div>
+      </div>
+
+      <!-- Recent Lessons -->
+      <div class="admin-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h2 style="margin: 0; border: none; padding: 0;">Recent Lessons</h2>
+          <a href="/admin/lessons" class="btn-admin btn-admin-secondary">View All</a>
+        </div>
+
+        <% if (recentLessons && recentLessons.length > 0) { %>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Series</th>
+              <th>Lesson #</th>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% recentLessons.forEach(lesson => { %>
+            <tr>
+              <td><%= lesson.seriesId %></td>
+              <td>Lesson <%= lesson.lessonNumber %></td>
+              <td>
+                <%= lesson.titleEnglish || 'Untitled' %>
+                <% if (lesson.titleArabic) { %>
+                <br><span style="font-size: 0.85rem; color: var(--text-light);"><%= lesson.titleArabic %></span>
+                <% } %>
+              </td>
+              <td><%= lesson.dateGregorian ? new Date(lesson.dateGregorian).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A' %></td>
+              <td>
+                <a href="/lesson/<%= lesson._id %>" class="btn-admin btn-admin-secondary" style="margin-right: 0.5rem;">View</a>
+                <a href="/admin/lesson/<%= lesson._id %>/edit" class="btn-admin btn-admin-primary">Edit</a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <p style="text-align: center; color: var(--text-light); padding: 2rem;">No lessons yet</p>
+        <% } %>
+      </div>
+
+      <!-- Active Admins -->
+      <div class="admin-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h2 style="margin: 0; border: none; padding: 0;">Active Admins</h2>
+          <% if (adminRole === 'super-admin') { %>
+          <a href="/admin/users" class="btn-admin btn-admin-secondary">Manage Users</a>
+          <% } %>
+        </div>
+
+        <% if (admins && admins.length > 0) { %>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Added</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% admins.forEach(admin => { %>
+            <tr>
+              <td><strong><%= admin.name %></strong></td>
+              <td><%= admin.email %></td>
+              <td><span class="admin-badge <%= admin.role %>"><%= admin.role %></span></td>
+              <td><%= new Date(admin.addedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <p style="text-align: center; color: var(--text-light); padding: 2rem;">No active admins</p>
+        <% } %>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes. They have not been reviewed or endorsed by Sheikh Hassan Dghriri. Always verify information from the original audio recordings.</p>
+      </div>
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

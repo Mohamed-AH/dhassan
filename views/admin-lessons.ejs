@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Lessons - Admin Panel</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .admin-nav {
+      background: var(--warm-sand);
+      border-bottom: 2px solid var(--terracotta);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .admin-nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .admin-nav-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .admin-nav-links a:hover,
+    .admin-nav-links a.active {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .admin-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      margin-bottom: 2rem;
+    }
+
+    .admin-section h2 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--soft-beige);
+    }
+
+    .series-header {
+      background: var(--soft-beige);
+      padding: 1rem 1.5rem;
+      margin: 0 -2rem 1rem -2rem;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .admin-table th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background: var(--warm-cream);
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .admin-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .admin-table tr:hover {
+      background: var(--warm-cream);
+    }
+
+    .btn-admin {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .btn-admin-primary {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .btn-admin-primary:hover {
+      background: var(--burnt-orange);
+    }
+
+    .btn-admin-secondary {
+      background: var(--soft-beige);
+      color: var(--text-primary);
+    }
+
+    .btn-admin-secondary:hover {
+      background: var(--warm-sand);
+    }
+
+    .lesson-meta-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      background: var(--soft-beige);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <% if (user) { %>
+        <li><a href="/profile"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Admin Navigation -->
+  <div class="admin-nav">
+    <div class="container">
+      <ul class="admin-nav-links">
+        <li><a href="/admin">Dashboard</a></li>
+        <li><a href="/admin/lessons" class="active">All Lessons</a></li>
+        <% if (adminRole === 'super-admin') { %>
+        <li><a href="/admin/users">User Management</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main style="padding: 2rem 0; background: var(--warm-cream); min-height: 70vh;">
+    <div class="container">
+
+      <h1 style="font-family: var(--font-display); margin-bottom: 2rem;">All Lessons</h1>
+
+      <% const seriesIds = Object.keys(lessonsBySeries).sort(); %>
+      <% if (seriesIds.length > 0) { %>
+        <% seriesIds.forEach(seriesId => { %>
+          <% const series = seriesMap[seriesId]; %>
+          <% const lessons = lessonsBySeries[seriesId]; %>
+
+          <div class="admin-section">
+            <div class="series-header">
+              <%= series ? series.titleEnglish : seriesId %>
+              <% if (series && series.titleArabic) { %>
+              <span style="float: right; font-size: 1rem; opacity: 0.8;"><%= series.titleArabic %></span>
+              <% } %>
+            </div>
+
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Lesson</th>
+                  <th>Title</th>
+                  <th style="width: 120px;">Date</th>
+                  <th style="width: 100px;">Metadata</th>
+                  <th style="width: 180px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% lessons.sort((a, b) => a.lessonNumber - b.lessonNumber).forEach(lesson => { %>
+                <tr>
+                  <td><strong>#<%= lesson.lessonNumber %></strong></td>
+                  <td>
+                    <%= lesson.titleEnglish || 'Untitled' %>
+                    <% if (lesson.titleArabic) { %>
+                    <br><span style="font-size: 0.85rem; color: var(--text-light);"><%= lesson.titleArabic %></span>
+                    <% } %>
+                  </td>
+                  <td><%= lesson.dateGregorian ? new Date(lesson.dateGregorian).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A' %></td>
+                  <td>
+                    <% if (lesson.hadithsDisplay) { %>
+                    <span class="lesson-meta-badge"><%= lesson.hadithsDisplay %></span>
+                    <% } %>
+                    <% if (lesson.duration) { %>
+                    <span class="lesson-meta-badge">⏱ <%= lesson.duration %></span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <a href="/lesson/<%= lesson._id %>" class="btn-admin btn-admin-secondary" style="margin-right: 0.5rem;">View</a>
+                    <a href="/admin/lesson/<%= lesson._id %>/edit" class="btn-admin btn-admin-primary">Edit</a>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+
+        <% }); %>
+      <% } else { %>
+        <div class="admin-section">
+          <p style="text-align: center; color: var(--text-light); padding: 3rem;">No lessons found</p>
+        </div>
+      <% } %>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes. They have not been reviewed or endorsed by Sheikh Hassan Dghriri. Always verify information from the original audio recordings.</p>
+      </div>
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

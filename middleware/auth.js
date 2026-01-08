@@ -78,40 +78,144 @@ function optionalAuth(req, res, next) {
   next();
 }
 
-// Inject user into all templates
-function injectUser(req, res, next) {
-  res.locals.user = req.user || null;
-  res.locals.isAuthenticated = req.isAuthenticated();
-  res.locals.isAdmin = req.user && req.user.email === 'emah84@gmail.com';
-  next();
+// Inject user into all templates (accepts admins collection for admin check)
+function injectUser(adminsCollection = null) {
+  return async (req, res, next) => {
+    res.locals.user = req.user || null;
+    res.locals.isAuthenticated = req.isAuthenticated();
+
+    // Check if user is admin by querying database
+    if (req.user && adminsCollection) {
+      try {
+        const admin = await adminsCollection.findOne({
+          email: req.user.email,
+          isActive: true
+        });
+        res.locals.isAdmin = !!admin;
+        res.locals.adminRole = admin ? admin.role : null;
+      } catch (error) {
+        console.error('Admin check error:', error);
+        res.locals.isAdmin = false;
+        res.locals.adminRole = null;
+      }
+    } else {
+      res.locals.isAdmin = false;
+      res.locals.adminRole = null;
+    }
+
+    next();
+  };
 }
 
-// Check if user is admin
-function isAdmin(req, res, next) {
-  if (!req.isAuthenticated()) {
-    if (req.path.startsWith('/api/')) {
-      return res.status(401).json({
-        success: false,
-        errors: ['Authentication required']
+// Check if user is admin (accepts admins collection)
+function isAdmin(adminsCollection) {
+  return async (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      if (req.path.startsWith('/api/')) {
+        return res.status(401).json({
+          success: false,
+          errors: ['Authentication required']
+        });
+      }
+      return res.redirect('/login');
+    }
+
+    try {
+      // Check if user is an active admin in database
+      const admin = await adminsCollection.findOne({
+        email: req.user.email,
+        isActive: true
+      });
+
+      if (!admin) {
+        if (req.path.startsWith('/api/')) {
+          return res.status(403).json({
+            success: false,
+            errors: ['Admin access required']
+          });
+        }
+        return res.status(403).render('error.ejs', {
+          message: 'Admin access required',
+          user: req.user,
+          isAuthenticated: true,
+          isAdmin: false
+        });
+      }
+
+      // Attach admin data to request
+      req.admin = admin;
+      next();
+    } catch (error) {
+      console.error('Admin authentication error:', error);
+      if (req.path.startsWith('/api/')) {
+        return res.status(500).json({
+          success: false,
+          errors: ['Server error during authorization']
+        });
+      }
+      return res.status(500).render('error.ejs', {
+        message: 'Server error',
+        user: req.user,
+        isAuthenticated: req.isAuthenticated(),
+        isAdmin: false
       });
     }
-    return res.redirect('/login');
-  }
+  };
+}
 
-  // Check if user email matches admin email
-  if (req.user.email !== 'emah84@gmail.com') {
-    if (req.path.startsWith('/api/')) {
-      return res.status(403).json({
-        success: false,
-        errors: ['Admin access required']
+// Check if user is super admin (for user management features)
+function isSuperAdmin(adminsCollection) {
+  return async (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      if (req.path.startsWith('/api/')) {
+        return res.status(401).json({
+          success: false,
+          errors: ['Authentication required']
+        });
+      }
+      return res.redirect('/login');
+    }
+
+    try {
+      const admin = await adminsCollection.findOne({
+        email: req.user.email,
+        isActive: true,
+        role: 'super-admin'
+      });
+
+      if (!admin) {
+        if (req.path.startsWith('/api/')) {
+          return res.status(403).json({
+            success: false,
+            errors: ['Super admin access required']
+          });
+        }
+        return res.status(403).render('error.ejs', {
+          message: 'Super admin access required',
+          user: req.user,
+          isAuthenticated: true,
+          isAdmin: req.admin ? true : false
+        });
+      }
+
+      req.admin = admin;
+      next();
+    } catch (error) {
+      console.error('Super admin check error:', error);
+      if (req.path.startsWith('/api/')) {
+        return res.status(500).json({
+          success: false,
+          errors: ['Server error during authorization']
+        });
+      }
+      return res.status(500).render('error.ejs', {
+        message: 'Server error',
+        user: req.user,
+        isAuthenticated: req.isAuthenticated(),
+        isAdmin: false
       });
     }
-    return res.status(403).render('error.ejs', {
-      message: 'Admin access required'
-    });
-  }
-
-  next();
+  };
 }
 
 module.exports = {
@@ -119,5 +223,6 @@ module.exports = {
   isOwner,
   optionalAuth,
   injectUser,
-  isAdmin
+  isAdmin,
+  isSuperAdmin
 };
