@@ -197,9 +197,23 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
       try {
         const recentLessons = await lessonsCollection
           .find()
-          .sort({ date: -1 })
+          .sort({ dateGregorian: -1, date: -1, _id: -1 })
           .limit(6)
           .toArray();
+
+        // Generate summary from notes if missing
+        recentLessons.forEach(lesson => {
+          if (!lesson.summary && lesson.notes) {
+            // Extract first 200 chars from notes, removing markdown
+            const plainText = lesson.notes
+              .replace(/#{1,6}\s/g, '') // Remove markdown headers
+              .replace(/\*\*/g, '') // Remove bold
+              .replace(/\*/g, '') // Remove italic
+              .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove links
+              .trim();
+            lesson.summary = plainText.substring(0, 200);
+          }
+        });
 
         const totalSeries = await seriesCollection.countDocuments();
         const totalLessons = await lessonsCollection.countDocuments();

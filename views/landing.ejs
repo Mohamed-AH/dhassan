@@ -105,14 +105,15 @@
           <div class="lesson-card">
             <div class="lesson-meta">
               <span class="lesson-tag">Lesson <%= lesson.lessonNumber %></span>
-              <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
-              <span><%= lesson.keyTerms.length %> key terms</span>
-              <span>•</span>
+              <% if (lesson.hadithsDisplay) { %>
+              <span class="lesson-tag"><%= lesson.hadithsDisplay %></span>
               <% } %>
-              <span><%= new Date(lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+              <% if (lesson.duration) { %>
+              <span class="lesson-tag">⏱ <%= lesson.duration %></span>
+              <% } %>
             </div>
 
-            <h3><%= lesson.titleEnglish %></h3>
+            <h3><%= lesson.titleEnglish || `Lesson ${lesson.lessonNumber}` %></h3>
             <% if (lesson.titleArabic) { %>
             <p class="arabic-title"><%= lesson.titleArabic %></p>
             <% } %>
@@ -124,7 +125,9 @@
             <% } %>
 
             <div class="lesson-footer">
-              <span class="lesson-info">📖 Hadith Studies</span>
+              <span class="lesson-info">
+                <%= new Date(lesson.dateGregorian || lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+              </span>
               <a href="/lesson/<%= lesson._id %>" class="lesson-link">
                 View Notes →
               </a>
