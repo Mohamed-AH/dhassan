@@ -1,64 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Browse by Topics - Notes from the Majlis</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <!-- Navigation -->
-  <nav class="nav-main">
+  <nav>
     <div class="nav-container">
       <a href="/" class="logo">Notes from the Majlis</a>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/topics" class="active">Browse Topics</a>
-        <a href="/series">Browse Series</a>
-        <a href="/about">About</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics" class="active">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#sources">Sources</a></li>
         <% if (user) { %>
-        <a href="/profile"><%= user.name %></a>
-        <a href="/auth/logout">Logout</a>
-        <% } else { %>
-        <a href="/login" class="btn-primary-small">Sign In</a>
+        <li><a href="/profile"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
         <% } %>
-      </div>
+      </ul>
     </div>
   </nav>
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="page-header-content">
-      <h1 class="page-title">Browse by Topic</h1>
-      <p class="page-subtitle">Explore course series organized by subject matter</p>
+  <!-- Page Hero -->
+  <section class="hero" style="padding: 4rem 2rem;">
+    <div class="hero-content">
+      <h1 style="margin-bottom: 1rem;">Browse by Topic</h1>
+      <p class="hero-subtitle">Explore course series organized by Islamic subject matter</p>
     </div>
-  </header>
+  </section>
 
   <!-- Main Content -->
-  <main class="main-content">
-    <div class="browse-container">
+  <main style="padding: 3rem 0; background: var(--warm-cream);">
+    <div class="container">
 
       <% if (seriesByCategory.Tafsir && seriesByCategory.Tafsir.length > 0) { %>
-      <section class="category-section">
-        <h2 class="category-title">Quranic Sciences (Tafsir)</h2>
-        <div class="series-grid">
+      <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+          <h2 style="color: var(--tafsir);">📖 Quranic Sciences (Tafsir)</h2>
+          <p>Study of Quranic interpretation and sciences</p>
+        </div>
+        <div class="lessons-grid">
           <% seriesByCategory.Tafsir.forEach(series => { %>
-          <div class="series-card">
-            <h3 class="series-title"><%= series.titleEnglish %></h3>
-            <% if (series.titleArabic) { %>
-            <p class="series-title-ar"><%= series.titleArabic %></p>
-            <% } %>
-            <p class="series-author">By <%= series.author %></p>
-            <div class="series-meta">
-              <span><%= series.totalLessons || 0 %> lessons</span>
-              <span><%= series.status %></span>
+          <div class="lesson-card">
+            <div class="lesson-meta">
+              <span class="lesson-tag" style="background: var(--soft-beige); color: var(--tafsir);">Tafsir</span>
+              <span class="lesson-tag"><%= series.totalLessons || 0 %> lessons</span>
             </div>
-            <% if (series.description) { %>
-            <p class="series-description"><%= series.description.substring(0, 100) %>...</p>
+            <h3><%= series.titleEnglish %></h3>
+            <% if (series.titleArabic) { %>
+            <p class="arabic-title"><%= series.titleArabic %></p>
             <% } %>
-            <a href="/series/<%= series.seriesId %>" class="series-link">View Series</a>
+            <p class="lesson-info" style="margin: 1rem 0; color: var(--text-secondary);">
+              By <%= series.author %>
+            </p>
+            <% if (series.description) { %>
+            <p class="lesson-excerpt"><%= series.description.substring(0, 120) %><%= series.description.length > 120 ? '...' : '' %></p>
+            <% } %>
+            <div class="lesson-footer">
+              <span class="lesson-info"><%= series.status %></span>
+              <a href="/series/<%= series.seriesId %>" class="lesson-link">
+                View Series →
+              </a>
+            </div>
           </div>
           <% }); %>
         </div>
@@ -66,24 +75,34 @@
       <% } %>
 
       <% if (seriesByCategory.Aqeedah && seriesByCategory.Aqeedah.length > 0) { %>
-      <section class="category-section">
-        <h2 class="category-title">Islamic Creed (Aqeedah)</h2>
-        <div class="series-grid">
+      <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+          <h2 style="color: var(--aqeedah);">🕌 Islamic Creed (Aqeedah)</h2>
+          <p>Fundamental beliefs and theology</p>
+        </div>
+        <div class="lessons-grid">
           <% seriesByCategory.Aqeedah.forEach(series => { %>
-          <div class="series-card">
-            <h3 class="series-title"><%= series.titleEnglish %></h3>
-            <% if (series.titleArabic) { %>
-            <p class="series-title-ar"><%= series.titleArabic %></p>
-            <% } %>
-            <p class="series-author">By <%= series.author %></p>
-            <div class="series-meta">
-              <span><%= series.totalLessons || 0 %> lessons</span>
-              <span><%= series.status %></span>
+          <div class="lesson-card">
+            <div class="lesson-meta">
+              <span class="lesson-tag" style="background: var(--soft-beige); color: var(--aqeedah);">Aqeedah</span>
+              <span class="lesson-tag"><%= series.totalLessons || 0 %> lessons</span>
             </div>
-            <% if (series.description) { %>
-            <p class="series-description"><%= series.description.substring(0, 100) %>...</p>
+            <h3><%= series.titleEnglish %></h3>
+            <% if (series.titleArabic) { %>
+            <p class="arabic-title"><%= series.titleArabic %></p>
             <% } %>
-            <a href="/series/<%= series.seriesId %>" class="series-link">View Series</a>
+            <p class="lesson-info" style="margin: 1rem 0; color: var(--text-secondary);">
+              By <%= series.author %>
+            </p>
+            <% if (series.description) { %>
+            <p class="lesson-excerpt"><%= series.description.substring(0, 120) %><%= series.description.length > 120 ? '...' : '' %></p>
+            <% } %>
+            <div class="lesson-footer">
+              <span class="lesson-info"><%= series.status %></span>
+              <a href="/series/<%= series.seriesId %>" class="lesson-link">
+                View Series →
+              </a>
+            </div>
           </div>
           <% }); %>
         </div>
@@ -91,24 +110,34 @@
       <% } %>
 
       <% if (seriesByCategory.Fiqh && seriesByCategory.Fiqh.length > 0) { %>
-      <section class="category-section">
-        <h2 class="category-title">Islamic Jurisprudence (Fiqh)</h2>
-        <div class="series-grid">
+      <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+          <h2 style="color: var(--fiqh);">⚖️ Islamic Jurisprudence (Fiqh)</h2>
+          <p>Islamic legal rulings and methodology</p>
+        </div>
+        <div class="lessons-grid">
           <% seriesByCategory.Fiqh.forEach(series => { %>
-          <div class="series-card">
-            <h3 class="series-title"><%= series.titleEnglish %></h3>
-            <% if (series.titleArabic) { %>
-            <p class="series-title-ar"><%= series.titleArabic %></p>
-            <% } %>
-            <p class="series-author">By <%= series.author %></p>
-            <div class="series-meta">
-              <span><%= series.totalLessons || 0 %> lessons</span>
-              <span><%= series.status %></span>
+          <div class="lesson-card">
+            <div class="lesson-meta">
+              <span class="lesson-tag" style="background: var(--soft-beige); color: var(--fiqh);">Fiqh</span>
+              <span class="lesson-tag"><%= series.totalLessons || 0 %> lessons</span>
             </div>
-            <% if (series.description) { %>
-            <p class="series-description"><%= series.description.substring(0, 100) %>...</p>
+            <h3><%= series.titleEnglish %></h3>
+            <% if (series.titleArabic) { %>
+            <p class="arabic-title"><%= series.titleArabic %></p>
             <% } %>
-            <a href="/series/<%= series.seriesId %>" class="series-link">View Series</a>
+            <p class="lesson-info" style="margin: 1rem 0; color: var(--text-secondary);">
+              By <%= series.author %>
+            </p>
+            <% if (series.description) { %>
+            <p class="lesson-excerpt"><%= series.description.substring(0, 120) %><%= series.description.length > 120 ? '...' : '' %></p>
+            <% } %>
+            <div class="lesson-footer">
+              <span class="lesson-info"><%= series.status %></span>
+              <a href="/series/<%= series.seriesId %>" class="lesson-link">
+                View Series →
+              </a>
+            </div>
           </div>
           <% }); %>
         </div>
@@ -116,24 +145,34 @@
       <% } %>
 
       <% if (seriesByCategory.Hadith && seriesByCategory.Hadith.length > 0) { %>
-      <section class="category-section">
-        <h2 class="category-title">Hadith Studies</h2>
-        <div class="series-grid">
+      <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+          <h2 style="color: var(--hadith);">📚 Hadith Studies</h2>
+          <p>Study of Prophetic traditions and narrations</p>
+        </div>
+        <div class="lessons-grid">
           <% seriesByCategory.Hadith.forEach(series => { %>
-          <div class="series-card">
-            <h3 class="series-title"><%= series.titleEnglish %></h3>
-            <% if (series.titleArabic) { %>
-            <p class="series-title-ar"><%= series.titleArabic %></p>
-            <% } %>
-            <p class="series-author">By <%= series.author %></p>
-            <div class="series-meta">
-              <span><%= series.totalLessons || 0 %> lessons</span>
-              <span><%= series.status %></span>
+          <div class="lesson-card">
+            <div class="lesson-meta">
+              <span class="lesson-tag" style="background: var(--soft-beige); color: var(--hadith);">Hadith</span>
+              <span class="lesson-tag"><%= series.totalLessons || 0 %> lessons</span>
             </div>
-            <% if (series.description) { %>
-            <p class="series-description"><%= series.description.substring(0, 100) %>...</p>
+            <h3><%= series.titleEnglish %></h3>
+            <% if (series.titleArabic) { %>
+            <p class="arabic-title"><%= series.titleArabic %></p>
             <% } %>
-            <a href="/series/<%= series.seriesId %>" class="series-link">View Series</a>
+            <p class="lesson-info" style="margin: 1rem 0; color: var(--text-secondary);">
+              By <%= series.author %>
+            </p>
+            <% if (series.description) { %>
+            <p class="lesson-excerpt"><%= series.description.substring(0, 120) %><%= series.description.length > 120 ? '...' : '' %></p>
+            <% } %>
+            <div class="lesson-footer">
+              <span class="lesson-info"><%= series.status %></span>
+              <a href="/series/<%= series.seriesId %>" class="lesson-link">
+                View Series →
+              </a>
+            </div>
           </div>
           <% }); %>
         </div>
@@ -141,24 +180,34 @@
       <% } %>
 
       <% if (seriesByCategory.Khutbah && seriesByCategory.Khutbah.length > 0) { %>
-      <section class="category-section">
-        <h2 class="category-title">Sermons (Khutbah)</h2>
-        <div class="series-grid">
+      <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+          <h2 style="color: var(--khutbah);">🎙️ Sermons (Khutbah)</h2>
+          <p>Friday sermons and special lectures</p>
+        </div>
+        <div class="lessons-grid">
           <% seriesByCategory.Khutbah.forEach(series => { %>
-          <div class="series-card">
-            <h3 class="series-title"><%= series.titleEnglish %></h3>
-            <% if (series.titleArabic) { %>
-            <p class="series-title-ar"><%= series.titleArabic %></p>
-            <% } %>
-            <p class="series-author">By <%= series.author %></p>
-            <div class="series-meta">
-              <span><%= series.totalLessons || 0 %> lessons</span>
-              <span><%= series.status %></span>
+          <div class="lesson-card">
+            <div class="lesson-meta">
+              <span class="lesson-tag" style="background: var(--soft-beige); color: var(--khutbah);">Khutbah</span>
+              <span class="lesson-tag"><%= series.totalLessons || 0 %> lessons</span>
             </div>
-            <% if (series.description) { %>
-            <p class="series-description"><%= series.description.substring(0, 100) %>...</p>
+            <h3><%= series.titleEnglish %></h3>
+            <% if (series.titleArabic) { %>
+            <p class="arabic-title"><%= series.titleArabic %></p>
             <% } %>
-            <a href="/series/<%= series.seriesId %>" class="series-link">View Series</a>
+            <p class="lesson-info" style="margin: 1rem 0; color: var(--text-secondary);">
+              By <%= series.author %>
+            </p>
+            <% if (series.description) { %>
+            <p class="lesson-excerpt"><%= series.description.substring(0, 120) %><%= series.description.length > 120 ? '...' : '' %></p>
+            <% } %>
+            <div class="lesson-footer">
+              <span class="lesson-info"><%= series.status %></span>
+              <a href="/series/<%= series.seriesId %>" class="lesson-link">
+                View Series →
+              </a>
+            </div>
           </div>
           <% }); %>
         </div>
@@ -169,10 +218,12 @@
   </main>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-bottom">
-      <p>&copy; 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.</p>
-      <p>These are unofficial AI-assisted student notes. Always verify from original recordings.</p>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes. They have not been reviewed or endorsed by Sheikh Hassan Dghriri. Always verify information from the original audio recordings.</p>
+      </div>
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
     </div>
   </footer>
 

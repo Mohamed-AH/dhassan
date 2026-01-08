@@ -1,108 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= series.titleEnglish %> - Notes from the Majlis</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <!-- Navigation -->
-  <nav class="nav-main">
+  <nav>
     <div class="nav-container">
       <a href="/" class="logo">Notes from the Majlis</a>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/topics">Browse Topics</a>
-        <a href="/series">Browse Series</a>
-        <a href="/about">About</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#sources">Sources</a></li>
         <% if (user) { %>
-        <a href="/profile"><%= user.name %></a>
-        <a href="/auth/logout">Logout</a>
-        <% } else { %>
-        <a href="/login" class="btn-primary-small">Sign In</a>
+        <li><a href="/profile"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
         <% } %>
-      </div>
+      </ul>
     </div>
   </nav>
 
   <!-- Breadcrumb -->
-  <nav class="breadcrumb">
-    <div class="breadcrumb-container">
-      <a href="/">Home</a>
-      <span class="breadcrumb-separator">/</span>
-      <a href="/series">All Series</a>
-      <span class="breadcrumb-separator">/</span>
-      <span class="breadcrumb-current"><%= series.titleEnglish %></span>
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="/series">All Series</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current"><%= series.titleEnglish %></span>
+      </nav>
     </div>
-  </nav>
+  </div>
 
-  <!-- Series Header -->
-  <header class="series-header">
-    <div class="series-header-content">
-      <div class="series-header-category">
-        <span class="category-badge <%= series.category.toLowerCase() %>">
+  <!-- Series Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div style="display: inline-flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+        <span class="lesson-badge" style="background: rgba(255, 255, 255, 0.2);">
           <%= series.category %>
+        </span>
+        <span class="lesson-badge" style="background: rgba(255, 255, 255, 0.2);">
+          <%= series.totalLessons || lessons.length %> Lessons
+        </span>
+        <span class="lesson-badge" style="background: rgba(255, 255, 255, 0.2);">
+          <%= series.status %>
         </span>
       </div>
 
-      <h1 class="series-header-title"><%= series.titleEnglish %></h1>
+      <h1 style="margin-bottom: 1rem;"><%= series.titleEnglish %></h1>
       <% if (series.titleArabic) { %>
-      <h2 class="series-header-title-ar"><%= series.titleArabic %></h2>
+      <p class="hero-arabic" style="margin-bottom: 2rem;"><%= series.titleArabic %></p>
       <% } %>
 
-      <p class="series-header-author">By <%= series.author %></p>
+      <p class="hero-subtitle" style="margin-bottom: 2rem;">
+        By <%= series.author %>
+      </p>
 
       <% if (series.description) { %>
-      <div class="series-header-description">
-        <p><%= series.description %></p>
+      <div style="max-width: 800px; margin: 0 auto 2rem;">
+        <p style="font-size: 1.1rem; line-height: 1.8; opacity: 0.95;">
+          <%= series.description %>
+        </p>
       </div>
       <% } %>
 
-      <div class="series-header-meta">
-        <div class="meta-stat">
-          <span class="meta-stat-value"><%= series.totalLessons || lessons.length %></span>
-          <span class="meta-stat-label">Total Lessons</span>
-        </div>
-        <div class="meta-stat">
-          <span class="meta-stat-value"><%= series.status %></span>
-          <span class="meta-stat-label">Status</span>
-        </div>
-        <% if (series.duration) { %>
-        <div class="meta-stat">
-          <span class="meta-stat-value"><%= series.duration %></span>
-          <span class="meta-stat-label">Duration</span>
-        </div>
-        <% } %>
-      </div>
-
       <% if (series.telegramLink) { %>
-      <div class="series-header-links">
-        <a href="<%= series.telegramLink %>" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+      <div style="margin-top: 2rem;">
+        <a href="<%= series.telegramLink %>" target="_blank" rel="noopener noreferrer" class="cta-button">
+          <span style="font-size: 1.25rem;">📱</span>
           View on Telegram
         </a>
       </div>
       <% } %>
     </div>
-  </header>
+  </section>
 
   <!-- Lessons List -->
-  <main class="main-content">
-    <div class="lessons-container">
-      <h2 class="lessons-section-title">All Lessons</h2>
+  <main style="padding: 4rem 0; background: var(--warm-cream);">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 3rem;">
+        <h2>All Lessons</h2>
+        <p>Sequential lessons in this series</p>
+      </div>
 
       <% if (lessons && lessons.length > 0) { %>
-        <div class="lessons-list">
+        <div class="lessons-grid">
           <% lessons.forEach(lesson => { %>
-          <div class="lesson-item">
-            <div class="lesson-item-header">
-              <span class="lesson-number">Lesson <%= lesson.lessonNumber %></span>
-              <span class="lesson-date"><%= new Date(lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+          <div class="lesson-card">
+            <div class="lesson-meta">
+              <span class="lesson-tag">Lesson <%= lesson.lessonNumber %></span>
+              <% if (lesson.duration) { %>
+              <span class="lesson-tag">⏱ <%= lesson.duration %></span>
+              <% } %>
+              <% if (lesson.hadithsDisplay) { %>
+              <span class="lesson-tag"><%= lesson.hadithsDisplay %></span>
+              <% } %>
             </div>
 
-            <h3 class="lesson-item-title">
+            <h3>
               <% if (lesson.titleEnglish) { %>
                 <%= lesson.titleEnglish %>
               <% } else { %>
@@ -111,34 +114,40 @@
             </h3>
 
             <% if (lesson.titleArabic) { %>
-            <p class="lesson-item-title-ar"><%= lesson.titleArabic %></p>
+            <p class="arabic-title"><%= lesson.titleArabic %></p>
             <% } %>
 
             <% if (lesson.summary) { %>
-            <p class="lesson-item-summary"><%= lesson.summary.substring(0, 200) %>...</p>
+            <p class="lesson-excerpt"><%= lesson.summary.substring(0, 150) %><%= lesson.summary.length > 150 ? '...' : '' %></p>
             <% } %>
 
-            <div class="lesson-item-meta">
-              <% if (lesson.duration) { %>
-              <span class="lesson-duration"><%= lesson.duration %></span>
-              <% } %>
-              <% if (lesson.keyTerms && lesson.keyTerms.length > 0) { %>
-              <span class="lesson-terms-count"><%= lesson.keyTerms.length %> key terms</span>
-              <% } %>
-            </div>
-
-            <div class="lesson-item-actions">
-              <a href="/lesson/<%= lesson._id %>" class="btn-primary">View Notes</a>
-              <% if (lesson.audioLink) { %>
-              <a href="<%= lesson.audioLink %>" target="_blank" rel="noopener noreferrer" class="btn-secondary-small">Audio</a>
-              <% } %>
+            <div class="lesson-footer">
+              <span class="lesson-info">
+                <%= new Date(lesson.dateGregorian || lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                <% if (lesson.dateHijri) { %>
+                  <br><span style="font-size: 0.85rem; opacity: 0.8;"><%= lesson.dateHijri %></span>
+                <% } %>
+              </span>
+              <a href="/lesson/<%= lesson._id %>" class="lesson-link">
+                View Notes →
+              </a>
             </div>
           </div>
           <% }); %>
         </div>
       <% } else { %>
-        <div class="empty-state">
-          <p>No lessons available for this series yet.</p>
+        <div style="text-align: center; padding: 4rem 2rem; background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+          <h3 style="font-family: var(--font-display); font-size: 1.5rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            No Lessons Yet
+          </h3>
+          <p style="color: var(--text-light);">Lessons for this series will be added soon. Check back later!</p>
+          <% if (series.telegramLink) { %>
+          <div style="margin-top: 2rem;">
+            <a href="<%= series.telegramLink %>" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              Follow on Telegram for Updates
+            </a>
+          </div>
+          <% } %>
         </div>
       <% } %>
 
@@ -146,10 +155,12 @@
   </main>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-bottom">
-      <p>&copy; 2025 Notes from the Majlis. Not affiliated with or endorsed by Sheikh Hassan Dghriri.</p>
-      <p>These are unofficial AI-assisted student notes. Always verify from original recordings.</p>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-note">
+        <p><strong>Important Notice:</strong> These are unofficial AI-assisted student notes. They have not been reviewed or endorsed by Sheikh Hassan Dghriri. Always verify information from the original audio recordings.</p>
+      </div>
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
     </div>
   </footer>
 
