@@ -396,7 +396,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
 
         // Re-parse markdown to update chapters, timestamps, etc.
         const MarkdownParser = require('./scripts/markdown-parser');
-        const parser = new MarkdownParser(notes);
+        const parser = new MarkdownParser(notes, true); // true = raw content, not file path
         const parsed = parser.parseAll();
 
         // Update lesson in database

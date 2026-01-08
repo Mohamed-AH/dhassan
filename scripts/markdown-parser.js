@@ -4,16 +4,26 @@ const fs = require('fs');
  * Parse markdown file and extract structured data
  */
 class MarkdownParser {
-  constructor(filePath) {
-    this.filePath = filePath;
-    this.content = '';
-    this.lines = [];
+  constructor(filePathOrContent, isRawContent = false) {
+    if (isRawContent) {
+      this.filePath = null;
+      this.content = filePathOrContent;
+      this.lines = this.content.split('\n');
+    } else {
+      this.filePath = filePathOrContent;
+      this.content = '';
+      this.lines = [];
+    }
   }
 
   /**
    * Read markdown file
    */
   readFile() {
+    if (!this.filePath) {
+      // Content already loaded, skip file reading
+      return this;
+    }
     if (!fs.existsSync(this.filePath)) {
       throw new Error(`File not found: ${this.filePath}`);
     }
