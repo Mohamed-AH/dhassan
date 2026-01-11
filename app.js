@@ -224,10 +224,15 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         .limit(3)
         .toArray();
 
+      const totalSeries = await seriesCollection.countDocuments();
+      const totalLessons = await lessonsCollection.countDocuments();
+
       res.render("landing.ejs", {
         recentLessons,
         allSeries,
-        featuredSeries
+        featuredSeries,
+        totalSeries,
+        totalLessons
       });
     } catch (error) {
       console.error(error);
