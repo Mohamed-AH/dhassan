@@ -303,7 +303,7 @@
       <div class="lesson-nav-grid">
         <div class="lesson-nav-item lesson-nav-prev">
           <% if (previousLesson) { %>
-          <a href="/lesson/<%= previousLesson._id %>" class="lesson-nav-link">
+          <a href="/lesson/<%= series.seriesId %>/<%= previousLesson.lessonNumber %>" class="lesson-nav-link">
             <span class="nav-direction">← Previous Lesson</span>
             <span class="nav-lesson-title">
               <%= previousLesson.titleEnglish || `Lesson ${previousLesson.lessonNumber}` %>
@@ -323,7 +323,7 @@
 
         <div class="lesson-nav-item lesson-nav-next">
           <% if (nextLesson) { %>
-          <a href="/lesson/<%= nextLesson._id %>" class="lesson-nav-link">
+          <a href="/lesson/<%= series.seriesId %>/<%= nextLesson.lessonNumber %>" class="lesson-nav-link">
             <span class="nav-direction">Next Lesson →</span>
             <span class="nav-lesson-title">
               <%= nextLesson.titleEnglish || `Lesson ${nextLesson.lessonNumber}` %>

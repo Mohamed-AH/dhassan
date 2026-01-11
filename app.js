@@ -248,17 +248,40 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         .sort({ category: 1, titleEnglish: 1 })
         .toArray();
 
-      const categorizedSeries = {};
+      // Count lessons for all series at once using aggregation
+      const lessonCounts = await lessonsCollection
+        .aggregate([
+          {
+            $group: {
+              _id: "$seriesId",
+              count: { $sum: 1 }
+            }
+          }
+        ])
+        .toArray();
+
+      // Create a map of seriesId -> lesson count
+      const lessonCountMap = {};
+      lessonCounts.forEach(item => {
+        lessonCountMap[item._id] = item.count;
+      });
+
+      // Add lesson count to each series
+      allSeries.forEach(series => {
+        series.totalLessons = lessonCountMap[series.seriesId] || 0;
+      });
+
+      const seriesByCategory = {};
       allSeries.forEach(series => {
         const category = series.category || 'Other';
-        if (!categorizedSeries[category]) {
-          categorizedSeries[category] = [];
+        if (!seriesByCategory[category]) {
+          seriesByCategory[category] = [];
         }
-        categorizedSeries[category].push(series);
+        seriesByCategory[category].push(series);
       });
 
       res.render("topics.ejs", {
-        categorizedSeries
+        seriesByCategory
       });
     } catch (error) {
       console.error(error);
@@ -332,10 +355,16 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         .sort({ lessonNumber: 1 })
         .toArray();
 
+      // Find previous and next lessons
+      const currentIndex = allLessons.findIndex(l => l.lessonNumber === lesson.lessonNumber);
+      const previousLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
+      const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+
       res.render("lesson.ejs", {
         series,
         lesson,
-        allLessons
+        previousLesson,
+        nextLesson
       });
     } catch (error) {
       console.error(error);
@@ -374,16 +403,27 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         .sort({ seriesId: 1, lessonNumber: 1 })
         .toArray();
 
+      // Group lessons by series
+      const lessonsBySeries = {};
+      allLessons.forEach(lesson => {
+        const seriesId = lesson.seriesId;
+        if (!lessonsBySeries[seriesId]) {
+          lessonsBySeries[seriesId] = [];
+        }
+        lessonsBySeries[seriesId].push(lesson);
+      });
+
+      // Map seriesId to full series object
       const seriesMap = {};
       const allSeries = await seriesCollection.find().toArray();
       allSeries.forEach(s => {
-        seriesMap[s.seriesId] = s.titleEnglish;
+        seriesMap[s.seriesId] = s;
       });
 
       res.render("admin-lessons.ejs", {
-        allLessons,
+        lessonsBySeries,
         seriesMap,
-        currentAdmin: req.admin
+        adminRole: req.admin.role
       });
     } catch (error) {
       console.error(error);
