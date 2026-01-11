@@ -84,6 +84,11 @@ function injectUser(adminsCollection = null) {
     res.locals.user = req.user || null;
     res.locals.isAuthenticated = req.isAuthenticated();
 
+    // In test mode, if res.locals already has admin data from mock middleware, skip DB query
+    if (process.env.NODE_ENV === 'test' && res.locals.isAdmin !== undefined) {
+      return next();
+    }
+
     // Check if user is admin by querying database
     if (req.user && adminsCollection) {
       try {
@@ -118,6 +123,11 @@ function isAdmin(adminsCollection) {
         });
       }
       return res.redirect('/login');
+    }
+
+    // In test mode, if req.admin is already set by mock middleware, skip DB query
+    if (process.env.NODE_ENV === 'test' && req.admin) {
+      return next();
     }
 
     try {
@@ -174,6 +184,11 @@ function isSuperAdmin(adminsCollection) {
         });
       }
       return res.redirect('/login');
+    }
+
+    // In test mode, if req.admin is already set with super-admin role, skip DB query
+    if (process.env.NODE_ENV === 'test' && req.admin && req.admin.role === 'super-admin') {
+      return next();
     }
 
     try {

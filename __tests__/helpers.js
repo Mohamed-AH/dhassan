@@ -137,6 +137,7 @@ async function seedTestDatabase() {
     email: 'superadmin@test.com',
     name: 'Super Admin',
     role: 'super-admin',
+    isActive: true,
     googleId: 'test-google-id-super',
     createdAt: new Date(),
     lastLogin: new Date()
@@ -146,6 +147,7 @@ async function seedTestDatabase() {
     email: 'editor@test.com',
     name: 'Editor User',
     role: 'editor',
+    isActive: true,
     googleId: 'test-google-id-editor',
     createdAt: new Date(),
     lastLogin: new Date()
