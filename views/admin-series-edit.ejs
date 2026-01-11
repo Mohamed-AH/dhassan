@@ -200,13 +200,16 @@
         <div class="form-section">
           <h2>Basic Information</h2>
           <div class="form-grid">
-            <% if (isNew) { %>
             <div class="form-group full-width">
               <label for="seriesId">Series ID *</label>
+              <% if (isNew) { %>
               <input type="text" id="seriesId" name="seriesId" required placeholder="e.g., sahih-bukhari-book-of-faith">
               <div class="help-text">Lowercase, use hyphens instead of spaces. This cannot be changed later.</div>
+              <% } else { %>
+              <input type="text" id="seriesId" name="seriesId" value="<%= series.seriesId %>" readonly style="background-color: var(--soft-beige); cursor: not-allowed;">
+              <div class="help-text">Series ID cannot be changed after creation.</div>
+              <% } %>
             </div>
-            <% } %>
 
             <div class="form-group">
               <label for="titleEnglish">Title (English) *</label>

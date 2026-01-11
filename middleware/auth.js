@@ -205,12 +205,7 @@ function isSuperAdmin(adminsCollection) {
             errors: ['Super admin access required']
           });
         }
-        return res.status(403).render('error.ejs', {
-          message: 'Super admin access required',
-          user: req.user,
-          isAuthenticated: true,
-          isAdmin: req.admin ? true : false
-        });
+        return res.redirect('/login');
       }
 
       req.admin = admin;

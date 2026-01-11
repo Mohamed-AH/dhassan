@@ -94,6 +94,49 @@
     </div>
   </section>
 
+  <!-- Featured Series -->
+  <% if (featuredSeries && featuredSeries.length > 0) { %>
+  <section style="background: var(--warm-cream); padding: 3rem 0;">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Series</h2>
+        <p>Explore our collection of Islamic studies series</p>
+      </div>
+
+      <div class="lessons-grid">
+        <% featuredSeries.forEach(series => { %>
+        <div class="lesson-card">
+          <div class="lesson-meta">
+            <span class="lesson-tag"><%= series.category || 'Islamic Studies' %></span>
+            <span class="lesson-tag"><%= series.status || 'Ongoing' %></span>
+          </div>
+
+          <h3><%= series.titleEnglish %></h3>
+          <% if (series.titleArabic) { %>
+          <p class="arabic-title"><%= series.titleArabic %></p>
+          <% } %>
+
+          <% if (series.description) { %>
+          <p class="lesson-excerpt">
+            <%= series.description.length > 150 ? series.description.substring(0, 150) + '...' : series.description %>
+          </p>
+          <% } %>
+
+          <div class="lesson-footer">
+            <span class="lesson-info">
+              By <%= series.author || 'Sheikh Hassan Dghriri' %>
+            </span>
+            <a href="/series/<%= series.seriesId %>" class="lesson-link">
+              View Series →
+            </a>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
   <!-- Recent Lessons -->
   <section id="lessons" style="background: var(--soft-beige);">
     <div class="container">
@@ -131,7 +174,7 @@
               <span class="lesson-info">
                 <%= new Date(lesson.dateGregorian || lesson.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
               </span>
-              <a href="/lesson/<%= lesson._id %>" class="lesson-link">
+              <a href="/lesson/<%= lesson.seriesId %>/<%= lesson.lessonNumber %>" class="lesson-link">
                 View Notes →
               </a>
             </div>
