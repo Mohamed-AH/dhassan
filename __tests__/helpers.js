@@ -223,9 +223,11 @@ async function countLessonsInSeries(seriesId) {
 
 /**
  * Create test app with test database collections
+ * @param {Object} options - Optional configuration
+ * @param {Object} options.mockAdmin - Mock admin user to inject (for admin route testing)
  * @returns {Promise<Object>} Configured Express app for testing
  */
-async function createTestApp() {
+async function createTestApp(options = {}) {
   const db = await connectTestDb();
 
   const collections = {
@@ -239,6 +241,19 @@ async function createTestApp() {
   // Create app without mongoClient to skip session/passport setup
   // This allows testing without OAuth
   const app = createApp(collections, null);
+
+  // If mockAdmin provided, inject it into all requests
+  if (options.mockAdmin) {
+    app.use((req, res, next) => {
+      req.isAuthenticated = () => true;
+      req.user = options.mockAdmin;
+      req.admin = options.mockAdmin;
+      res.locals.user = options.mockAdmin;
+      res.locals.isAdmin = true;
+      res.locals.adminRole = options.mockAdmin.role;
+      next();
+    });
+  }
 
   return app;
 }

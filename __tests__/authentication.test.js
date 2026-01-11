@@ -1,6 +1,7 @@
 /**
  * Authentication & Authorization Tests
  * Tests for login, logout, and access control
+ * NOTE: OAuth tests require manual testing - only database-level tests are automated
  */
 
 const request = require('supertest');
@@ -8,27 +9,27 @@ const {
   seedTestDatabase,
   clearTestDatabase,
   disconnectTestDb,
-  getAdminByEmail
+  getAdminByEmail,
+  createTestApp
 } = require('./helpers');
 
 process.env.NODE_ENV = 'test';
 process.env.DB_STRING = require('./helpers').getTestDbString();
 
-let app;
-let server;
+let appNoAuth;
 let testData;
 
 describe('Authentication & Authorization', () => {
   beforeAll(async () => {
     testData = await seedTestDatabase();
+
+    // Create app without authentication for access control testing
+    appNoAuth = await createTestApp();
   });
 
   afterAll(async () => {
     await clearTestDatabase();
     await disconnectTestDb();
-    if (server) {
-      server.close();
-    }
   });
 
   describe('Admin Database Access', () => {
@@ -81,41 +82,49 @@ describe('Authentication & Authorization', () => {
 
   describe('Access Control - Public Routes', () => {
     it('should allow unauthenticated access to landing page', async () => {
-      expect(true).toBe(true); // Placeholder
+      const response = await request(appNoAuth).get('/');
+      expect(response.status).toBe(200);
     });
 
     it('should allow unauthenticated access to topics', async () => {
-      expect(true).toBe(true); // Placeholder
+      const response = await request(appNoAuth).get('/topics');
+      expect(response.status).toBe(200);
     });
 
     it('should allow unauthenticated access to series', async () => {
-      expect(true).toBe(true); // Placeholder
+      const response = await request(appNoAuth).get('/series');
+      expect(response.status).toBe(200);
     });
 
     it('should allow unauthenticated access to lessons', async () => {
-      expect(true).toBe(true); // Placeholder
+      const response = await request(appNoAuth).get('/lesson/test-series-1/1');
+      expect(response.status).toBe(200);
     });
   });
 
   describe('Access Control - Admin Routes', () => {
     it('should redirect unauthenticated users from /admin', async () => {
-      expect(true).toBe(true); // Placeholder
+      const response = await request(appNoAuth).get('/admin');
+      expect(response.status).toBe(302);
+      expect(response.headers.location).toBe('/login');
     });
 
-    it('should redirect non-admin users from /admin', async () => {
-      expect(true).toBe(true); // Placeholder
+    it('should redirect unauthenticated users from /admin/lessons', async () => {
+      const response = await request(appNoAuth).get('/admin/lessons');
+      expect(response.status).toBe(302);
+      expect(response.headers.location).toBe('/login');
     });
 
-    it('should allow admin access to /admin', async () => {
-      expect(true).toBe(true); // Placeholder
+    it('should redirect unauthenticated users from /admin/series', async () => {
+      const response = await request(appNoAuth).get('/admin/series');
+      expect(response.status).toBe(302);
+      expect(response.headers.location).toBe('/login');
     });
 
-    it('should allow admin access to lesson editing', async () => {
-      expect(true).toBe(true); // Placeholder
-    });
-
-    it('should allow admin access to series management', async () => {
-      expect(true).toBe(true); // Placeholder
+    it('should redirect unauthenticated users from /admin/users', async () => {
+      const response = await request(appNoAuth).get('/admin/users');
+      expect(response.status).toBe(302);
+      expect(response.headers.location).toBe('/login');
     });
   });
 
