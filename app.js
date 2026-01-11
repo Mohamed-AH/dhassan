@@ -6,6 +6,7 @@
 
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require('dotenv').config();
 
 const bodyParser = require("body-parser");
@@ -57,8 +58,9 @@ function createApp(collections, mongoClient, testMiddleware = null) {
 
   const app = express();
 
-  // Set view engine
+  // Set view engine and views directory
   app.set("view engine", "ejs");
+  app.set("views", path.join(__dirname, "views"));
 
   // Trust first proxy (required for Render, Railway, Heroku, etc.)
   if (process.env.NODE_ENV === 'production') {
