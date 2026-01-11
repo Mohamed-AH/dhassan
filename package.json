@@ -8,9 +8,9 @@
     "dev": "nodemon server.js",
     "populate-db": "node scripts/populate-db.js",
     "import-lesson": "node scripts/import-lesson-wizard.js",
-    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
-    "test:watch": "NODE_ENV=test jest --watch --runInBand",
-    "test:coverage": "NODE_ENV=test jest --coverage --runInBand"
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles",
+    "test:watch": "cross-env NODE_ENV=test jest --watch --runInBand",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage --runInBand"
   },
   "keywords": [
     "islamic-studies",
@@ -48,21 +48,28 @@
     "slugify": "^1.6.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16",
+    "@types/jest": "^29.5.11",
+    "cross-env": "^7.0.3",
     "jest": "^29.7.0",
-    "supertest": "^6.3.3",
-    "@types/jest": "^29.5.11"
+    "nodemon": "^2.0.16",
+    "supertest": "^6.3.3"
   },
   "jest": {
     "testEnvironment": "node",
-    "coveragePathIgnorePatterns": ["/node_modules/"],
-    "testMatch": ["**/__tests__/**/*.test.js"],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
     "collectCoverageFrom": [
       "server.js",
       "scripts/**/*.js",
       "!scripts/import-lesson-wizard.js",
       "!scripts/populate-db.js"
     ],
-    "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.js"]
+    "setupFilesAfterEnv": [
+      "<rootDir>/__tests__/setup.js"
+    ]
   }
 }
