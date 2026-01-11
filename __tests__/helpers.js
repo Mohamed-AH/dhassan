@@ -4,6 +4,7 @@
  */
 
 const { MongoClient, ObjectId } = require('mongodb');
+const createApp = require('../app');
 
 let testClient = null;
 let testDb = null;
@@ -220,6 +221,28 @@ async function countLessonsInSeries(seriesId) {
   return await db.collection('lessons').countDocuments({ seriesId });
 }
 
+/**
+ * Create test app with test database collections
+ * @returns {Promise<Object>} Configured Express app for testing
+ */
+async function createTestApp() {
+  const db = await connectTestDb();
+
+  const collections = {
+    seriesCollection: db.collection('series'),
+    lessonsCollection: db.collection('lessons'),
+    usersCollection: db.collection('users'),
+    notesCollection: db.collection('notes'),
+    adminsCollection: db.collection('admins')
+  };
+
+  // Create app without mongoClient to skip session/passport setup
+  // This allows testing without OAuth
+  const app = createApp(collections, null);
+
+  return app;
+}
+
 module.exports = {
   connectTestDb,
   disconnectTestDb,
@@ -230,5 +253,6 @@ module.exports = {
   getLessonByNumber,
   getSeriesById,
   countLessonsInSeries,
-  getTestDbString
+  getTestDbString,
+  createTestApp
 };
