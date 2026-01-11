@@ -43,9 +43,10 @@ const sanitizeInput = (text) => {
  * @param {Object} collections.notesCollection - Notes collection
  * @param {Object} collections.adminsCollection - Admins collection
  * @param {Object} mongoClient - MongoDB client (for session store)
+ * @param {Function} testMiddleware - Optional middleware for testing (injected before routes)
  * @returns {Object} Configured Express app
  */
-function createApp(collections, mongoClient) {
+function createApp(collections, mongoClient, testMiddleware = null) {
   const {
     seriesCollection,
     lessonsCollection,
@@ -183,14 +184,19 @@ function createApp(collections, mongoClient) {
       }
     });
   } else {
-    // Test mode without session/passport - add mock middleware
-    app.use((req, res, next) => {
-      req.isAuthenticated = () => false;
-      req.user = null;
-      res.locals.user = null;
-      res.locals.isAdmin = false;
-      next();
-    });
+    // Test mode without session/passport - use provided test middleware or default
+    if (testMiddleware) {
+      app.use(testMiddleware);
+    } else {
+      // Default: unauthenticated user
+      app.use((req, res, next) => {
+        req.isAuthenticated = () => false;
+        req.user = null;
+        res.locals.user = null;
+        res.locals.isAdmin = false;
+        next();
+      });
+    }
   }
 
   // ===== PAGE ROUTES =====

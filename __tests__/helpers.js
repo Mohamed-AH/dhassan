@@ -238,13 +238,10 @@ async function createTestApp(options = {}) {
     adminsCollection: db.collection('admins')
   };
 
-  // Create app without mongoClient to skip session/passport setup
-  // This allows testing without OAuth
-  const app = createApp(collections, null);
-
-  // If mockAdmin provided, inject it into all requests
+  // Create mock middleware if mockAdmin provided
+  let testMiddleware = null;
   if (options.mockAdmin) {
-    app.use((req, res, next) => {
+    testMiddleware = (req, res, next) => {
       req.isAuthenticated = () => true;
       req.user = options.mockAdmin;
       req.admin = options.mockAdmin;
@@ -252,8 +249,12 @@ async function createTestApp(options = {}) {
       res.locals.isAdmin = true;
       res.locals.adminRole = options.mockAdmin.role;
       next();
-    });
+    };
   }
+
+  // Create app without mongoClient to skip session/passport setup
+  // Pass testMiddleware to be injected before routes
+  const app = createApp(collections, null, testMiddleware);
 
   return app;
 }
