@@ -248,6 +248,7 @@ async function createTestApp(options = {}) {
       req.user = options.mockAdmin;
       req.admin = options.mockAdmin;
       res.locals.user = options.mockAdmin;
+      res.locals.isAuthenticated = true;
       res.locals.isAdmin = true;
       res.locals.adminRole = options.mockAdmin.role;
       next();

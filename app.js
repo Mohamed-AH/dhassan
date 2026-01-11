@@ -193,7 +193,9 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         req.isAuthenticated = () => false;
         req.user = null;
         res.locals.user = null;
+        res.locals.isAuthenticated = false;
         res.locals.isAdmin = false;
+        res.locals.adminRole = null;
         next();
       });
     }
