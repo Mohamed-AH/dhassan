@@ -27,6 +27,8 @@
         <% if (user) { %>
         <li><a href="/profile"><%= user.name %></a></li>
         <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+        <li><a href="/login" style="background: var(--terracotta); color: white; padding: 0.5rem 1rem; border-radius: 5px;">Login</a></li>
         <% } %>
       </ul>
     </div>

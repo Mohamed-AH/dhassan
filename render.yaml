@@ -1,0 +1,38 @@
+services:
+  # Web Service (Express API + Views)
+  - type: web
+    name: dhassan-web
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_STRING
+        fromDatabase:
+          name: dhassan-mongodb
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: PRODUCTION_URL
+        sync: false
+      - key: DEVELOPMENT_URL
+        value: http://localhost:8000
+      - key: PORT
+        value: 8000
+
+databases:
+  # MongoDB Database
+  - name: dhassan-mongodb
+    databaseName: notes-from-majlis
+    plan: free
+    region: oregon

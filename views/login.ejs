@@ -1,19 +1,225 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل الدخول - Dhassan</title>
+  <title>Login - Notes from the Majlis</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background: linear-gradient(135deg, var(--warm-cream) 0%, var(--soft-beige) 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
+      width: 100%;
+      padding: 3rem 2.5rem;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .login-header h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin: 0 0 0.5rem;
+    }
+
+    .login-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .login-header .arabic-subtitle {
+      font-family: 'Amiri', serif;
+      direction: rtl;
+      font-size: 1.1rem;
+      color: var(--text-light);
+      margin-top: 0.5rem;
+    }
+
+    .oauth-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      background: white;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+    }
+
+    .oauth-button:hover {
+      background: var(--warm-cream);
+      border-color: var(--terracotta);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .oauth-button.google-button {
+      border-color: #4285F4;
+    }
+
+    .oauth-button.google-button:hover {
+      background: #f8f9ff;
+      border-color: #4285F4;
+    }
+
+    .oauth-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 0.75rem;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .login-divider span {
+      padding: 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .info-section {
+      background: var(--soft-beige);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .info-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin: 0 0 1rem;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .info-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--terracotta);
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info-text {
+      flex: 1;
+    }
+
+    .info-text h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 0.25rem;
+    }
+
+    .info-text p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .privacy-notice {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .privacy-notice p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .login-footer {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .login-footer a {
+      color: var(--terracotta);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .login-footer a:hover {
+      color: var(--burnt-orange);
+    }
+
+    @media (max-width: 768px) {
+      .login-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .login-header h1 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
 </head>
-<body class="login-page">
+<body>
 
   <div class="login-container">
-    <div class="login-content">
+    <div class="login-card">
       <div class="login-header">
-        <h1 class="login-title">مرحباً بك في دحسن</h1>
-        <p class="login-subtitle">سجل دخولك للوصول إلى ملاحظاتك ومشاركة الفوائد العلمية</p>
+        <h1>Welcome to Notes from the Majlis</h1>
+        <p>Sign in to access the admin panel and manage content</p>
+        <p class="arabic-subtitle">ملاحظات من المجلس</p>
       </div>
 
       <div class="oauth-buttons">
@@ -24,25 +230,19 @@
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          تسجيل الدخول بواسطة Google
-        </a>
-
-        <a href="/auth/github" class="oauth-button github-button">
-          <svg class="oauth-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.840 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-          تسجيل الدخول بواسطة GitHub
+          Sign in with Google
         </a>
       </div>
 
-      <div class="login-info">
+      <div class="info-section">
+        <h3>For Administrators</h3>
         <div class="info-item">
           <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg>
           <div class="info-text">
-            <h3>آمن ومحمي</h3>
-            <p>معلوماتك محمية بأعلى معايير الأمان</p>
+            <h4>Secure Access</h4>
+            <p>Admin access is restricted to authorized users only</p>
           </div>
         </div>
 
@@ -52,8 +252,8 @@
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
           </svg>
           <div class="info-text">
-            <h3>مكتبة شخصية</h3>
-            <p>احفظ ونظم ملاحظاتك بسهولة</p>
+            <h4>Content Management</h4>
+            <p>Manage series, lessons, and educational content</p>
           </div>
         </div>
 
@@ -65,20 +265,20 @@
             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
           </svg>
           <div class="info-text">
-            <h3>مشاركة العلم</h3>
-            <p>شارك الفوائد العلمية مع الآخرين</p>
+            <h4>User Management</h4>
+            <p>View and manage admin access and permissions</p>
           </div>
         </div>
       </div>
 
       <div class="privacy-notice">
-        <p>بتسجيل دخولك، أنت توافق على استخدام المنصة للأغراض التعليمية</p>
+        <p>By signing in, you agree to use this platform for educational purposes only. All content is unofficial and should be verified from original sources.</p>
       </div>
     </div>
   </div>
 
   <div class="login-footer">
-    <p><a href="/">العودة إلى الصفحة الرئيسية</a></p>
+    <p><a href="/">← Back to Home</a></p>
   </div>
 
 </body>

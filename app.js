@@ -7,6 +7,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const helmet = require("helmet");
 require('dotenv').config();
 
 const bodyParser = require("body-parser");
@@ -66,6 +67,43 @@ function createApp(collections, mongoClient, testMiddleware = null) {
   if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1);
   }
+
+  // Security middleware - Helmet with Content Security Policy
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",  // Required for inline scripts in EJS templates
+          "https://cdn.jsdelivr.net",  // For marked.js and DOMPurify
+          "https://accounts.google.com"  // For Google OAuth
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",  // Required for inline styles
+          "https://fonts.googleapis.com"
+        ],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com"
+        ],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https:"
+        ],
+        connectSrc: [
+          "'self'",
+          "https://accounts.google.com",
+          "https://oauth2.googleapis.com"
+        ],
+        frameSrc: [
+          "https://accounts.google.com"
+        ]
+      }
+    }
+  }));
 
   // Middleware
   app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
@@ -382,7 +420,7 @@ function createApp(collections, mongoClient, testMiddleware = null) {
       const totalUsers = await usersCollection.countDocuments();
       const totalAdmins = await adminsCollection.countDocuments();
 
-      res.render("admin.ejs", {
+      res.render("admin-dashboard.ejs", {
         allSeries,
         totalLessons,
         totalUsers,
