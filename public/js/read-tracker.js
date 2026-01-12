@@ -266,12 +266,21 @@ class ReadTracker {
         <span>Sign in to sync your progress across devices</span>
         <div class="login-toast-actions">
           <a href="/login" class="login-toast-btn">Sign In</a>
-          <button class="login-toast-close" onclick="this.parentElement.parentElement.parentElement.remove()">✕</button>
+          <button class="login-toast-close">✕</button>
         </div>
       </div>
     `;
 
     document.body.appendChild(toast);
+
+    // Attach close button event listener
+    const closeBtn = toast.querySelector('.login-toast-close');
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      };
+    }
 
     // Auto-remove after 10 seconds
     setTimeout(() => {
