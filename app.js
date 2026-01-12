@@ -801,12 +801,12 @@ function createApp(collections, mongoClient, testMiddleware = null) {
   // Admin users/admins management
   app.get("/admin/users", isSuperAdmin(adminsCollection), async (req, res) => {
     try {
-      const allAdmins = await adminsCollection.find().sort({ createdAt: -1 }).toArray();
-      const allUsers = await usersCollection.find().sort({ createdAt: -1 }).limit(50).toArray();
+      const admins = await adminsCollection.find().sort({ addedAt: -1 }).toArray();
+      const users = await usersCollection.find().sort({ createdAt: -1 }).limit(50).toArray();
 
       res.render("admin-users.ejs", {
-        allAdmins,
-        allUsers,
+        admins,
+        users,
         currentAdmin: req.admin
       });
     } catch (error) {
