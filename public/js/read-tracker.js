@@ -131,6 +131,14 @@ class ReadTracker {
       if (indicator) {
         const isRead = this.readLessons.has(lessonId);
         this.updateIndicatorUI(indicator, isRead);
+
+        // Attach click event listener (remove any existing listeners first)
+        // Use a new function reference each time to avoid duplicates
+        indicator.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.toggleRead(lessonId, indicator);
+        };
       }
     });
   }

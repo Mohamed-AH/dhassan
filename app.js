@@ -96,7 +96,8 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         connectSrc: [
           "'self'",
           "https://accounts.google.com",
-          "https://oauth2.googleapis.com"
+          "https://oauth2.googleapis.com",
+          "https://cdn.jsdelivr.net"  // For source maps (DOMPurify, marked.js)
         ],
         frameSrc: [
           "https://accounts.google.com"

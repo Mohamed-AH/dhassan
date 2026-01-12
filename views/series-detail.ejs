@@ -97,9 +97,7 @@
           <% lessons.forEach(lesson => { %>
           <div class="lesson-card" data-lesson-id="<%= lesson.seriesId %>/<%= lesson.lessonNumber %>">
             <!-- Read indicator -->
-            <div class="read-indicator unread"
-                 title="Mark as read"
-                 onclick="readTracker.toggleRead('<%= lesson.seriesId %>/<%= lesson.lessonNumber %>', this)"></div>
+            <div class="read-indicator unread" title="Mark as read"></div>
 
             <div class="lesson-meta">
               <span class="lesson-tag">Lesson <%= lesson.lessonNumber %></span>
