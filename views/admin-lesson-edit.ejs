@@ -249,7 +249,7 @@
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/admin">Admin Panel</a></li>
-        <li><a href="/lesson/<%= lesson._id %>">View Lesson</a></li>
+        <li><a href="/lesson/<%= lesson.seriesId %>/<%= lesson.lessonNumber %>">View Lesson</a></li>
         <% if (user) { %>
         <li><a href="/auth/logout">Logout</a></li>
         <% } %>
@@ -329,7 +329,7 @@
           <button type="submit" class="btn-save" id="save-btn">
             💾 Save All Changes
           </button>
-          <a href="/lesson/<%= lesson._id %>" class="btn-cancel">
+          <a href="/lesson/<%= lesson.seriesId %>/<%= lesson.lessonNumber %>" class="btn-cancel">
             ← Cancel
           </a>
           <span class="save-status" id="save-status"></span>

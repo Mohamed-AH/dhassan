@@ -250,7 +250,7 @@
               </td>
               <td><%= lesson.dateGregorian ? new Date(lesson.dateGregorian).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A' %></td>
               <td>
-                <a href="/lesson/<%= lesson._id %>" class="btn-admin btn-admin-secondary" style="margin-right: 0.5rem;">View</a>
+                <a href="/lesson/<%= lesson.seriesId %>/<%= lesson.lessonNumber %>" class="btn-admin btn-admin-secondary" style="margin-right: 0.5rem;">View</a>
                 <a href="/admin/lesson/<%= lesson._id %>/edit" class="btn-admin btn-admin-primary">Edit</a>
               </td>
             </tr>

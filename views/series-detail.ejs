@@ -129,7 +129,7 @@
                   <br><span style="font-size: 0.85rem; opacity: 0.8;"><%= lesson.dateHijri %></span>
                 <% } %>
               </span>
-              <a href="/lesson/<%= lesson._id %>" class="lesson-link">
+              <a href="/lesson/<%= lesson.seriesId %>/<%= lesson.lessonNumber %>" class="lesson-link">
                 View Notes →
               </a>
             </div>
