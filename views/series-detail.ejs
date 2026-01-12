@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body data-user-logged-in="<%= user ? 'true' : 'false' %>">
 
   <!-- Navigation -->
   <nav>
@@ -95,7 +95,12 @@
       <% if (lessons && lessons.length > 0) { %>
         <div class="lessons-grid">
           <% lessons.forEach(lesson => { %>
-          <div class="lesson-card">
+          <div class="lesson-card" data-lesson-id="<%= lesson.seriesId %>/<%= lesson.lessonNumber %>">
+            <!-- Read indicator -->
+            <div class="read-indicator unread"
+                 title="Mark as read"
+                 onclick="readTracker.toggleRead('<%= lesson.seriesId %>/<%= lesson.lessonNumber %>', this)"></div>
+
             <div class="lesson-meta">
               <span class="lesson-tag">Lesson <%= lesson.lessonNumber %></span>
               <% if (lesson.duration) { %>
@@ -164,6 +169,9 @@
       <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
     </div>
   </footer>
+
+  <!-- Read Tracker Script -->
+  <script src="/js/read-tracker.js"></script>
 
 </body>
 </html>

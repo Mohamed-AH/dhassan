@@ -1655,3 +1655,155 @@ footer {
     text-align: center;
   }
 }
+
+/* ===== READ/UNREAD TRACKING STYLES ===== */
+
+/* Read Indicator - Subtle circle in top-right corner */
+.read-indicator {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+/* Unread state - hollow circle with subtle goldenrod */
+.read-indicator.unread {
+  background: transparent;
+  border: 2px solid rgba(184, 134, 11, 0.4);
+}
+
+.read-indicator.unread:hover {
+  border-color: rgba(184, 134, 11, 0.7);
+  width: 12px;
+  height: 12px;
+  top: 0.65rem;
+  right: 0.65rem;
+}
+
+/* Read state - filled circle with saddle brown */
+.read-indicator.read {
+  background: rgba(139, 69, 19, 0.6);
+  border: 2px solid rgba(139, 69, 19, 0.6);
+}
+
+.read-indicator.read:hover {
+  background: rgba(139, 69, 19, 0.8);
+  border-color: rgba(139, 69, 19, 0.8);
+  width: 12px;
+  height: 12px;
+  top: 0.65rem;
+  right: 0.65rem;
+}
+
+/* Ensure lesson cards have position relative for absolute positioning */
+.lesson-card {
+  position: relative;
+}
+
+/* Login Toast - Bottom notification */
+.login-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideUp 0.3s ease;
+  max-width: 90%;
+  width: 480px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.login-toast-content {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.login-toast-content span {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.login-toast-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.login-toast-btn {
+  background: var(--sage-green);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.login-toast-btn:hover {
+  background: var(--deep-sage);
+  transform: translateY(-1px);
+}
+
+.login-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.login-toast-close:hover {
+  color: var(--text-primary);
+}
+
+/* Mobile adjustments for login toast */
+@media (max-width: 768px) {
+  .login-toast {
+    bottom: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+
+  .login-toast-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .login-toast-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .login-toast-btn {
+    flex: 1;
+    text-align: center;
+  }
+}

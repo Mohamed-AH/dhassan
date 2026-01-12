@@ -1090,6 +1090,140 @@ function createApp(collections, mongoClient, testMiddleware = null) {
       });
   });
 
+  // ===== READ/UNREAD TRACKING API =====
+
+  // Get user's read lessons
+  app.get("/api/user/read-lessons", isAuthenticated, async (req, res) => {
+    try {
+      const user = await usersCollection.findOne({ _id: req.user._id });
+      const readLessons = user?.readLessons || [];
+
+      // Return just the lesson IDs as an array of strings
+      const lessonIds = readLessons.map(item => item.lessonId);
+
+      res.json({
+        success: true,
+        readLessons: lessonIds
+      });
+    } catch (error) {
+      console.error("Error fetching read lessons:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch read lessons"
+      });
+    }
+  });
+
+  // Toggle read/unread status for a lesson
+  app.post("/api/lessons/:seriesId/:lessonNumber/toggle-read", isAuthenticated, async (req, res) => {
+    try {
+      const { seriesId, lessonNumber } = req.params;
+      const lessonId = `${seriesId}/${lessonNumber}`;
+
+      // Check if lesson exists
+      const lesson = await lessonsCollection.findOne({
+        seriesId,
+        lessonNumber: parseInt(lessonNumber)
+      });
+
+      if (!lesson) {
+        return res.status(404).json({
+          success: false,
+          error: "Lesson not found"
+        });
+      }
+
+      const user = await usersCollection.findOne({ _id: req.user._id });
+      const readLessons = user?.readLessons || [];
+
+      // Check if lesson is already marked as read
+      const existingIndex = readLessons.findIndex(item => item.lessonId === lessonId);
+
+      let isRead;
+      if (existingIndex >= 0) {
+        // Remove from read lessons (mark as unread)
+        readLessons.splice(existingIndex, 1);
+        isRead = false;
+      } else {
+        // Add to read lessons
+        readLessons.push({
+          lessonId,
+          readAt: new Date()
+        });
+        isRead = true;
+      }
+
+      // Update user document
+      await usersCollection.updateOne(
+        { _id: req.user._id },
+        { $set: { readLessons } }
+      );
+
+      res.json({
+        success: true,
+        isRead,
+        lessonId
+      });
+    } catch (error) {
+      console.error("Error toggling read status:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to toggle read status"
+      });
+    }
+  });
+
+  // Sync read lessons from local storage when user logs in
+  app.post("/api/user/sync-read-lessons", isAuthenticated, async (req, res) => {
+    try {
+      const { readLessons: localReadLessons } = req.body;
+
+      if (!Array.isArray(localReadLessons)) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid data format"
+        });
+      }
+
+      const user = await usersCollection.findOne({ _id: req.user._id });
+      const cloudReadLessons = user?.readLessons || [];
+
+      // Create a Set of existing lesson IDs from cloud
+      const cloudLessonIds = new Set(cloudReadLessons.map(item => item.lessonId));
+
+      // Add local lessons that aren't in cloud
+      const now = new Date();
+      localReadLessons.forEach(lessonId => {
+        if (!cloudLessonIds.has(lessonId)) {
+          cloudReadLessons.push({
+            lessonId,
+            readAt: now
+          });
+        }
+      });
+
+      // Update user document
+      await usersCollection.updateOne(
+        { _id: req.user._id },
+        { $set: { readLessons: cloudReadLessons } }
+      );
+
+      // Return merged list
+      const mergedLessonIds = cloudReadLessons.map(item => item.lessonId);
+
+      res.json({
+        success: true,
+        readLessons: mergedLessonIds
+      });
+    } catch (error) {
+      console.error("Error syncing read lessons:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to sync read lessons"
+      });
+    }
+  });
+
   // 404 handler
   app.use((req, res) => {
     res.status(404).render("error.ejs", {

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body data-user-logged-in="<%= user ? 'true' : 'false' %>">
 
   <!-- Navigation -->
   <nav>
@@ -150,7 +150,12 @@
       <div class="lessons-grid">
         <% if (recentLessons && recentLessons.length > 0) { %>
           <% recentLessons.forEach(lesson => { %>
-          <div class="lesson-card">
+          <div class="lesson-card" data-lesson-id="<%= lesson.seriesId %>/<%= lesson.lessonNumber %>">
+            <!-- Read indicator -->
+            <div class="read-indicator unread"
+                 title="Mark as read"
+                 onclick="readTracker.toggleRead('<%= lesson.seriesId %>/<%= lesson.lessonNumber %>', this)"></div>
+
             <div class="lesson-meta">
               <span class="lesson-tag">Lesson <%= lesson.lessonNumber %></span>
               <% if (lesson.hadithsDisplay) { %>
@@ -266,6 +271,9 @@
       </p>
     </div>
   </footer>
+
+  <!-- Read Tracker Script -->
+  <script src="/js/read-tracker.js"></script>
 
 </body>
 </html>
