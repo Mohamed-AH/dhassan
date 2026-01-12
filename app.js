@@ -417,14 +417,34 @@ function createApp(collections, mongoClient, testMiddleware = null) {
     try {
       const allSeries = await seriesCollection.find().sort({ category: 1, titleEnglish: 1 }).toArray();
       const totalLessons = await lessonsCollection.countDocuments();
+      const totalSeries = await seriesCollection.countDocuments();
       const totalUsers = await usersCollection.countDocuments();
       const totalAdmins = await adminsCollection.countDocuments();
 
+      // Get 5 most recent lessons
+      const recentLessons = await lessonsCollection
+        .find()
+        .sort({ dateGregorian: -1 })
+        .limit(5)
+        .toArray();
+
+      // Get all admins
+      const admins = await adminsCollection
+        .find()
+        .sort({ addedAt: -1 })
+        .toArray();
+
       res.render("admin-dashboard.ejs", {
         allSeries,
-        totalLessons,
-        totalUsers,
-        totalAdmins,
+        stats: {
+          totalLessons,
+          totalSeries,
+          totalUsers,
+          totalAdmins
+        },
+        recentLessons,
+        admins,
+        adminRole: req.admin.role,
         currentAdmin: req.admin
       });
     } catch (error) {
