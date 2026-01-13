@@ -247,8 +247,9 @@ function createApp(collections, mongoClient, testMiddleware = null) {
   // Landing page
   app.get("/", async (req, res) => {
     try {
+      // Only show reviewed lessons to public
       const recentLessons = await lessonsCollection
-        .find()
+        .find({ isReviewed: true })
         .sort({ createdAt: -1 })
         .limit(6)
         .toArray();
@@ -264,7 +265,7 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         .toArray();
 
       const totalSeries = await seriesCollection.countDocuments();
-      const totalLessons = await lessonsCollection.countDocuments();
+      const totalLessons = await lessonsCollection.countDocuments({ isReviewed: true });
 
       res.render("landing.ejs", {
         recentLessons,
@@ -355,8 +356,9 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         return res.status(404).render("error.ejs", { message: "Series not found" });
       }
 
+      // Only show reviewed lessons to public
       const lessons = await lessonsCollection
-        .find({ seriesId })
+        .find({ seriesId, isReviewed: true })
         .sort({ lessonNumber: 1 })
         .toArray();
 
@@ -374,6 +376,7 @@ function createApp(collections, mongoClient, testMiddleware = null) {
   app.get("/lesson/:seriesId/:lessonNumber", async (req, res) => {
     try {
       const { seriesId, lessonNumber } = req.params;
+      const isAdmin = res.locals.isAdmin || false;
 
       const series = await seriesCollection.findOne({ seriesId });
       if (!series) {
@@ -389,8 +392,15 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         return res.status(404).render("error.ejs", { message: "Lesson not found" });
       }
 
+      // If lesson is not reviewed and user is not admin, show 404
+      if (!lesson.isReviewed && !isAdmin) {
+        return res.status(404).render("error.ejs", { message: "Lesson not found" });
+      }
+
+      // For navigation, only show reviewed lessons to non-admins
+      const lessonQuery = isAdmin ? { seriesId } : { seriesId, isReviewed: true };
       const allLessons = await lessonsCollection
-        .find({ seriesId })
+        .find(lessonQuery)
         .sort({ lessonNumber: 1 })
         .toArray();
 
@@ -530,7 +540,8 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         duration,
         dateGregorian,
         lessonNumber,
-        notes
+        notes,
+        isReviewed
       } = req.body;
 
       if (!ObjectId.isValid(lessonId)) {
@@ -551,6 +562,9 @@ function createApp(collections, mongoClient, testMiddleware = null) {
       const parser = new MarkdownParser(notes, true);
       const parsed = parser.parseAll();
 
+      // Get current lesson to check if review status changed
+      const currentLesson = await lessonsCollection.findOne({ _id: new ObjectId(lessonId) });
+
       const updateFields = {
         titleEnglish: titleEnglish.trim(),
         titleArabic: titleArabic ? titleArabic.trim() : '',
@@ -566,6 +580,16 @@ function createApp(collections, mongoClient, testMiddleware = null) {
 
       if (dateGregorian) {
         updateFields.dateGregorian = new Date(dateGregorian);
+      }
+
+      // Handle review status
+      const isReviewedBool = isReviewed === 'true' || isReviewed === true;
+      updateFields.isReviewed = isReviewedBool;
+
+      // If marking as reviewed for the first time, record who and when
+      if (isReviewedBool && !currentLesson.isReviewed) {
+        updateFields.reviewedBy = req.user.email;
+        updateFields.reviewedAt = new Date();
       }
 
       await lessonsCollection.updateOne(

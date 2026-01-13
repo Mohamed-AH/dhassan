@@ -305,6 +305,23 @@
               <input type="number" id="lessonNumber" name="lessonNumber" value="<%= lesson.lessonNumber %>" required min="1">
             </div>
           </div>
+
+          <!-- Review Status -->
+          <div class="form-group" style="margin-top: 1.5rem; padding: 1rem; background: var(--soft-beige); border-radius: 8px;">
+            <label style="display: flex; align-items: center; cursor: pointer; font-weight: 600;">
+              <input type="checkbox" id="isReviewed" name="isReviewed" <%= lesson.isReviewed ? 'checked' : '' %> style="margin-right: 0.75rem; width: 20px; height: 20px; cursor: pointer;">
+              <span style="color: var(--sage-green);">✓ Mark as Reviewed (Visible to Public)</span>
+            </label>
+            <% if (lesson.reviewedBy) { %>
+              <p style="margin: 0.75rem 0 0 2rem; font-size: 0.85rem; color: var(--text-secondary);">
+                Reviewed by <strong><%= lesson.reviewedBy %></strong> on <%= new Date(lesson.reviewedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+              </p>
+            <% } else { %>
+              <p style="margin: 0.75rem 0 0 2rem; font-size: 0.85rem; color: var(--text-light);">
+                <em>Not yet reviewed - lesson is only visible to admins</em>
+              </p>
+            <% } %>
+          </div>
         </div>
 
         <!-- Notes Section -->
@@ -380,7 +397,8 @@
         duration: document.getElementById('duration').value.trim(),
         dateGregorian: document.getElementById('dateGregorian').value,
         lessonNumber: parseInt(document.getElementById('lessonNumber').value),
-        notes: easyMDE.value()
+        notes: easyMDE.value(),
+        isReviewed: document.getElementById('isReviewed').checked
       };
 
       // Validate

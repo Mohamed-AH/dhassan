@@ -187,6 +187,7 @@
               <thead>
                 <tr>
                   <th style="width: 80px;">Lesson</th>
+                  <th style="width: 110px;">Status</th>
                   <th>Title</th>
                   <th style="width: 120px;">Date</th>
                   <th style="width: 100px;">Metadata</th>
@@ -197,6 +198,11 @@
                 <% lessons.sort((a, b) => a.lessonNumber - b.lessonNumber).forEach(lesson => { %>
                 <tr>
                   <td><strong>#<%= lesson.lessonNumber %></strong></td>
+                  <td>
+                    <span class="status-indicator <%= lesson.isReviewed ? 'reviewed' : 'pending' %>">
+                      <%= lesson.isReviewed ? '✓ Reviewed' : '⚠ Pending' %>
+                    </span>
+                  </td>
                   <td>
                     <%= lesson.titleEnglish || 'Untitled' %>
                     <% if (lesson.titleArabic) { %>
