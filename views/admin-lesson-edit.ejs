@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Lesson - <%= lesson.titleEnglish || `Lesson ${lesson.lessonNumber}` %> - Admin</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+  <link rel="stylesheet" href="/lib/easymde/easymde.min.css">
   <style>
     .admin-editor-container {
       max-width: 100%;
@@ -361,7 +361,7 @@
   </div>
 
   <!-- EasyMDE JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+  <script src="/lib/easymde/easymde.min.js"></script>
   <script>
     // Initialize EasyMDE
     const easyMDE = new EasyMDE({
