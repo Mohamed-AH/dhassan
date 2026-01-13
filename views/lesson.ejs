@@ -287,9 +287,9 @@
               If you notice any mistakes in these notes, please help us improve by reporting them.
               These notes are AI-assisted and may contain errors.
             </p>
-            <a href="mailto:corrections@example.com?subject=Error%20in%20Lesson%20<%= lesson.lessonNumber %>%20-%20<%= series.titleEnglish %>" class="btn-report">
+            <button id="open-error-modal" class="btn-report">
               Report an Error
-            </a>
+            </button>
           </div>
         </section>
 
@@ -552,6 +552,228 @@
       }
     });
   </script>
+
+  <!-- Error Report Modal JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get DOM elements
+      const openModalBtn = document.getElementById('open-error-modal');
+      const modalOverlay = document.getElementById('error-modal-overlay');
+      const closeModalBtn = document.getElementById('error-modal-close');
+      const cancelBtn = document.getElementById('error-modal-cancel');
+      const errorForm = document.getElementById('error-report-form');
+      const errorTextarea = document.getElementById('error-description');
+      const charCount = document.getElementById('char-count');
+      const submitBtn = document.getElementById('error-modal-submit');
+      const messageBox = document.getElementById('error-modal-message');
+      const messageIcon = document.getElementById('error-modal-message-icon');
+      const messageText = document.getElementById('error-modal-message-text');
+
+      // Lesson data for submission
+      const lessonData = {
+        lessonId: '<%= lesson.seriesId %>/<%= lesson.lessonNumber %>',
+        lessonTitle: '<%= (lesson.titleEnglish || `Lesson ${lesson.lessonNumber}`).replace(/'/g, "\\'") %> - <%= series.titleEnglish.replace(/'/g, "\\'") %>'
+      };
+
+      // Open modal
+      function openModal() {
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+      }
+
+      // Close modal
+      function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scroll
+        // Reset form after animation completes
+        setTimeout(() => {
+          resetForm();
+        }, 300);
+      }
+
+      // Reset form
+      function resetForm() {
+        errorForm.reset();
+        updateCharCount();
+        hideMessage();
+        submitBtn.disabled = true;
+      }
+
+      // Show message
+      function showMessage(type, text) {
+        messageBox.className = `error-modal-message show ${type}`;
+        messageIcon.textContent = type === 'success' ? '✓' : '⚠';
+        messageText.textContent = text;
+      }
+
+      // Hide message
+      function hideMessage() {
+        messageBox.classList.remove('show');
+      }
+
+      // Update character count
+      function updateCharCount() {
+        const text = errorTextarea.value.trim();
+        const length = text.length;
+        const isValid = length >= 10 && length <= 1000;
+
+        charCount.textContent = `${length} / 1000 characters`;
+
+        // Update styling
+        if (length === 0) {
+          charCount.classList.remove('error', 'success');
+          errorTextarea.classList.remove('error');
+          submitBtn.disabled = true;
+        } else if (length < 10 || length > 1000) {
+          charCount.classList.add('error');
+          charCount.classList.remove('success');
+          errorTextarea.classList.add('error');
+          submitBtn.disabled = true;
+        } else {
+          charCount.classList.add('success');
+          charCount.classList.remove('error');
+          errorTextarea.classList.remove('error');
+          submitBtn.disabled = false;
+        }
+      }
+
+      // Handle form submission
+      async function handleSubmit(e) {
+        e.preventDefault();
+
+        const errorDescription = errorTextarea.value.trim();
+
+        // Validate
+        if (errorDescription.length < 10 || errorDescription.length > 1000) {
+          showMessage('error', 'Please enter between 10 and 1000 characters.');
+          return;
+        }
+
+        // Disable submit button during submission
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+
+        try {
+          const response = await fetch('/api/report-error', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              lessonId: lessonData.lessonId,
+              lessonTitle: lessonData.lessonTitle,
+              errorDescription: errorDescription
+            })
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            showMessage('success', 'Thank you! Your error report has been sent successfully. We\'ll review it and make corrections as needed.');
+
+            // Close modal after 3 seconds
+            setTimeout(() => {
+              closeModal();
+            }, 3000);
+          } else {
+            showMessage('error', result.error || 'Failed to submit error report. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Report';
+          }
+        } catch (error) {
+          console.error('Error submitting report:', error);
+          showMessage('error', 'Network error. Please check your connection and try again.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Report';
+        }
+      }
+
+      // Event listeners - attach programmatically to avoid CSP violations
+      openModalBtn.onclick = openModal;
+      closeModalBtn.onclick = closeModal;
+      cancelBtn.onclick = closeModal;
+
+      // Close modal when clicking overlay (but not the modal itself)
+      modalOverlay.onclick = (e) => {
+        if (e.target === modalOverlay) {
+          closeModal();
+        }
+      };
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      // Character counter
+      errorTextarea.addEventListener('input', updateCharCount);
+
+      // Form submission
+      errorForm.addEventListener('submit', handleSubmit);
+
+      // Initialize character count
+      updateCharCount();
+    });
+  </script>
+
+  <!-- Error Report Modal -->
+  <div class="error-modal-overlay" id="error-modal-overlay">
+    <div class="error-modal">
+      <!-- Modal Header -->
+      <div class="error-modal-header">
+        <h2 class="error-modal-title">Report an Error</h2>
+        <p class="error-modal-subtitle">Help us improve these notes by reporting any mistakes you find</p>
+        <button class="error-modal-close" id="error-modal-close" aria-label="Close modal">×</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="error-modal-body">
+        <!-- Success/Error Messages -->
+        <div class="error-modal-message" id="error-modal-message">
+          <span class="error-modal-message-icon" id="error-modal-message-icon"></span>
+          <div class="error-modal-message-text" id="error-modal-message-text"></div>
+        </div>
+
+        <!-- Lesson Info -->
+        <div class="error-modal-lesson-info">
+          <p><strong>Lesson:</strong> <%= lesson.titleEnglish || `Lesson ${lesson.lessonNumber}` %></p>
+          <p><strong>Series:</strong> <%= series.titleEnglish %></p>
+        </div>
+
+        <!-- Form -->
+        <form id="error-report-form">
+          <div class="error-modal-form-group">
+            <label class="error-modal-label" for="error-description">
+              Describe the error <span style="color: #dc3545;">*</span>
+            </label>
+            <textarea
+              class="error-modal-textarea"
+              id="error-description"
+              name="errorDescription"
+              placeholder="Please describe the error you found in detail. Include the section or paragraph where the error appears, and what the correction should be."
+              required
+            ></textarea>
+            <div class="error-modal-char-counter">
+              <span class="error-modal-char-count" id="char-count">0 / 1000 characters</span>
+              <span class="error-modal-hint">Minimum 10 characters</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="error-modal-footer">
+        <button type="button" class="error-modal-btn error-modal-btn-cancel" id="error-modal-cancel">
+          Cancel
+        </button>
+        <button type="submit" form="error-report-form" class="error-modal-btn error-modal-btn-submit" id="error-modal-submit" disabled>
+          Submit Report
+        </button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
