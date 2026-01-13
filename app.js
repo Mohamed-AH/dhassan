@@ -1249,6 +1249,86 @@ function createApp(collections, mongoClient, testMiddleware = null) {
     }
   });
 
+  // ===== TELEGRAM ERROR REPORTING API =====
+
+  // Report error via Telegram
+  app.post("/api/report-error", async (req, res) => {
+    try {
+      const { lessonId, lessonTitle, errorDescription } = req.body;
+      const userEmail = req.user ? req.user.email : "Anonymous";
+      const userId = req.user ? req.user._id : null;
+
+      // Validate input
+      if (!errorDescription || errorDescription.trim().length < 10) {
+        return res.status(400).json({
+          success: false,
+          error: "Please provide a detailed description (at least 10 characters)"
+        });
+      }
+
+      if (errorDescription.length > 1000) {
+        return res.status(400).json({
+          success: false,
+          error: "Description is too long (max 1000 characters)"
+        });
+      }
+
+      // Check if Telegram is configured
+      if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+        console.error("Telegram not configured - missing BOT_TOKEN or CHAT_ID");
+        return res.status(500).json({
+          success: false,
+          error: "Error reporting is temporarily unavailable. Please contact us directly."
+        });
+      }
+
+      // Build Telegram message
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.PRODUCTION_URL
+        : process.env.DEVELOPMENT_URL;
+
+      const message = `🚨 *New Error Report*
+
+📖 *Lesson:* ${lessonTitle || 'Unknown'}
+👤 *User:* ${userEmail}
+📝 *Description:*
+${errorDescription.trim()}
+
+🔗 *Lesson Link:* ${baseUrl}/lesson/${lessonId}`;
+
+      // Send to Telegram
+      const telegramUrl = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+      const response = await fetch(telegramUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: process.env.TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown'
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        res.json({
+          success: true,
+          message: "Thank you! Your report has been sent successfully."
+        });
+      } else {
+        console.error("Telegram API error:", data);
+        throw new Error("Telegram API error");
+      }
+    } catch (error) {
+      console.error("Error sending to Telegram:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to send report. Please try again or contact us directly."
+      });
+    }
+  });
+
   // 404 handler
   app.use((req, res) => {
     res.status(404).render("error.ejs", {
