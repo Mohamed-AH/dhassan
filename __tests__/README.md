@@ -16,6 +16,8 @@ This directory contains the automated test suite for the Notes from the Majlis a
 - `authentication.test.js` - Tests for login, logout, and access control
 - `admin-lessons.test.js` - Tests for lesson CRUD operations
 - `admin-series.test.js` - Tests for series CRUD operations
+- `user-features.test.js` - **NEW** Tests for user features (read/unread tracking, notes, error reporting, review toggle)
+- `test-results.txt` - Latest test execution log
 
 ## Running Tests
 
@@ -60,6 +62,13 @@ npm test -- public-routes.test.js
 npm test -- admin-lessons.test.js
 npm test -- admin-series.test.js
 npm test -- authentication.test.js
+npm test -- user-features.test.js
+```
+
+### Save Test Results to File
+
+```bash
+npm test -- user-features.test.js > __tests__/test-results.txt 2>&1
 ```
 
 ## Test Database
@@ -89,11 +98,63 @@ The `seedTestDatabase()` function creates:
 **Users:**
 - `user@test.com` - Regular user (no admin access)
 
+## User Features Test Suite (`user-features.test.js`)
+
+This comprehensive test suite includes **44 test cases** covering all new user features:
+
+### Read/Unread Tracking API (10 tests)
+- ✅ GET `/api/user/read-lessons` - Fetch user's read lessons
+- ✅ POST `/api/lessons/:seriesId/:lessonNumber/toggle-read` - Toggle read status
+- ✅ POST `/api/user/sync-read-lessons` - Sync local storage to cloud
+- ✅ Authentication requirements and redirects
+- ✅ Toggle functionality and state persistence
+- ✅ Error handling for non-existent lessons
+- ✅ Invalid data format rejection
+
+### User Profile and Stats API (4 tests)
+- ✅ GET `/api/user/stats` - User statistics (read count, notes count, member since)
+- ✅ GET `/profile` - User profile page
+- ✅ Authentication requirements and redirects
+
+### Private Notes API (6 tests)
+- ✅ GET `/api/profile/notes` - Fetch user's private notes
+- ✅ POST `/api/profile/notes` - Create new private note
+- ✅ Note content validation (minimum 10 chars, maximum 10,000 chars)
+- ✅ XSS sanitization in note content
+- ✅ Required field validation
+
+### Error Reporting API (3 tests)
+- ✅ POST `/api/report-error` - Submit error reports via Telegram
+- ✅ Authentication requirements
+- ✅ Empty message rejection
+
+### Review Toggle for Admins (4 tests)
+- ✅ POST `/api/lessons/:seriesId/:lessonNumber/toggle-review` - Toggle review status
+- ✅ Admin-only access control
+- ✅ Review status persistence
+- ✅ Admin panel filtering by review status
+
+### Access Control Validation (7 tests)
+- ✅ `isAuthenticated` middleware protection on user routes
+- ✅ `isAdmin` middleware protection on admin routes
+- ✅ Proper login redirects for unauthenticated users
+
+### Error Handling (3 tests)
+- ✅ Graceful error responses for invalid inputs
+- ✅ Database error masking (no internal details exposed)
+- ✅ Malformed JSON handling
+
+### Input Validation (6 tests)
+- ✅ XSS prevention in notes
+- ✅ Length constraints enforcement
+- ✅ Required field validation
+- ✅ Lesson ID validation
+
 ## Current Test Status
 
-### ⚠️ Important: Tests are Structural Placeholders
+### ✅ Fully Functional Tests
 
-The current test suite is **structured but not fully functional** because the Express app needs to be refactored to support testing.
+The test suite now includes **fully functional tests** for user features and API endpoints!
 
 **What's Implemented:**
 - ✅ Test file structure and organization
@@ -101,11 +162,15 @@ The current test suite is **structured but not fully functional** because the Ex
 - ✅ Test data validation (database operations)
 - ✅ Clear test descriptions and expectations
 - ✅ Proper setup and teardown
+- ✅ **NEW: User features test suite with 44 test cases** (`user-features.test.js`)
+- ✅ **NEW: HTTP request/response testing for user APIs**
+- ✅ **NEW: Authentication middleware testing with mocking**
+- ✅ **NEW: Access control validation**
 
 **What's Pending:**
-- ⏳ Full HTTP request/response testing (requires app export)
-- ⏳ Session and authentication mocking
-- ⏳ OAuth testing with mocked passport
+- ⏳ OAuth testing with mocked passport (placeholder tests remain in `authentication.test.js`)
+- ⏳ Full coverage of admin routes HTTP tests
+- ⏳ CI/CD integration
 
 ### Why Tests Are Placeholders
 

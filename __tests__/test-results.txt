@@ -1,0 +1,365 @@
+
+> dhassan@1.0.0 test
+> cross-env NODE_ENV=test jest --runInBand --detectOpenHandles __tests__/user-features.test.js
+
+FAIL __tests__/user-features.test.js (32.415 s)
+  ● User Features › Read/Unread Tracking API › GET /api/user/read-lessons › should return empty array for unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › GET /api/user/read-lessons › should return read lessons for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › GET /api/user/read-lessons › should handle database errors gracefully
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should redirect unauthenticated users to login
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should mark lesson as read for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should toggle read status when called again
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should return 404 for non-existent lesson
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/user/sync-read-lessons › should redirect unauthenticated users to login
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/user/sync-read-lessons › should sync local storage lessons to cloud
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/user/sync-read-lessons › should reject invalid data format
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /api/user/stats › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /api/user/stats › should return user statistics for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /profile › should redirect unauthenticated users to login
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /profile › should render profile page for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › GET /api/profile/notes › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › GET /api/profile/notes › should return user notes for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should create a new note for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should reject notes with insufficient content
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should reject notes without content
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should sanitize note content
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should accept error reports from authenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should reject empty error messages
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should redirect non-admin users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should redirect non-admin users
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      234 |
+      235 |   const collections = {
+    > 236 |     seriesCollection: db.collection('series'),
+          |                          ^
+      237 |     lessonsCollection: db.collection('lessons'),
+      238 |     usersCollection: db.collection('users'),
+      239 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:236:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:325:18)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should allow admin to toggle review status
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should allow admin to toggle review status
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      234 |
+      235 |   const collections = {
+    > 236 |     seriesCollection: db.collection('series'),
+          |                          ^
+      237 |     lessonsCollection: db.collection('lessons'),
+      238 |     usersCollection: db.collection('users'),
+      239 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:236:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:325:18)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should toggle review status when called again
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should toggle review status when called again
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      234 |
+      235 |   const collections = {
+    > 236 |     seriesCollection: db.collection('series'),
+          |                          ^
+      237 |     lessonsCollection: db.collection('lessons'),
+      238 |     usersCollection: db.collection('users'),
+      239 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:236:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:325:18)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should return 404 for non-existent lesson
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should return 404 for non-existent lesson
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      234 |
+      235 |   const collections = {
+    > 236 |     seriesCollection: db.collection('series'),
+          |                          ^
+      237 |     lessonsCollection: db.collection('lessons'),
+      238 |     usersCollection: db.collection('users'),
+      239 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:236:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:325:18)
+
+  ● User Features › Review Toggle for Admins › GET /admin/lessons (Review Filter) › should support filtering by review status
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › GET /admin/lessons (Review Filter) › should support filtering by review status
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      234 |
+      235 |   const collections = {
+    > 236 |     seriesCollection: db.collection('series'),
+          |                          ^
+      237 |     lessonsCollection: db.collection('lessons'),
+      238 |     usersCollection: db.collection('users'),
+      239 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:236:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:325:18)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /profile route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /api/user/stats route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /api/profile/notes route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /api/report-error route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAdmin Middleware › should protect /admin routes
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAdmin Middleware › should protect /admin/lessons route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAdmin Middleware › should protect admin API endpoints
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Graceful Error Responses › should return proper error for invalid lesson ID format
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Graceful Error Responses › should return proper error for missing required fields
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Graceful Error Responses › should handle malformed JSON gracefully
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Database Error Handling › should not expose database errors to client
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Note Content Validation › should reject XSS attempts in notes
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Note Content Validation › should enforce minimum length
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Note Content Validation › should enforce maximum length
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Lesson ID Validation › should validate lesson exists before operations
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+
+  ● Test suite failed to run
+
+    TypeError: Cannot read properties of null (reading 'listCollections')
+
+      53 | async function clearTestDatabase() {
+      54 |   const db = await connectTestDb();
+    > 55 |   const collections = await db.listCollections().toArray();
+         |                                ^
+      56 |
+      57 |   for (const collection of collections) {
+      58 |     await db.collection(collection.name).deleteMany({});
+
+      at listCollections (__tests__/helpers.js:55:32)
+      at Object.<anonymous> (__tests__/user-features.test.js:53:5)
+
+Test Suites: 1 failed, 1 total
+Tests:       44 failed, 44 total
+Snapshots:   0 total
+Time:        32.543 s, estimated 33 s
+Ran all test suites matching /__tests__\/user-features.test.js/i.
