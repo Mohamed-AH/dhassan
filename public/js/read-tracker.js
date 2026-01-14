@@ -198,6 +198,7 @@ class ReadTracker {
    */
   updateIndicatorUI(indicator, isRead) {
     console.log('[ReadTracker] updateIndicatorUI: Updating indicator, isRead:', isRead);
+    console.log('[ReadTracker] updateIndicatorUI: Call stack:', new Error().stack);
 
     if (isRead) {
       indicator.classList.add('read');

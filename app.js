@@ -1133,18 +1133,23 @@ function createApp(collections, mongoClient, testMiddleware = null) {
   // Get user's read lessons
   app.get("/api/user/read-lessons", isAuthenticated, async (req, res) => {
     try {
+      console.log('[API] GET /api/user/read-lessons called for user:', req.user._id);
+
       const user = await usersCollection.findOne({ _id: req.user._id });
       const readLessons = user?.readLessons || [];
+      console.log('[API] Found user with', readLessons.length, 'read lessons');
+      console.log('[API] Full readLessons array from DB:', JSON.stringify(readLessons, null, 2));
 
       // Return just the lesson IDs as an array of strings
       const lessonIds = readLessons.map(item => item.lessonId);
+      console.log('[API] Returning lesson IDs:', lessonIds);
 
       res.json({
         success: true,
         readLessons: lessonIds
       });
     } catch (error) {
-      console.error("Error fetching read lessons:", error);
+      console.error("[API] Error fetching read lessons:", error);
       res.status(500).json({
         success: false,
         error: "Failed to fetch read lessons"
@@ -1158,6 +1163,10 @@ function createApp(collections, mongoClient, testMiddleware = null) {
       const { seriesId, lessonNumber } = req.params;
       const lessonId = `${seriesId}/${lessonNumber}`;
 
+      console.log('[API] POST /api/lessons/:seriesId/:lessonNumber/toggle-read called');
+      console.log('[API] User:', req.user._id);
+      console.log('[API] Lesson ID:', lessonId);
+
       // Check if lesson exists
       const lesson = await lessonsCollection.findOne({
         seriesId,
@@ -1165,6 +1174,7 @@ function createApp(collections, mongoClient, testMiddleware = null) {
       });
 
       if (!lesson) {
+        console.log('[API] Lesson not found:', lessonId);
         return res.status(404).json({
           success: false,
           error: "Lesson not found"
@@ -1173,17 +1183,22 @@ function createApp(collections, mongoClient, testMiddleware = null) {
 
       const user = await usersCollection.findOne({ _id: req.user._id });
       const readLessons = user?.readLessons || [];
+      console.log('[API] User currently has', readLessons.length, 'read lessons');
+      console.log('[API] Current readLessons:', readLessons.map(item => item.lessonId));
 
       // Check if lesson is already marked as read
       const existingIndex = readLessons.findIndex(item => item.lessonId === lessonId);
+      console.log('[API] Lesson already read?', existingIndex >= 0, '(index:', existingIndex + ')');
 
       let isRead;
       if (existingIndex >= 0) {
         // Remove from read lessons (mark as unread)
+        console.log('[API] Marking lesson as UNREAD (removing from array)');
         readLessons.splice(existingIndex, 1);
         isRead = false;
       } else {
         // Add to read lessons
+        console.log('[API] Marking lesson as READ (adding to array)');
         readLessons.push({
           lessonId,
           readAt: new Date()
@@ -1191,11 +1206,16 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         isRead = true;
       }
 
+      console.log('[API] New readLessons array (before DB update):', readLessons.map(item => item.lessonId));
+
       // Update user document
       await usersCollection.updateOne(
         { _id: req.user._id },
         { $set: { readLessons } }
       );
+
+      console.log('[API] Database updated successfully');
+      console.log('[API] Returning: isRead =', isRead, ', lessonId =', lessonId);
 
       res.json({
         success: true,
@@ -1203,7 +1223,7 @@ function createApp(collections, mongoClient, testMiddleware = null) {
         lessonId
       });
     } catch (error) {
-      console.error("Error toggling read status:", error);
+      console.error("[API] Error toggling read status:", error);
       res.status(500).json({
         success: false,
         error: "Failed to toggle read status"
