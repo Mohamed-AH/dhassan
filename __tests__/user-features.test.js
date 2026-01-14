@@ -4,6 +4,7 @@
  */
 
 const request = require('supertest');
+const { ObjectId } = require('mongodb');
 const {
   seedTestDatabase,
   clearTestDatabase,
@@ -495,7 +496,7 @@ describe('User Features', () => {
         if (response.status === 201) {
           // If accepted, verify content was sanitized
           const db = await connectTestDb();
-          const note = await db.collection('notes').findOne({ _id: response.body.noteId });
+          const note = await db.collection('notes').findOne({ _id: new ObjectId(response.body.noteId) });
           expect(note.content).not.toContain('<script>');
         }
       });

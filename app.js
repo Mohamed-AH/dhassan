@@ -1316,21 +1316,24 @@ function createApp(collections, mongoClient, testMiddleware = null) {
   // ===== TELEGRAM ERROR REPORTING API =====
 
   // Report error via Telegram
-  app.post("/api/report-error", async (req, res) => {
+  app.post("/api/report-error", isAuthenticated, async (req, res) => {
     try {
-      const { lessonId, lessonTitle, errorDescription } = req.body;
+      const { lessonId, lessonTitle, errorMessage, errorDescription } = req.body;
       const userEmail = req.user ? req.user.email : "Anonymous";
       const userId = req.user ? req.user._id : null;
 
+      // Accept both errorMessage (from tests) and errorDescription (for backward compatibility)
+      const description = errorMessage || errorDescription;
+
       // Validate input
-      if (!errorDescription || errorDescription.trim().length < 10) {
+      if (!description || description.trim().length < 10) {
         return res.status(400).json({
           success: false,
           error: "Please provide a detailed description (at least 10 characters)"
         });
       }
 
-      if (errorDescription.length > 1000) {
+      if (description.length > 1000) {
         return res.status(400).json({
           success: false,
           error: "Description is too long (max 1000 characters)"
@@ -1356,7 +1359,7 @@ function createApp(collections, mongoClient, testMiddleware = null) {
 📖 *Lesson:* ${lessonTitle || 'Unknown'}
 👤 *User:* ${userEmail}
 📝 *Description:*
-${errorDescription.trim()}
+${description.trim()}
 
 🔗 *Lesson Link:* ${baseUrl}/lesson/${lessonId}`;
 
