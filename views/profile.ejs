@@ -1,117 +1,971 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الملف الشخصي - Dhassan</title>
+  <title>My Profile - Notes from the Majlis</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Amiri:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Profile-specific styles */
+    .profile-hero {
+      background: var(--warm-cream);
+      padding: 3rem 0 1.5rem;
+      text-align: center;
+    }
+
+    .profile-hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .profile-hero h1 {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--sage-green);
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    /* Tab Navigation */
+    .profile-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 1px solid var(--border-light);
+      margin-top: 2rem;
+    }
+
+    .profile-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 1rem 2rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .profile-tab:hover {
+      color: var(--sage-green);
+    }
+
+    .profile-tab.active {
+      color: var(--sage-green);
+      border-bottom-color: var(--sage-green);
+      font-weight: 700;
+    }
+
+    /* Tab Content */
+    .profile-tab-content {
+      display: none;
+      padding: 3rem 0;
+    }
+
+    .profile-tab-content.active {
+      display: block;
+    }
+
+    .profile-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Stats Cards */
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .stat-card-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--sage-green);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    /* Progress Section */
+    .progress-section {
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .progress-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-bar-container {
+      background: var(--soft-beige);
+      border-radius: var(--radius-lg);
+      height: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background: var(--sage-green);
+      height: 100%;
+      border-radius: var(--radius-lg);
+      transition: width 0.6s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.75rem;
+    }
+
+    .progress-bar-text {
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .progress-bar-text-outside {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* Activity List */
+    .activity-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .activity-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-item:hover {
+      background: var(--soft-beige);
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin-left: -1rem;
+      margin-right: -1rem;
+    }
+
+    .activity-item-content {
+      flex: 1;
+    }
+
+    .activity-item-bullet {
+      color: var(--muted-gold);
+      font-size: 1.2rem;
+      margin-right: 0.75rem;
+    }
+
+    .activity-item-title {
+      color: var(--text-primary);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .activity-item-title:hover {
+      color: var(--sage-green);
+      text-decoration: underline;
+    }
+
+    .activity-item-series {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .activity-item-time {
+      color: var(--text-light);
+      font-size: 0.85rem;
+      white-space: nowrap;
+      margin-left: 1rem;
+    }
+
+    /* Series Grid */
+    .series-progress-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .series-progress-card {
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .series-progress-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--muted-gold);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .series-progress-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .series-progress-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .series-progress-header {
+      margin-bottom: 1rem;
+    }
+
+    .series-progress-category {
+      display: inline-block;
+      background: var(--soft-beige);
+      color: var(--sage-green);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.75rem;
+    }
+
+    .series-progress-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .series-progress-info {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .series-progress-bar-small {
+      background: var(--soft-beige);
+      border-radius: var(--radius-sm);
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .series-progress-bar-fill-small {
+      background: var(--sage-green);
+      height: 100%;
+      border-radius: var(--radius-sm);
+      transition: width 0.4s ease;
+    }
+
+    .series-progress-link {
+      display: inline-block;
+      color: var(--sage-green);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .series-progress-link:hover {
+      color: var(--deep-sage);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .empty-state-cta {
+      display: inline-block;
+      background: var(--sage-green);
+      color: white;
+      padding: 0.875rem 2rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .empty-state-cta:hover {
+      background: var(--deep-sage);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Notes Tab */
+    .notes-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .notes-header {
+      margin-bottom: 2rem;
+    }
+
+    .notes-header h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .notes-editor {
+      background: white;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.8;
+      min-height: 400px;
+      resize: vertical;
+      width: 100%;
+      transition: border-color 0.2s ease;
+    }
+
+    .notes-editor:focus {
+      outline: none;
+      border-color: var(--sage-green);
+    }
+
+    .notes-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .notes-char-count {
+      font-size: 0.85rem;
+      color: var(--sage-green);
+      font-weight: 500;
+    }
+
+    .notes-char-count.warning {
+      color: var(--muted-gold);
+    }
+
+    .notes-char-count.error {
+      color: #dc3545;
+      font-weight: 700;
+    }
+
+    .notes-save-status {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .notes-save-status.saving {
+      color: var(--text-secondary);
+    }
+
+    .notes-save-status.saved {
+      color: var(--sage-green);
+      font-weight: 600;
+    }
+
+    .notes-save-btn {
+      background: var(--sage-green);
+      color: white;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .notes-save-btn:hover:not(:disabled) {
+      background: var(--deep-sage);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .notes-save-btn:disabled {
+      background: var(--border-light);
+      color: var(--text-light);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .notes-hint {
+      background: var(--soft-beige);
+      border-left: 4px solid var(--muted-gold);
+      padding: 1rem 1.5rem;
+      margin-top: 2rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .notes-hint h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .notes-hint ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .notes-hint li {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      padding: 0.25rem 0;
+    }
+
+    .notes-hint code {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .profile-hero h1 {
+        font-size: 2rem;
+      }
+
+      .profile-tabs {
+        flex-direction: column;
+      }
+
+      .profile-tab {
+        width: 100%;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .profile-tab.active {
+        border-bottom: 3px solid var(--sage-green);
+      }
+
+      .stats-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .series-progress-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .activity-item-time {
+        margin-left: 0;
+        margin-top: 0.5rem;
+      }
+
+      .notes-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .notes-save-btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-<body class="profile-page">
+<body>
 
   <!-- Navigation -->
-  <nav class="nav-main">
+  <nav>
     <div class="nav-container">
-      <a href="/" class="logo">دحسن</a>
-      <div class="nav-links">
-        <a href="/notes">المكتبة</a>
-        <% if (user) { %>
-        <a href="/write" class="btn-primary-small">كتابة ملاحظة</a>
-        <a href="/profile" class="active">حسابي</a>
-        <a href="/auth/logout">تسجيل خروج</a>
+      <a href="/" class="logo">Notes from the Majlis</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Browse Topics</a></li>
+        <li><a href="/series">Browse Series</a></li>
+        <% if (isAdmin) { %>
+        <li><a href="/admin" style="color: var(--terracotta); font-weight: 600;">Admin Panel</a></li>
         <% } %>
-      </div>
+        <% if (user) { %>
+        <li><a href="/profile" class="active"><%= user.name %></a></li>
+        <li><a href="/auth/logout">Logout</a></li>
+        <% } %>
+      </ul>
     </div>
   </nav>
 
-  <!-- Profile Container -->
-  <div class="profile-container">
-    <!-- Profile Header -->
-    <div class="profile-header">
-      <img src="<%= profileUser.avatar %>" alt="<%= profileUser.name %>" class="profile-avatar-large">
+  <!-- Profile Hero -->
+  <section class="profile-hero">
+    <div class="profile-hero-content">
+      <h1>Welcome Back, <%= user.name %>!</h1>
+      <p class="profile-hero-subtitle">Continue your journey through the teachings</p>
 
-      <div class="profile-info">
-        <h1 class="profile-name"><%= profileUser.name %></h1>
-        <p class="profile-email"><%= profileUser.email %></p>
-
-        <div class="profile-stats">
-          <div class="profile-stat">
-            <span class="profile-stat-number"><%= profileUser.notesCount || 0 %></span>
-            <span class="profile-stat-label">ملاحظة</span>
-          </div>
-          <div class="profile-stat">
-            <span class="profile-stat-number"><%= notes.length %></span>
-            <span class="profile-stat-label">منشورة</span>
-          </div>
-        </div>
+      <!-- Tab Navigation -->
+      <div class="profile-tabs">
+        <button class="profile-tab active" data-tab="progress">📊 Progress</button>
+        <button class="profile-tab" data-tab="notes">📝 My Notes</button>
       </div>
     </div>
+  </section>
 
-    <!-- Notes Section -->
-    <div class="profile-section">
-      <div class="profile-section-header">
-        <h2 class="profile-section-title"><%= isOwnProfile ? 'ملاحظاتي' : 'ملاحظات ' + profileUser.name %></h2>
-        <% if (isOwnProfile) { %>
-        <a href="/write" class="btn-primary-small">ملاحظة جديدة</a>
-        <% } %>
+  <!-- Progress Tab Content -->
+  <div class="profile-tab-content active" id="progress-tab">
+    <div class="profile-container">
+      <h2 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); margin-bottom: 2rem;">Your Learning Journey</h2>
+
+      <!-- Stats Cards -->
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-card-number" id="stat-lessons-read">-</div>
+          <div class="stat-card-label">Lessons Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-number" id="stat-series-started">-</div>
+          <div class="stat-card-label">Series Started</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-number" id="stat-completion-rate">-%</div>
+          <div class="stat-card-label">Completion Rate</div>
+        </div>
       </div>
 
-      <% if (notes && notes.length > 0) { %>
-        <div class="notes-grid-profile">
-          <% notes.forEach(note => { %>
-          <article class="note-card-profile">
-            <div class="note-header-full">
-              <div class="note-info">
-                <h3 class="note-title-full"><%= note.title %></h3>
-                <span class="note-category"><%= note.category %></span>
-              </div>
-              <div class="note-meta">
-                <span class="note-date"><%= new Date(note.createdAt).toLocaleDateString('ar-SA') %></span>
-              </div>
-            </div>
-
-            <div class="note-body">
-              <p class="note-text"><%= note.content %></p>
-            </div>
-
-            <% if (note.tags) { %>
-            <div class="note-tags">
-              <% note.tags.split(',').forEach(tag => { %>
-                <span class="tag"><%= tag.trim() %></span>
-              <% }); %>
-            </div>
-            <% } %>
-
-            <% if (isOwnProfile) { %>
-            <div class="note-actions">
-              <button class="action-btn edit-btn" onclick="editNote('<%= note._id %>')">تعديل</button>
-              <button class="action-btn delete-btn" onclick="deleteNote('<%= note._id %>')">حذف</button>
-            </div>
-            <% } %>
-          </article>
-          <% }); %>
+      <!-- Overall Progress Bar -->
+      <div class="progress-section">
+        <h2>Overall Progress</h2>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="overall-progress-bar" style="width: 0%;">
+            <span class="progress-bar-text" id="progress-text-inside"></span>
+          </div>
+          <span class="progress-bar-text-outside" id="progress-text-outside">0%</span>
         </div>
-      <% } else { %>
-        <div class="empty-profile">
-          <h3>لا توجد ملاحظات بعد</h3>
-          <% if (isOwnProfile) { %>
-          <p>ابدأ رحلتك العلمية بكتابة أول ملاحظة</p>
-          <a href="/write" class="btn-primary">كتابة ملاحظة</a>
-          <% } else { %>
-          <p>لم ينشر هذا المستخدم أي ملاحظات بعد</p>
-          <% } %>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="progress-section" id="recent-activity-section">
+        <h2>Recent Activity</h2>
+        <ul class="activity-list" id="activity-list">
+          <!-- Populated by JavaScript -->
+        </ul>
+      </div>
+
+      <!-- Series in Progress -->
+      <div id="series-progress-section">
+        <h2 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-primary); margin-bottom: 2rem;">Series in Progress</h2>
+        <div class="series-progress-grid" id="series-progress-grid">
+          <!-- Populated by JavaScript -->
         </div>
-      <% } %>
+      </div>
+
+      <!-- Empty State (hidden by default) -->
+      <div class="empty-state" id="empty-state" style="display: none;">
+        <div class="empty-state-icon">📚</div>
+        <h3>Start Your Learning Journey</h3>
+        <p>You haven't started any lessons yet.<br>Explore our collection and begin your path to knowledge.</p>
+        <a href="/" class="empty-state-cta">Browse Lessons →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Tab Content -->
+  <div class="profile-tab-content" id="notes-tab">
+    <div class="profile-container">
+      <div class="notes-container">
+        <div class="notes-header">
+          <h2>My Personal Notes</h2>
+          <p>Private notes visible only to you. Use this space to record your thoughts, questions, and reflections from your studies.</p>
+        </div>
+
+        <textarea
+          class="notes-editor"
+          id="notes-editor"
+          placeholder="Write your notes here in markdown format...
+
+## Example Heading
+
+**Bold text** and *italic text*
+
+- List item 1
+- List item 2
+
+[Link text](https://example.com)"
+        ></textarea>
+
+        <div class="notes-footer">
+          <div>
+            <div class="notes-char-count" id="notes-char-count">0 / 5000 characters</div>
+            <div class="notes-save-status" id="notes-save-status"></div>
+          </div>
+          <button class="notes-save-btn" id="notes-save-btn">💾 Save Notes</button>
+        </div>
+
+        <div class="notes-hint">
+          <h4>💡 Markdown Supported</h4>
+          <ul>
+            <li><code>**bold**</code> for <strong>bold text</strong></li>
+            <li><code>## Heading</code> for headings</li>
+            <li><code>- List item</code> for bullet lists</li>
+            <li><code>[link](url)</code> for links</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-bottom">
-      <p>&copy; 2025 Dhassan. جميع الحقوق محفوظة.</p>
+  <footer>
+    <div class="footer-content">
+      <p class="footer-copyright">&copy; 2025 Notes from the Majlis. Educational purposes only.</p>
     </div>
   </footer>
 
-  <script src="/js/profile.js"></script>
+  <!-- JavaScript -->
+  <script>
+    // Tab Switching
+    document.querySelectorAll('.profile-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetTab = tab.dataset.tab;
+
+        // Update tab buttons
+        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Update tab content
+        document.querySelectorAll('.profile-tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(`${targetTab}-tab`).classList.add('active');
+
+        // Load tab-specific data
+        if (targetTab === 'progress') {
+          loadProgressData();
+        } else if (targetTab === 'notes') {
+          loadNotes();
+        }
+      });
+    });
+
+    // Load Progress Data
+    async function loadProgressData() {
+      try {
+        const response = await fetch('/api/user/stats');
+        const data = await response.json();
+
+        if (data.success) {
+          const { stats, recentActivity, seriesInProgress } = data;
+
+          // Update stats cards
+          document.getElementById('stat-lessons-read').textContent = stats.totalLessonsRead;
+          document.getElementById('stat-series-started').textContent = stats.seriesStarted;
+          document.getElementById('stat-completion-rate').textContent = stats.completionRate + '%';
+
+          // Update progress bar
+          const progressBar = document.getElementById('overall-progress-bar');
+          const progressPercentage = stats.completionRate;
+          progressBar.style.width = progressPercentage + '%';
+
+          if (progressPercentage >= 15) {
+            document.getElementById('progress-text-inside').textContent = progressPercentage + '%';
+            document.getElementById('progress-text-outside').style.display = 'none';
+          } else {
+            document.getElementById('progress-text-inside').textContent = '';
+            document.getElementById('progress-text-outside').textContent = progressPercentage + '%';
+            document.getElementById('progress-text-outside').style.display = 'block';
+          }
+
+          // Show/hide empty state
+          if (stats.totalLessonsRead === 0) {
+            document.getElementById('empty-state').style.display = 'block';
+            document.getElementById('recent-activity-section').style.display = 'none';
+            document.getElementById('series-progress-section').style.display = 'none';
+          } else {
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('recent-activity-section').style.display = 'block';
+            document.getElementById('series-progress-section').style.display = 'block';
+
+            // Populate recent activity
+            const activityList = document.getElementById('activity-list');
+            if (recentActivity.length > 0) {
+              activityList.innerHTML = recentActivity.map(activity => `
+                <li class="activity-item">
+                  <div class="activity-item-content">
+                    <span class="activity-item-bullet">●</span>
+                    <a href="/lesson/${activity.seriesId}/${activity.lessonNumber}" class="activity-item-title">
+                      ${activity.lessonTitle}
+                    </a>
+                    <div class="activity-item-series">${activity.seriesTitle}</div>
+                  </div>
+                  <div class="activity-item-time">${formatTimeAgo(activity.readAt)}</div>
+                </li>
+              `).join('');
+            } else {
+              activityList.innerHTML = '<li class="activity-item">No recent activity</li>';
+            }
+
+            // Populate series in progress
+            const seriesGrid = document.getElementById('series-progress-grid');
+            if (seriesInProgress.length > 0) {
+              seriesGrid.innerHTML = seriesInProgress.map(series => `
+                <div class="series-progress-card">
+                  <div class="series-progress-header">
+                    <div class="series-progress-category">${series.category || 'Islamic Studies'}</div>
+                    <h3 class="series-progress-title">${series.titleEnglish}</h3>
+                    ${series.titleArabic ? `<p style="font-family: var(--font-arabic); direction: rtl; color: var(--text-secondary);">${series.titleArabic}</p>` : ''}
+                  </div>
+                  <div class="series-progress-info">
+                    ${series.lessonsRead} of ${series.totalLessons} lessons completed
+                  </div>
+                  <div class="series-progress-bar-small">
+                    <div class="series-progress-bar-fill-small" style="width: ${series.progressPercentage}%"></div>
+                  </div>
+                  <a href="/series/${series.seriesId}" class="series-progress-link">Continue Series →</a>
+                </div>
+              `).join('');
+            } else {
+              seriesGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; grid-column: 1 / -1;">No series in progress. You\'ve completed all started series!</p>';
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading progress data:', error);
+      }
+    }
+
+    // Format time ago
+    function formatTimeAgo(date) {
+      const now = new Date();
+      const past = new Date(date);
+      const diffMs = now - past;
+      const diffSecs = Math.floor(diffMs / 1000);
+      const diffMins = Math.floor(diffSecs / 60);
+      const diffHours = Math.floor(diffMins / 60);
+      const diffDays = Math.floor(diffHours / 24);
+      const diffWeeks = Math.floor(diffDays / 7);
+
+      if (diffSecs < 60) return 'Just now';
+      if (diffMins < 60) return `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`;
+      if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+      if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+      if (diffWeeks < 4) return `${diffWeeks} ${diffWeeks === 1 ? 'week' : 'weeks'} ago`;
+      return past.toLocaleDateString();
+    }
+
+    // Notes functionality
+    let autoSaveTimer;
+    let lastSavedNotes = '';
+
+    async function loadNotes() {
+      try {
+        const response = await fetch('/api/profile/notes');
+        const data = await response.json();
+
+        if (data.success) {
+          const editor = document.getElementById('notes-editor');
+          editor.value = data.notes || '';
+          lastSavedNotes = data.notes || '';
+          updateCharCount();
+
+          if (data.lastUpdated) {
+            const statusEl = document.getElementById('notes-save-status');
+            statusEl.textContent = 'Last saved: ' + formatTimeAgo(data.lastUpdated);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading notes:', error);
+      }
+    }
+
+    function updateCharCount() {
+      const editor = document.getElementById('notes-editor');
+      const charCount = document.getElementById('notes-char-count');
+      const saveBtn = document.getElementById('notes-save-btn');
+      const length = editor.value.length;
+
+      charCount.textContent = `${length} / 5000 characters`;
+
+      // Color coding: 0-4000 green, 4001-5000 gold/warning, 5000+ red/error
+      charCount.classList.remove('warning', 'error');
+      if (length > 5000) {
+        charCount.classList.add('error');
+        saveBtn.disabled = true;
+      } else if (length > 4000) {
+        charCount.classList.add('warning');
+        saveBtn.disabled = false;
+      } else {
+        // Default green styling
+        saveBtn.disabled = false;
+      }
+    }
+
+    async function saveNotes() {
+      const editor = document.getElementById('notes-editor');
+      const statusEl = document.getElementById('notes-save-status');
+      const saveBtn = document.getElementById('notes-save-btn');
+      const notes = editor.value;
+
+      if (notes.length > 5000) {
+        statusEl.textContent = 'Error: Notes exceed 5000 characters';
+        statusEl.className = 'notes-save-status';
+        return;
+      }
+
+      // Show saving status
+      statusEl.textContent = 'Saving...';
+      statusEl.className = 'notes-save-status saving';
+      saveBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/profile/notes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ notes })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          lastSavedNotes = notes;
+          statusEl.textContent = '✓ Saved just now';
+          statusEl.className = 'notes-save-status saved';
+          saveBtn.disabled = false;
+
+          // Clear status after 3 seconds
+          setTimeout(() => {
+            if (statusEl.textContent === '✓ Saved just now') {
+              statusEl.textContent = 'Last saved: just now';
+              statusEl.className = 'notes-save-status';
+            }
+          }, 3000);
+        } else {
+          throw new Error(data.error || 'Failed to save');
+        }
+      } catch (error) {
+        console.error('Error saving notes:', error);
+        statusEl.textContent = '✗ Failed to save';
+        statusEl.className = 'notes-save-status';
+        saveBtn.disabled = false;
+      }
+    }
+
+    // Auto-save on input (30 second debounce)
+    document.getElementById('notes-editor').addEventListener('input', () => {
+      updateCharCount();
+
+      // Clear existing timer
+      clearTimeout(autoSaveTimer);
+
+      // Only auto-save if notes have changed
+      const currentNotes = document.getElementById('notes-editor').value;
+      if (currentNotes !== lastSavedNotes && currentNotes.length <= 5000) {
+        autoSaveTimer = setTimeout(() => {
+          saveNotes();
+        }, 30000); // 30 seconds
+      }
+    });
+
+    // Manual save button
+    document.getElementById('notes-save-btn').addEventListener('click', () => {
+      clearTimeout(autoSaveTimer);
+      saveNotes();
+    });
+
+    // Keyboard shortcut: Ctrl+S / Cmd+S to save
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        const notesTab = document.getElementById('notes-tab');
+        if (notesTab.classList.contains('active')) {
+          e.preventDefault();
+          clearTimeout(autoSaveTimer);
+          saveNotes();
+        }
+      }
+    });
+
+    // Load initial data
+    loadProgressData();
+  </script>
+
 </body>
 </html>

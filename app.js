@@ -421,6 +421,19 @@ function createApp(collections, mongoClient, testMiddleware = null) {
     }
   });
 
+  // Profile page
+  app.get("/profile", isAuthenticated, async (req, res) => {
+    try {
+      res.render("profile.ejs", {
+        user: req.user,
+        isAdmin: res.locals.isAdmin || false
+      });
+    } catch (error) {
+      console.error("Error loading profile:", error);
+      res.status(500).render("error.ejs", { message: "Failed to load profile" });
+    }
+  });
+
   // ===== ADMIN ROUTES =====
 
   // Admin dashboard
@@ -1325,6 +1338,173 @@ ${errorDescription.trim()}
       res.status(500).json({
         success: false,
         error: "Failed to send report. Please try again or contact us directly."
+      });
+    }
+  });
+
+  // ===== PROFILE API ROUTES =====
+
+  // Get user statistics for profile page
+  app.get("/api/user/stats", isAuthenticated, async (req, res) => {
+    try {
+      const user = await usersCollection.findOne({ _id: req.user._id });
+      const readLessons = user?.readLessons || [];
+
+      // Calculate statistics
+      const totalLessonsRead = readLessons.length;
+
+      // Get unique series IDs from read lessons
+      const uniqueSeriesIds = new Set();
+      for (const item of readLessons) {
+        const lessonId = item.lessonId; // Format: "seriesId/lessonNumber"
+        const seriesId = lessonId.split('/')[0];
+        uniqueSeriesIds.add(seriesId);
+      }
+      const seriesStarted = uniqueSeriesIds.size;
+
+      // Calculate completion rate
+      const totalAvailableLessons = await lessonsCollection.countDocuments({ isReviewed: true });
+      const completionRate = totalAvailableLessons > 0
+        ? Math.round((totalLessonsRead / totalAvailableLessons) * 100)
+        : 0;
+
+      // Get recent activity (last 10 read lessons with details)
+      const recentActivity = [];
+      for (const item of readLessons.slice(-10).reverse()) {
+        const lessonId = item.lessonId;
+        const [seriesId, lessonNumber] = lessonId.split('/');
+
+        const lesson = await lessonsCollection.findOne({
+          seriesId,
+          lessonNumber: parseInt(lessonNumber)
+        });
+
+        const series = await seriesCollection.findOne({ seriesId });
+
+        if (lesson && series) {
+          recentActivity.push({
+            lessonId,
+            lessonTitle: lesson.titleEnglish || `Lesson ${lesson.lessonNumber}`,
+            seriesTitle: series.titleEnglish,
+            seriesId: series.seriesId,
+            lessonNumber: lesson.lessonNumber,
+            readAt: item.readAt
+          });
+        }
+      }
+
+      // Get series in progress (series where user read at least 1 lesson but not all)
+      const seriesInProgress = [];
+      for (const seriesId of uniqueSeriesIds) {
+        const series = await seriesCollection.findOne({ seriesId });
+        if (!series) continue;
+
+        // Count total lessons in series (only reviewed ones)
+        const totalLessonsInSeries = await lessonsCollection.countDocuments({
+          seriesId,
+          isReviewed: true
+        });
+
+        // Count read lessons in this series
+        const readLessonsInSeries = readLessons.filter(item => {
+          const [sid] = item.lessonId.split('/');
+          return sid === seriesId;
+        }).length;
+
+        // Only include if started but not completed
+        if (readLessonsInSeries > 0 && readLessonsInSeries < totalLessonsInSeries) {
+          seriesInProgress.push({
+            seriesId: series.seriesId,
+            titleEnglish: series.titleEnglish,
+            titleArabic: series.titleArabic,
+            category: series.category,
+            description: series.description,
+            totalLessons: totalLessonsInSeries,
+            lessonsRead: readLessonsInSeries,
+            progressPercentage: Math.round((readLessonsInSeries / totalLessonsInSeries) * 100)
+          });
+        }
+      }
+
+      res.json({
+        success: true,
+        stats: {
+          totalLessonsRead,
+          seriesStarted,
+          completionRate
+        },
+        recentActivity,
+        seriesInProgress
+      });
+    } catch (error) {
+      console.error("Error fetching user stats:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch statistics"
+      });
+    }
+  });
+
+  // Get user notes
+  app.get("/api/profile/notes", isAuthenticated, async (req, res) => {
+    try {
+      const user = await usersCollection.findOne({ _id: req.user._id });
+
+      res.json({
+        success: true,
+        notes: user?.userNotes || "",
+        lastUpdated: user?.lastNotesUpdate || null
+      });
+    } catch (error) {
+      console.error("Error fetching user notes:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch notes"
+      });
+    }
+  });
+
+  // Save user notes
+  app.post("/api/profile/notes", isAuthenticated, async (req, res) => {
+    try {
+      const { notes } = req.body;
+
+      // Validate notes
+      if (typeof notes !== 'string') {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid notes format"
+        });
+      }
+
+      if (notes.length > 5000) {
+        return res.status(400).json({
+          success: false,
+          error: "Notes exceed maximum length of 5000 characters"
+        });
+      }
+
+      // Update user notes using $set for efficiency (as suggested)
+      await usersCollection.updateOne(
+        { _id: req.user._id },
+        {
+          $set: {
+            userNotes: notes,
+            lastNotesUpdate: new Date()
+          }
+        }
+      );
+
+      res.json({
+        success: true,
+        message: "Notes saved successfully",
+        lastUpdated: new Date()
+      });
+    } catch (error) {
+      console.error("Error saving user notes:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to save notes"
       });
     }
   });
