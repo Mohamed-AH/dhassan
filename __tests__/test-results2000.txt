@@ -1,0 +1,217 @@
+
+> dhassan@1.0.0 test
+> cross-env NODE_ENV=test jest --runInBand --detectOpenHandles
+
+(node:63888) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+FAIL __tests__/user-features.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should redirect unauthenticated users
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 302
+    Received: 400
+
+    [0m [90m 288 |[39m           [33m.[39msend({ errorMessage[33m:[39m [32m'Test error'[39m })[33m;[39m
+     [90m 289 |[39m
+    [31m[1m>[22m[39m[90m 290 |[39m         expect(response[33m.[39mstatus)[33m.[39mtoBe([35m302[39m)[33m;[39m
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 291 |[39m       })[33m;[39m
+     [90m 292 |[39m
+     [90m 293 |[39m       it([32m'should accept error reports from authenticated users'[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.toBe (__tests__/user-features.test.js:290:33)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should accept error reports from authenticated users
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+    [0m [90m 300 |[39m           })[33m;[39m
+     [90m 301 |[39m
+    [31m[1m>[22m[39m[90m 302 |[39m         expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 303 |[39m         expect(response[33m.[39mbody)[33m.[39mtoHaveProperty([32m'success'[39m[33m,[39m [36mtrue[39m)[33m;[39m
+     [90m 304 |[39m       })[33m;[39m
+     [90m 305 |[39m[0m
+
+      at Object.toBe (__tests__/user-features.test.js:302:33)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /api/report-error route
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 302
+    Received: 400
+
+    [0m [90m 404 |[39m       it([32m'should protect /api/report-error route'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 405 |[39m         [36mconst[39m response [33m=[39m [36mawait[39m request(app)[33m.[39mpost([32m'/api/report-error'[39m)[33m.[39msend({})[33m;[39m
+    [31m[1m>[22m[39m[90m 406 |[39m         expect(response[33m.[39mstatus)[33m.[39mtoBe([35m302[39m)[33m;[39m
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 407 |[39m       })[33m;[39m
+     [90m 408 |[39m     })[33m;[39m
+     [90m 409 |[39m[0m
+
+      at Object.toBe (__tests__/user-features.test.js:406:33)
+
+  ● User Features › Input Validation › Note Content Validation › should reject XSS attempts in notes
+
+    TypeError: Cannot read properties of null (reading 'content')
+
+    [0m [90m 497 |[39m           [36mconst[39m db [33m=[39m [36mawait[39m connectTestDb()[33m;[39m
+     [90m 498 |[39m           [36mconst[39m note [33m=[39m [36mawait[39m db[33m.[39mcollection([32m'notes'[39m)[33m.[39mfindOne({ _id[33m:[39m response[33m.[39mbody[33m.[39mnoteId })[33m;[39m
+    [31m[1m>[22m[39m[90m 499 |[39m           expect(note[33m.[39mcontent)[33m.[39mnot[33m.[39mtoContain([32m'<script>'[39m)[33m;[39m
+     [90m     |[39m                       [31m[1m^[22m[39m
+     [90m 500 |[39m         }
+     [90m 501 |[39m       })[33m;[39m
+     [90m 502 |[39m[0m
+
+      at Object.content (__tests__/user-features.test.js:499:23)
+
+PASS __tests__/public-routes.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+PASS __tests__/authentication.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+PASS __tests__/admin-series.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+PASS __tests__/admin-lessons.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+
+Test Suites: 1 failed, 4 passed, 5 total
+Tests:       4 failed, 112 passed, 116 total
+Snapshots:   0 total
+Time:        6.027 s
+Ran all test suites.
