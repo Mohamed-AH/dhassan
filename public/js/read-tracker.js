@@ -160,13 +160,22 @@ class ReadTracker {
    * Initialize UI indicators for all lesson cards
    */
   initializeUI() {
+    console.log('[ReadTracker] initializeUI: Starting UI initialization...');
+
     // Find all lesson cards and add read indicators
-    document.querySelectorAll('[data-lesson-id]').forEach(card => {
+    const cards = document.querySelectorAll('[data-lesson-id]');
+    console.log('[ReadTracker] initializeUI: Found', cards.length, 'elements with data-lesson-id');
+
+    cards.forEach((card, index) => {
       const lessonId = card.getAttribute('data-lesson-id');
+      console.log('[ReadTracker] initializeUI: Card', index, 'has lesson ID:', lessonId);
+
       const indicator = card.querySelector('.read-indicator');
+      console.log('[ReadTracker] initializeUI: Card', index, 'has indicator:', !!indicator);
 
       if (indicator) {
         const isRead = this.readLessons.has(lessonId);
+        console.log('[ReadTracker] initializeUI: Card', index, 'isRead:', isRead, '(checking if "' + lessonId + '" is in Set)');
         this.updateIndicatorUI(indicator, isRead);
 
         // Attach click event listener (remove any existing listeners first)
@@ -178,6 +187,8 @@ class ReadTracker {
         };
       }
     });
+
+    console.log('[ReadTracker] initializeUI: UI initialization complete');
   }
 
   /**
@@ -186,14 +197,18 @@ class ReadTracker {
    * @param {boolean} isRead - Whether the lesson is read
    */
   updateIndicatorUI(indicator, isRead) {
+    console.log('[ReadTracker] updateIndicatorUI: Updating indicator, isRead:', isRead);
+
     if (isRead) {
       indicator.classList.add('read');
       indicator.classList.remove('unread');
       indicator.setAttribute('title', 'Mark as unread');
+      console.log('[ReadTracker] updateIndicatorUI: Applied "read" class, removed "unread" class');
     } else {
       indicator.classList.add('unread');
       indicator.classList.remove('read');
       indicator.setAttribute('title', 'Mark as read');
+      console.log('[ReadTracker] updateIndicatorUI: Applied "unread" class, removed "read" class');
     }
   }
 
