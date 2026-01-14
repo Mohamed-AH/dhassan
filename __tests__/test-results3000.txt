@@ -1,0 +1,170 @@
+
+> dhassan@1.0.0 test
+> cross-env NODE_ENV=test jest --runInBand --detectOpenHandles
+
+(node:8856) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS __tests__/user-features.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+PASS __tests__/admin-series.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+PASS __tests__/public-routes.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+PASS __tests__/admin-lessons.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+PASS __tests__/authentication.test.js
+  ● Console
+
+    console.log
+      Connected to test database
+
+      at log (__tests__/helpers.js:34:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Test database seeded with sample data
+
+      at log (__tests__/helpers.js:175:11)
+
+    console.log
+      Test database cleared
+
+      at log (__tests__/helpers.js:61:11)
+
+    console.log
+      Disconnected from test database
+
+      at log (__tests__/helpers.js:46:13)
+
+
+Test Suites: 5 passed, 5 total
+Tests:       116 passed, 116 total
+Snapshots:   0 total
+Time:        5.767 s, estimated 6 s
+Ran all test suites.
+
+Jest has detected the following 1 open handle potentially keeping Jest from exiting:
+
+  ●  TLSWRAP
+
+    [0m [90m 294 |[39m       it([32m'should accept error reports from authenticated users'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 295 |[39m         [36mconst[39m response [33m=[39m [36mawait[39m request(appAuthenticated)
+    [31m[1m>[22m[39m[90m 296 |[39m           [33m.[39mpost([32m'/api/report-error'[39m)
+     [90m     |[39m            [31m[1m^[22m[39m
+     [90m 297 |[39m           [33m.[39msend({
+     [90m 298 |[39m             errorMessage[33m:[39m [32m'This is a test error report'[39m[33m,[39m
+     [90m 299 |[39m             lessonId[33m:[39m [32m'test-series-1/1'[39m[33m,[39m[0m
+
+      at Test.serverAddress (node_modules/supertest/lib/test.js:48:35)
+      at new Test (node_modules/supertest/lib/test.js:34:14)
+      at Object.obj.<computed> [as post] (node_modules/supertest/index.js:43:18)
+      at Object.post (__tests__/user-features.test.js:296:12)
+
