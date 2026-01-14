@@ -1,0 +1,1339 @@
+
+> dhassan@1.0.0 test
+> cross-env NODE_ENV=test jest --runInBand --detectOpenHandles
+
+FAIL __tests__/user-features.test.js (32.642 s)
+  ● User Features › Read/Unread Tracking API › GET /api/user/read-lessons › should return empty array for unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › GET /api/user/read-lessons › should return read lessons for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › GET /api/user/read-lessons › should handle database errors gracefully
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should redirect unauthenticated users to login
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should mark lesson as read for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should toggle read status when called again
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/lessons/:seriesId/:lessonNumber/toggle-read › should return 404 for non-existent lesson
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/user/sync-read-lessons › should redirect unauthenticated users to login
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/user/sync-read-lessons › should sync local storage lessons to cloud
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Read/Unread Tracking API › POST /api/user/sync-read-lessons › should reject invalid data format
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /api/user/stats › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /api/user/stats › should return user statistics for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /profile › should redirect unauthenticated users to login
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › User Profile and Stats API › GET /profile › should render profile page for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › GET /api/profile/notes › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › GET /api/profile/notes › should return user notes for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should create a new note for authenticated user
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should reject notes with insufficient content
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should reject notes without content
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Private Notes API › POST /api/profile/notes › should sanitize note content
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should redirect unauthenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should accept error reports from authenticated users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Reporting API › POST /api/report-error › should reject empty error messages
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should redirect non-admin users
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should redirect non-admin users
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      240 |
+      241 |   const collections = {
+    > 242 |     seriesCollection: db.collection('series'),
+          |                          ^
+      243 |     lessonsCollection: db.collection('lessons'),
+      244 |     usersCollection: db.collection('users'),
+      245 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:242:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:326:18)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should allow admin to toggle review status
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should allow admin to toggle review status
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      240 |
+      241 |   const collections = {
+    > 242 |     seriesCollection: db.collection('series'),
+          |                          ^
+      243 |     lessonsCollection: db.collection('lessons'),
+      244 |     usersCollection: db.collection('users'),
+      245 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:242:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:326:18)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should toggle review status when called again
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should toggle review status when called again
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      240 |
+      241 |   const collections = {
+    > 242 |     seriesCollection: db.collection('series'),
+          |                          ^
+      243 |     lessonsCollection: db.collection('lessons'),
+      244 |     usersCollection: db.collection('users'),
+      245 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:242:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:326:18)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should return 404 for non-existent lesson
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › POST /api/lessons/:seriesId/:lessonNumber/toggle-review › should return 404 for non-existent lesson
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      240 |
+      241 |   const collections = {
+    > 242 |     seriesCollection: db.collection('series'),
+          |                          ^
+      243 |     lessonsCollection: db.collection('lessons'),
+      244 |     usersCollection: db.collection('users'),
+      245 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:242:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:326:18)
+
+  ● User Features › Review Toggle for Admins › GET /admin/lessons (Review Filter) › should support filtering by review status
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Review Toggle for Admins › GET /admin/lessons (Review Filter) › should support filtering by review status
+
+    TypeError: Cannot read properties of null (reading 'collection')
+
+      240 |
+      241 |   const collections = {
+    > 242 |     seriesCollection: db.collection('series'),
+          |                          ^
+      243 |     lessonsCollection: db.collection('lessons'),
+      244 |     usersCollection: db.collection('users'),
+      245 |     notesCollection: db.collection('notes'),
+
+      at collection (__tests__/helpers.js:242:26)
+      at Object.<anonymous> (__tests__/user-features.test.js:326:18)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /profile route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /api/user/stats route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /api/profile/notes route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAuthenticated Middleware › should protect /api/report-error route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAdmin Middleware › should protect /admin routes
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAdmin Middleware › should protect /admin/lessons route
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Access Control Validation › isAdmin Middleware › should protect admin API endpoints
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Graceful Error Responses › should return proper error for invalid lesson ID format
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Graceful Error Responses › should return proper error for missing required fields
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Graceful Error Responses › should handle malformed JSON gracefully
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Error Handling › Database Error Handling › should not expose database errors to client
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Note Content Validation › should reject XSS attempts in notes
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Note Content Validation › should enforce minimum length
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Note Content Validation › should enforce maximum length
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+  ● User Features › Input Validation › Lesson ID Validation › should validate lesson exists before operations
+
+    MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+
+      at Timeout._onTimeout (node_modules/mongodb/src/sdam/topology.ts:567:30)
+
+
+  ● Test suite failed to run
+
+    TypeError: Cannot read properties of null (reading 'listCollections')
+
+      53 | async function clearTestDatabase() {
+      54 |   const db = await connectTestDb();
+    > 55 |   const collections = await db.listCollections().toArray();
+         |                                ^
+      56 |
+      57 |   for (const collection of collections) {
+      58 |     await db.collection(collection.name).deleteMany({});
+
+      at listCollections (__tests__/helpers.js:55:32)
+      at Object.<anonymous> (__tests__/user-features.test.js:54:5)
+
+FAIL __tests__/public-routes.test.js (30.345 s)
+  ● Public Routes › GET / › should render the landing page
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET / › should display featured series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /topics › should render the topics page
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /topics › should display all categories
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /series › should render the series listing page
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /series › should display all series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /series/:seriesId › should render a specific series detail page
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /series/:seriesId › should display all lessons in the series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /series/:seriesId › should return 404 for non-existent series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /lesson/:seriesId/:lessonNumber › should render a specific lesson page
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /lesson/:seriesId/:lessonNumber › should display lesson title and content
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /lesson/:seriesId/:lessonNumber › should display chapters and timestamps
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+  ● Public Routes › GET /lesson/:seriesId/:lessonNumber › should return 404 for non-existent lesson
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      18 |
+      19 | describe('Public Routes', () => {
+    > 20 |   beforeAll(async () => {
+         |   ^
+      21 |     // Seed test database
+      22 |     await seedTestDatabase();
+      23 |
+
+      at beforeAll (__tests__/public-routes.test.js:20:3)
+      at Object.describe (__tests__/public-routes.test.js:19:1)
+
+
+  ● Test suite failed to run
+
+    TypeError: Cannot read properties of null (reading 'listCollections')
+
+      53 | async function clearTestDatabase() {
+      54 |   const db = await connectTestDb();
+    > 55 |   const collections = await db.listCollections().toArray();
+         |                                ^
+      56 |
+      57 |   for (const collection of collections) {
+      58 |     await db.collection(collection.name).deleteMany({});
+
+      at listCollections (__tests__/helpers.js:55:32)
+      at Object.<anonymous> (__tests__/public-routes.test.js:30:5)
+
+FAIL __tests__/authentication.test.js (30.32 s)
+  ● Authentication & Authorization › Admin Database Access › should have super-admin in test database
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Admin Database Access › should have editor in test database
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › GET /auth/google › should redirect to Google OAuth
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › GET /auth/google/callback › should handle successful OAuth callback
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › GET /auth/google/callback › should create user if not exists
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › GET /auth/google/callback › should update lastLogin timestamp
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › GET /auth/logout › should logout user and redirect to home
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › GET /auth/logout › should clear session data
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Public Routes › should allow unauthenticated access to landing page
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Public Routes › should allow unauthenticated access to topics
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Public Routes › should allow unauthenticated access to series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Public Routes › should allow unauthenticated access to lessons
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Admin Routes › should redirect unauthenticated users from /admin
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Admin Routes › should redirect unauthenticated users from /admin/lessons
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Admin Routes › should redirect unauthenticated users from /admin/series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Admin Routes › should redirect unauthenticated users from /admin/users
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Super Admin Only Routes › should allow super-admin to delete lessons
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Super Admin Only Routes › should prevent editor from deleting lessons
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Super Admin Only Routes › should allow super-admin to delete series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Super Admin Only Routes › should prevent editor from deleting series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Super Admin Only Routes › should allow super-admin to manage admins
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Access Control - Super Admin Only Routes › should prevent editor from managing admins
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Session Management › should maintain session across requests
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Session Management › should inject user data into views
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+  ● Authentication & Authorization › Session Management › should inject admin data for admin users
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      21 |
+      22 | describe('Authentication & Authorization', () => {
+    > 23 |   beforeAll(async () => {
+         |   ^
+      24 |     testData = await seedTestDatabase();
+      25 |
+      26 |     // Create app without authentication for access control testing
+
+      at beforeAll (__tests__/authentication.test.js:23:3)
+      at Object.describe (__tests__/authentication.test.js:22:1)
+
+
+  ● Test suite failed to run
+
+    TypeError: Cannot read properties of null (reading 'listCollections')
+
+      53 | async function clearTestDatabase() {
+      54 |   const db = await connectTestDb();
+    > 55 |   const collections = await db.listCollections().toArray();
+         |                                ^
+      56 |
+      57 |   for (const collection of collections) {
+      58 |     await db.collection(collection.name).deleteMany({});
+
+      at listCollections (__tests__/helpers.js:55:32)
+      at Object.<anonymous> (__tests__/authentication.test.js:31:5)
+
+FAIL __tests__/admin-series.test.js (30.309 s)
+  ● Admin Series CRUD › GET /admin/series › should render series list for authenticated admin
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › GET /admin/series › should display series with lesson counts
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › GET /admin/series › should show delete button only for empty series (super-admin)
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › GET /admin/series/new › should render create series form for admin
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › GET /admin/series/new › should include all category options
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › GET /admin/series/:seriesId/edit › should render edit form with existing series data
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › GET /admin/series/:seriesId/edit › should make seriesId field read-only
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › GET /admin/series/:seriesId/edit › should return 404 for non-existent series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/create › should create new series successfully
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/create › should require seriesId, titleEnglish, and category
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/create › should prevent duplicate seriesId
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/create › should set default values for optional fields
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/create › should track createdBy field
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/:seriesId/update › should update series metadata successfully
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/:seriesId/update › should not allow changing seriesId
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › POST /admin/series/:seriesId/update › should track updatedBy field
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › DELETE /admin/series/:seriesId/delete › should prevent deletion of series with lessons
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › DELETE /admin/series/:seriesId/delete › should allow super-admin to delete empty series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › DELETE /admin/series/:seriesId/delete › should prevent editor from deleting series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+  ● Admin Series CRUD › DELETE /admin/series/:seriesId/delete › should return 404 for non-existent series
+
+    thrown: "Exceeded timeout of 30000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+      24 |
+      25 | describe('Admin Series CRUD', () => {
+    > 26 |   beforeAll(async () => {
+         |   ^
+      27 |     testData = await seedTestDatabase();
+      28 |
+      29 |     // Get admin users from database
+
+      at beforeAll (__tests__/admin-series.test.js:26:3)
+      at Object.describe (__tests__/admin-series.test.js:25:1)
+
+
+  ● Test suite failed to run
+
+    TypeError: Cannot read properties of null (reading 'listCollections')
+
+      53 | async function clearTestDatabase() {
+      54 |   const db = await connectTestDb();
+    > 55 |   const collections = await db.listCollections().toArray();
+         |                                ^
+      56 |
+      57 |   for (const collection of collections) {
+      58 |     await db.collection(collection.name).deleteMany({});
+
+      at listCollections (__tests__/helpers.js:55:32)
+      at Object.<anonymous> (__tests__/admin-series.test.js:39:5)
+
