@@ -22,8 +22,11 @@ class ReadTracker {
    * @param {boolean} isLoggedIn - Whether the user is currently logged in
    */
   async init(isLoggedIn = false) {
+    console.log('[ReadTracker] Initializing... isLoggedIn:', isLoggedIn);
+
     // Return existing promise if already initializing
     if (this.initPromise) {
+      console.log('[ReadTracker] Already initializing, returning existing promise');
       return this.initPromise;
     }
 
@@ -32,18 +35,24 @@ class ReadTracker {
 
       if (this.isLoggedIn) {
         // User is logged in - fetch from cloud
+        console.log('[ReadTracker] User logged in, loading from cloud...');
         await this.loadFromCloud();
         // Sync any local storage data if exists
         await this.syncLocalToCloud();
       } else {
         // User is logged out - load from local storage
+        console.log('[ReadTracker] User logged out, loading from local storage...');
         this.loadFromLocalStorage();
       }
+
+      console.log('[ReadTracker] Read lessons loaded:', this.readLessons.size, 'items');
+      console.log('[ReadTracker] Lesson IDs:', [...this.readLessons]);
 
       // Initialize UI for all lesson cards on the page
       this.initializeUI();
 
       this.isInitialized = true;
+      console.log('[ReadTracker] Initialization complete!');
     })();
 
     return this.initPromise;
@@ -64,14 +73,19 @@ class ReadTracker {
    */
   async loadFromCloud() {
     try {
+      console.log('[ReadTracker] Fetching from /api/user/read-lessons...');
       const response = await fetch('/api/user/read-lessons');
       const data = await response.json();
+      console.log('[ReadTracker] Cloud response:', data);
 
       if (data.success && Array.isArray(data.readLessons)) {
         this.readLessons = new Set(data.readLessons);
+        console.log('[ReadTracker] Loaded', data.readLessons.length, 'lessons from cloud');
+      } else {
+        console.warn('[ReadTracker] Invalid cloud response format');
       }
     } catch (error) {
-      console.error('Error loading read lessons from cloud:', error);
+      console.error('[ReadTracker] Error loading read lessons from cloud:', error);
       // Fallback to local storage if cloud fetch fails
       this.loadFromLocalStorage();
     }
@@ -251,28 +265,47 @@ class ReadTracker {
    * @param {string} lessonId - The lesson ID
    */
   async markAsRead(lessonId) {
+    console.log('[ReadTracker] markAsRead called for:', lessonId);
+
     // Wait for initialization to complete
     await this.waitForInit();
+    console.log('[ReadTracker] Initialization complete, checking if already read...');
 
-    if (this.readLessons.has(lessonId)) return; // Already marked
+    if (this.readLessons.has(lessonId)) {
+      console.log('[ReadTracker] Lesson already marked as read, skipping');
+      return; // Already marked
+    }
 
+    console.log('[ReadTracker] Marking lesson as read...');
     this.readLessons.add(lessonId);
 
     if (this.isLoggedIn) {
       // Update cloud
       try {
         const [seriesId, lessonNumber] = lessonId.split('/');
-        await fetch(`/api/lessons/${seriesId}/${lessonNumber}/toggle-read`, {
+        console.log('[ReadTracker] Sending POST to /api/lessons/' + seriesId + '/' + lessonNumber + '/toggle-read');
+
+        const response = await fetch(`/api/lessons/${seriesId}/${lessonNumber}/toggle-read`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         });
+
+        const data = await response.json();
+        console.log('[ReadTracker] Cloud update response:', data);
+
+        if (!data.success) {
+          console.error('[ReadTracker] Cloud update failed:', data);
+        }
       } catch (error) {
-        console.error('Error marking lesson as read:', error);
+        console.error('[ReadTracker] Error marking lesson as read:', error);
       }
     } else {
       // Save to local storage
+      console.log('[ReadTracker] Saving to local storage...');
       this.saveToLocalStorage();
     }
+
+    console.log('[ReadTracker] markAsRead complete. Total read lessons:', this.readLessons.size);
   }
 
   /**
