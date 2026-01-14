@@ -542,13 +542,11 @@
   <!-- Auto-mark lesson as read when page loads -->
   <script>
     // Wait for read tracker to initialize, then auto-mark as read
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const lessonId = document.body.getAttribute('data-lesson-id');
       if (lessonId && window.readTracker) {
-        // Small delay to ensure read tracker is fully initialized
-        setTimeout(() => {
-          window.readTracker.markAsRead(lessonId);
-        }, 500);
+        // The markAsRead method now waits for initialization internally
+        await window.readTracker.markAsRead(lessonId);
       }
     });
   </script>

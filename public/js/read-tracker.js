@@ -13,6 +13,8 @@ class ReadTracker {
     this.isLoggedIn = false;
     this.hasShownLoginPrompt = false;
     this.syncInProgress = false;
+    this.initPromise = null;
+    this.isInitialized = false;
   }
 
   /**
@@ -20,20 +22,41 @@ class ReadTracker {
    * @param {boolean} isLoggedIn - Whether the user is currently logged in
    */
   async init(isLoggedIn = false) {
-    this.isLoggedIn = isLoggedIn;
-
-    if (this.isLoggedIn) {
-      // User is logged in - fetch from cloud
-      await this.loadFromCloud();
-      // Sync any local storage data if exists
-      await this.syncLocalToCloud();
-    } else {
-      // User is logged out - load from local storage
-      this.loadFromLocalStorage();
+    // Return existing promise if already initializing
+    if (this.initPromise) {
+      return this.initPromise;
     }
 
-    // Initialize UI for all lesson cards on the page
-    this.initializeUI();
+    this.initPromise = (async () => {
+      this.isLoggedIn = isLoggedIn;
+
+      if (this.isLoggedIn) {
+        // User is logged in - fetch from cloud
+        await this.loadFromCloud();
+        // Sync any local storage data if exists
+        await this.syncLocalToCloud();
+      } else {
+        // User is logged out - load from local storage
+        this.loadFromLocalStorage();
+      }
+
+      // Initialize UI for all lesson cards on the page
+      this.initializeUI();
+
+      this.isInitialized = true;
+    })();
+
+    return this.initPromise;
+  }
+
+  /**
+   * Wait for initialization to complete
+   */
+  async waitForInit() {
+    if (this.isInitialized) return;
+    if (this.initPromise) {
+      await this.initPromise;
+    }
   }
 
   /**
@@ -166,6 +189,9 @@ class ReadTracker {
    * @param {HTMLElement} indicator - The indicator element
    */
   async toggleRead(lessonId, indicator) {
+    // Wait for initialization to complete
+    await this.waitForInit();
+
     const wasRead = this.readLessons.has(lessonId);
     const newReadState = !wasRead;
 
@@ -225,6 +251,9 @@ class ReadTracker {
    * @param {string} lessonId - The lesson ID
    */
   async markAsRead(lessonId) {
+    // Wait for initialization to complete
+    await this.waitForInit();
+
     if (this.readLessons.has(lessonId)) return; // Already marked
 
     this.readLessons.add(lessonId);
