@@ -6,15 +6,7 @@ function isAuthenticated(req, res, next) {
     return next();
   }
 
-  // For API requests, return JSON error
-  if (req.path.startsWith('/api/')) {
-    return res.status(401).json({
-      success: false,
-      errors: ['Authentication required']
-    });
-  }
-
-  // For page requests, redirect to login
+  // Redirect to login for better UX
   res.redirect('/login');
 }
 
@@ -22,12 +14,6 @@ function isAuthenticated(req, res, next) {
 function isOwner(notesCollection) {
   return async (req, res, next) => {
     if (!req.isAuthenticated()) {
-      if (req.path.startsWith('/api/')) {
-        return res.status(401).json({
-          success: false,
-          errors: ['Authentication required']
-        });
-      }
       return res.redirect('/login');
     }
 
@@ -116,12 +102,6 @@ function injectUser(adminsCollection = null) {
 function isAdmin(adminsCollection) {
   return async (req, res, next) => {
     if (!req.isAuthenticated()) {
-      if (req.path.startsWith('/api/')) {
-        return res.status(401).json({
-          success: false,
-          errors: ['Authentication required']
-        });
-      }
       return res.redirect('/login');
     }
 
@@ -177,12 +157,6 @@ function isAdmin(adminsCollection) {
 function isSuperAdmin(adminsCollection) {
   return async (req, res, next) => {
     if (!req.isAuthenticated()) {
-      if (req.path.startsWith('/api/')) {
-        return res.status(401).json({
-          success: false,
-          errors: ['Authentication required']
-        });
-      }
       return res.redirect('/login');
     }
 

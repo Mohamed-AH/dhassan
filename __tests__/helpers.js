@@ -109,6 +109,9 @@ async function seedTestDatabase() {
       { level: 2, title: 'Chapter 1', timestamp: null }
     ],
     timestamps: [],
+    isReviewed: true,
+    reviewedBy: 'test@example.com',
+    reviewedAt: new Date(),
     createdAt: new Date(),
     updatedAt: new Date()
   };
@@ -126,6 +129,9 @@ async function seedTestDatabase() {
       { level: 1, title: 'Another Test Lesson', timestamp: null }
     ],
     timestamps: [],
+    isReviewed: true,
+    reviewedBy: 'test@example.com',
+    reviewedAt: new Date(),
     createdAt: new Date(),
     updatedAt: new Date()
   };

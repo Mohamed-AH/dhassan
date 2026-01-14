@@ -1211,6 +1211,57 @@ function createApp(collections, mongoClient, testMiddleware = null) {
     }
   });
 
+  // Toggle review status for a lesson (Admin only)
+  app.post("/api/lessons/:seriesId/:lessonNumber/toggle-review", isAdmin(adminsCollection), async (req, res) => {
+    try {
+      const { seriesId, lessonNumber } = req.params;
+
+      // Check if lesson exists
+      const lesson = await lessonsCollection.findOne({
+        seriesId,
+        lessonNumber: parseInt(lessonNumber)
+      });
+
+      if (!lesson) {
+        return res.status(404).json({
+          success: false,
+          error: "Lesson not found"
+        });
+      }
+
+      // Toggle the isReviewed status
+      const newReviewStatus = !lesson.isReviewed;
+      const updateFields = {
+        isReviewed: newReviewStatus,
+        updatedAt: new Date()
+      };
+
+      // If marking as reviewed for the first time, record who and when
+      if (newReviewStatus && !lesson.isReviewed) {
+        updateFields.reviewedBy = req.user.email;
+        updateFields.reviewedAt = new Date();
+      }
+
+      // Update the lesson
+      await lessonsCollection.updateOne(
+        { seriesId, lessonNumber: parseInt(lessonNumber) },
+        { $set: updateFields }
+      );
+
+      res.json({
+        success: true,
+        isReviewed: newReviewStatus,
+        lessonId: `${seriesId}/${lessonNumber}`
+      });
+    } catch (error) {
+      console.error("Error toggling review status:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to toggle review status"
+      });
+    }
+  });
+
   // Sync read lessons from local storage when user logs in
   app.post("/api/user/sync-read-lessons", isAuthenticated, async (req, res) => {
     try {
@@ -1426,10 +1477,16 @@ ${errorDescription.trim()}
         }
       }
 
+      // Count user's private notes
+      const totalNotes = await notesCollection.countDocuments({ userId: req.user._id });
+
       res.json({
         success: true,
         stats: {
-          totalLessonsRead,
+          totalRead: totalLessonsRead,
+          totalLessons: totalAvailableLessons,
+          totalNotes: totalNotes,
+          memberSince: user.createdAt,
           seriesStarted,
           completionRate
         },
@@ -1445,15 +1502,16 @@ ${errorDescription.trim()}
     }
   });
 
-  // Get user notes
+  // Get user's private notes
   app.get("/api/profile/notes", isAuthenticated, async (req, res) => {
     try {
-      const user = await usersCollection.findOne({ _id: req.user._id });
+      const notes = await notesCollection.find({ userId: req.user._id.toString() })
+        .sort({ createdAt: -1 })
+        .toArray();
 
       res.json({
         success: true,
-        notes: user?.userNotes || "",
-        lastUpdated: user?.lastNotesUpdate || null
+        notes: notes
       });
     } catch (error) {
       console.error("Error fetching user notes:", error);
@@ -1464,47 +1522,43 @@ ${errorDescription.trim()}
     }
   });
 
-  // Save user notes
+  // Create a new private note
   app.post("/api/profile/notes", isAuthenticated, async (req, res) => {
     try {
-      const { notes } = req.body;
+      const { content, lessonId } = req.body;
 
-      // Validate notes
-      if (typeof notes !== 'string') {
+      // Validate note content
+      const errors = validateNoteInput(content);
+
+      if (errors.length > 0) {
         return res.status(400).json({
           success: false,
-          error: "Invalid notes format"
+          errors
         });
       }
 
-      if (notes.length > 5000) {
-        return res.status(400).json({
-          success: false,
-          error: "Notes exceed maximum length of 5000 characters"
-        });
-      }
+      const newNote = {
+        content: sanitizeInput(content),
+        lessonId: lessonId || null,
+        userId: req.user._id.toString(),
+        userName: req.user.name,
+        userEmail: req.user.email,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
 
-      // Update user notes using $set for efficiency (as suggested)
-      await usersCollection.updateOne(
-        { _id: req.user._id },
-        {
-          $set: {
-            userNotes: notes,
-            lastNotesUpdate: new Date()
-          }
-        }
-      );
+      const result = await notesCollection.insertOne(newNote);
 
-      res.json({
+      res.status(201).json({
         success: true,
-        message: "Notes saved successfully",
-        lastUpdated: new Date()
+        noteId: result.insertedId,
+        note: { ...newNote, _id: result.insertedId }
       });
     } catch (error) {
-      console.error("Error saving user notes:", error);
+      console.error("Error creating note:", error);
       res.status(500).json({
         success: false,
-        error: "Failed to save notes"
+        errors: ["Failed to create note"]
       });
     }
   });
